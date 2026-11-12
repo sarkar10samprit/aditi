@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { birthdayData } from '../config/birthdayData';
-import { Play, Pause, RotateCcw, FastForward, Heart, Volume2, VolumeX, Feather, Gauge } from 'lucide-react';
-import confetti from 'canvas-confetti';
+import { Feather } from 'lucide-react';
 
 export default function ParchmentLetter() {
   const letter = birthdayData.parchmentLetter;
@@ -19,15 +18,11 @@ export default function ParchmentLetter() {
   const [visibleChars, setVisibleChars] = useState(0);
   const [hasStarted, setHasStarted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [typingSpeed, setTypingSpeed] = useState(68); // 68ms per character
-  const [soundEnabled, setSoundEnabled] = useState(false);
-  const [heartCount, setHeartCount] = useState(0);
 
   const sectionRef = useRef(null);
-  const audioCtxRef = useRef(null);
   const timerRef = useRef(null);
 
-  // Only start typing when user scrolls and reaches the letter section
+  // Trigger typing automatically when scrolling into the letter section
   useEffect(() => {
     const element = sectionRef.current;
     if (!element) return;
@@ -40,7 +35,7 @@ export default function ParchmentLetter() {
         }
       },
       {
-        threshold: 0.2, // Triggers when 20% of section enters viewport
+        threshold: 0.2,
       }
     );
 
@@ -51,84 +46,16 @@ export default function ParchmentLetter() {
     };
   }, [hasStarted]);
 
-  // Soft vintage quill / typewriter click
-  const playTypingSound = () => {
-    if (!soundEnabled) return;
-    try {
-      if (!audioCtxRef.current) {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        audioCtxRef.current = new AudioCtx();
-      }
-      const ctx = audioCtxRef.current;
-      if (ctx.state === 'suspended') ctx.resume();
-
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(300 + Math.random() * 100, ctx.currentTime);
-
-      gain.gain.setValueAtTime(0.01, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.04);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.04);
-    } catch (e) {
-      // Audio fallback
-    }
-  };
-
-  // Typing animation loop with decreased speed
+  // Typing animation loop restored to original speed (28ms per character)
   useEffect(() => {
     if (!isPlaying || visibleChars >= totalCharacters) return;
 
     timerRef.current = setTimeout(() => {
-      setVisibleChars((prev) => {
-        const next = prev + 1;
-        if (next % 2 === 0) playTypingSound();
-        return next;
-      });
-    }, typingSpeed);
+      setVisibleChars((prev) => prev + 1);
+    }, 28);
 
     return () => clearTimeout(timerRef.current);
-  }, [visibleChars, isPlaying, totalCharacters, typingSpeed, soundEnabled]);
-
-  const handleRestart = () => {
-    setVisibleChars(0);
-    setHasStarted(true);
-    setIsPlaying(true);
-  };
-
-  const handleSkip = () => {
-    setVisibleChars(totalCharacters);
-    setIsPlaying(false);
-    setHasStarted(true);
-  };
-
-  const toggleSpeed = () => {
-    if (typingSpeed === 68) setTypingSpeed(95);
-    else if (typingSpeed === 95) setTypingSpeed(42);
-    else setTypingSpeed(68);
-  };
-
-  const getSpeedLabel = () => {
-    if (typingSpeed === 95) return 'Pace: Slow';
-    if (typingSpeed === 42) return 'Pace: Brisk';
-    return 'Pace: Gentle';
-  };
-
-  const handleSendLove = () => {
-    setHeartCount((prev) => prev + 1);
-    confetti({
-      particleCount: 35,
-      spread: 65,
-      origin: { y: 0.75 },
-      colors: ['#E8729B', '#FCD34D', '#FFFFFF', '#D64E7E']
-    });
-  };
+  }, [visibleChars, isPlaying, totalCharacters]);
 
   // Helper to render text with character-by-character blur-in animation
   const renderAnimatedBlock = (text, globalOffset) => {
@@ -180,70 +107,11 @@ export default function ParchmentLetter() {
           A Letter for My Dearest Coco
         </h2>
         <p className="font-sans text-white/80 text-sm sm:text-base font-light leading-relaxed">
-          {hasStarted 
-            ? "Watch the ink appear word by word, character by character across the aged parchment."
-            : "Scroll down to this parchment to begin reading Coco's letter."}
+          Written from the bottom of my heart, just for you.
         </p>
       </div>
 
-      {/* Control Bar */}
-      <div className="flex flex-wrap items-center justify-center gap-2.5 mb-8 relative z-10">
-        <button
-          onClick={() => {
-            if (!hasStarted) {
-              setHasStarted(true);
-              setIsPlaying(true);
-            } else {
-              setIsPlaying(!isPlaying);
-            }
-          }}
-          disabled={visibleChars >= totalCharacters}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-full glass-pill hover:bg-white/20 text-white font-sans text-xs font-semibold tracking-wider uppercase transition-all disabled:opacity-40 cursor-pointer"
-        >
-          {isPlaying ? <Pause className="w-3.5 h-3.5 text-cosmic-champagne" /> : <Play className="w-3.5 h-3.5 text-cosmic-champagne" />}
-          <span>{isPlaying ? 'Pause Typing' : hasStarted ? 'Resume Typing' : 'Start Reading'}</span>
-        </button>
-
-        <button
-          onClick={handleRestart}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-full glass-pill hover:bg-white/20 text-white font-sans text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer"
-        >
-          <RotateCcw className="w-3.5 h-3.5 text-cosmic-champagne" />
-          <span>Restart</span>
-        </button>
-
-        <button
-          onClick={toggleSpeed}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-full glass-pill hover:bg-white/20 text-white font-sans text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer"
-          title="Adjust letter reveal speed"
-        >
-          <Gauge className="w-3.5 h-3.5 text-cosmic-champagne" />
-          <span>{getSpeedLabel()}</span>
-        </button>
-
-        <button
-          onClick={handleSkip}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-full glass-pill hover:bg-white/20 text-white font-sans text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer"
-        >
-          <FastForward className="w-3.5 h-3.5 text-cosmic-champagne" />
-          <span>Reveal All</span>
-        </button>
-
-        <button
-          onClick={() => setSoundEnabled(!soundEnabled)}
-          className={`flex items-center gap-1.5 px-4 py-2 rounded-full glass-pill transition-all cursor-pointer ${
-            soundEnabled ? 'bg-white/20 text-cosmic-champagne border-white/40' : 'text-white/70 hover:text-white'
-          }`}
-          title="Toggle typewriter audio feedback"
-        >
-          {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-cosmic-champagne" /> : <VolumeX className="w-3.5 h-3.5" />}
-          <span className="font-sans text-xs font-semibold uppercase tracking-wider">
-            {soundEnabled ? 'Typing Sound: ON' : 'Typing Sound: OFF'}
-          </span>
-        </button>
-      </div>
-
-      {/* Cutout Parchment Letter Container */}
+      {/* Pure Cutout Parchment Letter Container (Clean with zero buttons) */}
       <div className="relative max-w-2xl mx-auto filter drop-shadow-[0_25px_40px_rgba(0,0,0,0.65)] select-text">
         {/* Transparent Cutout Torn Paper Background Image */}
         <img
@@ -307,20 +175,6 @@ export default function ParchmentLetter() {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Love Reaction Button below parchment */}
-      <div className="mt-10 flex flex-col items-center justify-center gap-2 relative z-10">
-        <button
-          onClick={handleSendLove}
-          className="flex items-center gap-2 px-7 py-3 rounded-full luxury-button text-white font-sans text-xs sm:text-sm font-semibold tracking-wider uppercase shadow-xl hover:shadow-glow-rose transition-all active:scale-95 cursor-pointer"
-        >
-          <Heart className={`w-4 h-4 text-cosmic-champagne fill-cosmic-champagne ${heartCount > 0 ? 'scale-125' : ''} transition-transform`} />
-          <span>Send Coco Love Back ({heartCount})</span>
-        </button>
-        <span className="text-[11px] text-white/60 font-sans tracking-wide">
-          Tap to send floating stardust hearts to Coco
-        </span>
       </div>
     </section>
   );

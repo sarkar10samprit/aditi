@@ -36,12 +36,12 @@
 @keyframes charBlurIn {
   0% {
     opacity: 0;
-    filter: blur(8px);
-    transform: translateY(2px) scale(0.9);
+    filter: blur(6px);
+    transform: translateY(1px) scale(0.9);
   }
   50% {
     opacity: 0.7;
-    filter: blur(2.5px);
+    filter: blur(2px);
   }
   100% {
     opacity: 1;
@@ -52,7 +52,7 @@
 
 .char-blur-in {
   display: inline;
-  animation: charBlurIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: charBlurIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Blinking Vintage Ink Cursor */

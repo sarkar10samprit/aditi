@@ -17,13 +17,39 @@ export default function ParchmentLetter() {
   const totalCharacters = fullContent.reduce((sum, item) => sum + item.text.length, 0);
 
   const [visibleChars, setVisibleChars] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [typingSpeed, setTypingSpeed] = useState(68); // Decreased speed (68ms per character)
+  const [hasStarted, setHasStarted] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [typingSpeed, setTypingSpeed] = useState(68); // 68ms per character
   const [soundEnabled, setSoundEnabled] = useState(false);
   const [heartCount, setHeartCount] = useState(0);
 
+  const sectionRef = useRef(null);
   const audioCtxRef = useRef(null);
   const timerRef = useRef(null);
+
+  // Only start typing when user scrolls and reaches the letter section
+  useEffect(() => {
+    const element = sectionRef.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasStarted) {
+          setHasStarted(true);
+          setIsPlaying(true);
+        }
+      },
+      {
+        threshold: 0.2, // Triggers when 20% of section enters viewport
+      }
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasStarted]);
 
   // Soft vintage quill / typewriter click
   const playTypingSound = () => {
@@ -72,16 +98,17 @@ export default function ParchmentLetter() {
 
   const handleRestart = () => {
     setVisibleChars(0);
+    setHasStarted(true);
     setIsPlaying(true);
   };
 
   const handleSkip = () => {
     setVisibleChars(totalCharacters);
     setIsPlaying(false);
+    setHasStarted(true);
   };
 
   const toggleSpeed = () => {
-    // Cycle between Gentle (68ms), Slower (95ms), and Brisk (42ms)
     if (typingSpeed === 68) setTypingSpeed(95);
     else if (typingSpeed === 95) setTypingSpeed(42);
     else setTypingSpeed(68);
@@ -138,7 +165,11 @@ export default function ParchmentLetter() {
   let cumulativeOffset = 0;
 
   return (
-    <section id="letters" className="py-24 px-4 sm:px-6 max-w-5xl mx-auto relative">
+    <section 
+      id="letters" 
+      ref={sectionRef} 
+      className="py-24 px-4 sm:px-6 max-w-5xl mx-auto relative scroll-mt-10"
+    >
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto mb-10 relative z-10">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill text-cosmic-champagne font-sans text-xs font-semibold uppercase tracking-[0.2em] mb-4">
@@ -149,19 +180,28 @@ export default function ParchmentLetter() {
           A Letter for My Dearest Coco
         </h2>
         <p className="font-sans text-white/80 text-sm sm:text-base font-light leading-relaxed">
-          Watch the ink appear word by word, character by character across the aged parchment.
+          {hasStarted 
+            ? "Watch the ink appear word by word, character by character across the aged parchment."
+            : "Scroll down to this parchment to begin reading Coco's letter."}
         </p>
       </div>
 
       {/* Control Bar */}
       <div className="flex flex-wrap items-center justify-center gap-2.5 mb-8 relative z-10">
         <button
-          onClick={() => setIsPlaying(!isPlaying)}
+          onClick={() => {
+            if (!hasStarted) {
+              setHasStarted(true);
+              setIsPlaying(true);
+            } else {
+              setIsPlaying(!isPlaying);
+            }
+          }}
           disabled={visibleChars >= totalCharacters}
           className="flex items-center gap-1.5 px-4 py-2 rounded-full glass-pill hover:bg-white/20 text-white font-sans text-xs font-semibold tracking-wider uppercase transition-all disabled:opacity-40 cursor-pointer"
         >
           {isPlaying ? <Pause className="w-3.5 h-3.5 text-cosmic-champagne" /> : <Play className="w-3.5 h-3.5 text-cosmic-champagne" />}
-          <span>{isPlaying ? 'Pause Typing' : 'Resume Typing'}</span>
+          <span>{isPlaying ? 'Pause Typing' : hasStarted ? 'Resume Typing' : 'Start Reading'}</span>
         </button>
 
         <button

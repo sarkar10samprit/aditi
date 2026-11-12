@@ -1,11 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { birthdayData } from '../config/birthdayData';
-import { Flame, Sparkles, RotateCcw } from 'lucide-react';
+import { Sparkles, RotateCcw } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function CakeSection() {
   const [isBlown, setIsBlown] = useState(false);
   const [candles, setCandles] = useState([true, true, true, true, true]);
+  const [flameFrame, setFlameFrame] = useState(0);
+
+  // 8-bit Flame animation cycle (flickers every 180ms)
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setFlameFrame((prev) => (prev === 0 ? 1 : 0));
+    }, 180);
+    return () => clearInterval(timer);
+  }, []);
 
   const playFanfare = () => {
     try {
@@ -69,88 +78,198 @@ export default function CakeSection() {
     setCandles([true, true, true, true, true]);
   };
 
+  const candlePositions = [18, 24, 31, 38, 45];
+
   return (
     <section id="cake" className="py-24 px-4 sm:px-6 max-w-4xl mx-auto text-center relative">
-      <div className="mb-12 relative z-10">
+      <div className="mb-10 relative z-10">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill text-cosmic-champagne font-sans text-xs font-semibold uppercase tracking-[0.2em] mb-4">
           <Sparkles className="w-3.5 h-3.5 text-cosmic-gold" />
-          <span>Interactive Wish Ritual</span>
+          <span>Pixel Birthday Ritual</span>
         </div>
         <h2 className="font-serif text-4xl sm:text-6xl font-normal text-white mb-4">
-          Make a Secret Birthday Wish
+          Make a Secret Wish, Coco
         </h2>
         <p className="font-sans text-white/80 text-base sm:text-lg max-w-xl mx-auto font-light leading-relaxed">
-          Close your eyes, think of the one dream that makes your heart race, and blow out the candles.
+          Close your eyes, make your wish, and click the pixel cake to blow out the candles.
         </p>
       </div>
 
-      {/* Visual Cake with atmospheric styling */}
-      <div className="relative inline-flex flex-col items-center justify-center my-8 z-10">
-        {/* Candles */}
-        <div className="flex justify-center items-end gap-6 sm:gap-9 mb-[-4px] z-20">
-          {candles.map((isLit, index) => (
-            <div key={index} className="flex flex-col items-center">
-              <div className="h-8 flex items-center justify-center">
-                {isLit ? (
-                  <div className="relative cursor-pointer group" onClick={handleBlowCandles}>
-                    <div className="w-3.5 h-6 bg-gradient-to-t from-orange-400 via-amber-200 to-white rounded-full animate-pulse shadow-glow-gold filter drop-shadow-md" />
-                    <div className="absolute inset-0 w-3.5 h-6 bg-amber-300 rounded-full blur-2xs opacity-80 animate-wiggle" />
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center">
-                    <span className="w-1 h-3 bg-white/40 rounded-full animate-bounce" />
-                    <span className="text-[10px] text-white/60 font-mono">✨</span>
-                  </div>
-                )}
-              </div>
-              <div className="w-0.5 h-2 bg-neutral-400" />
-              <div
-                className={`w-3.5 sm:w-4 h-12 sm:h-14 rounded-t-sm shadow-md border-x border-t ${
-                  index % 2 === 0
-                    ? 'bg-gradient-to-b from-cosmic-blush to-cosmic-rose border-white/30'
-                    : 'bg-gradient-to-b from-cosmic-champagne to-amber-300 border-white/30'
-                }`}
-              />
-            </div>
-          ))}
+      {/* Retro Pixel Art Cake Container */}
+      <div className="relative inline-flex flex-col items-center justify-center my-6 z-10">
+        <div 
+          onClick={handleBlowCandles}
+          className="relative cursor-pointer group transition-transform duration-300 hover:scale-105 active:scale-95"
+          title="Click to blow out the pixel candles!"
+        >
+          {/* Scalable Pure Pixel Art SVG */}
+          <svg
+            viewBox="0 0 64 64"
+            className="w-64 h-64 sm:w-80 sm:h-80 drop-shadow-[0_20px_35px_rgba(0,0,0,0.6)]"
+            style={{
+              imageRendering: 'pixelated',
+              shapeRendering: 'crispEdges',
+            }}
+          >
+            {/* Outline & Drop Shadow on Plate */}
+            <rect x="2" y="58" width="60" height="2" fill="rgba(0,0,0,0.25)" />
+
+            {/* --- CAKE STAND / PEDESTAL --- */}
+            {/* Plate Base */}
+            <rect x="20" y="56" width="24" height="2" fill="#2E101D" />
+            <rect x="21" y="55" width="22" height="2" fill="#E2E8F0" />
+            <rect x="22" y="55" width="20" height="1" fill="#FFFFFF" />
+
+            {/* Pedestal Stem */}
+            <rect x="28" y="51" width="8" height="5" fill="#2E101D" />
+            <rect x="29" y="51" width="6" height="5" fill="#CBD5E1" />
+            <rect x="30" y="51" width="2" height="5" fill="#FFFFFF" />
+
+            {/* Plate Top Rim */}
+            <rect x="4" y="49" width="56" height="3" fill="#2E101D" />
+            <rect x="5" y="48" width="54" height="3" fill="#E2E8F0" />
+            <rect x="6" y="48" width="52" height="1" fill="#FFFFFF" />
+            <rect x="6" y="50" width="52" height="1" fill="#94A3B8" />
+
+            {/* --- BOTTOM TIER --- */}
+            {/* Outline */}
+            <rect x="7" y="34" width="50" height="15" fill="#2E101D" />
+            {/* Sponge Body */}
+            <rect x="8" y="35" width="48" height="13" fill="#F472B6" />
+            {/* Cream Layer */}
+            <rect x="8" y="42" width="48" height="2" fill="#FEF08A" />
+            <rect x="8" y="43" width="48" height="1" fill="#FDE047" />
+            {/* Shadow side */}
+            <rect x="50" y="35" width="6" height="13" fill="#DB2777" />
+
+            {/* Bottom Frosting & Drips */}
+            <rect x="8" y="35" width="48" height="3" fill="#FFF0F5" />
+            <rect x="10" y="38" width="3" height="3" fill="#FFF0F5" />
+            <rect x="17" y="38" width="2" height="4" fill="#FFF0F5" />
+            <rect x="23" y="38" width="3" height="2" fill="#FFF0F5" />
+            <rect x="30" y="38" width="3" height="4" fill="#FFF0F5" />
+            <rect x="37" y="38" width="2" height="3" fill="#FFF0F5" />
+            <rect x="43" y="38" width="3" height="4" fill="#FFF0F5" />
+            <rect x="49" y="38" width="3" height="2" fill="#FFF0F5" />
+
+            {/* Decorative Pixel Hearts on Bottom Tier */}
+            {/* Heart 1 */}
+            <rect x="15" y="44" width="1" height="1" fill="#BE185D" />
+            <rect x="17" y="44" width="1" height="1" fill="#BE185D" />
+            <rect x="15" y="45" width="3" height="1" fill="#BE185D" />
+            <rect x="16" y="46" width="1" height="1" fill="#BE185D" />
+
+            {/* Heart 2 (Center) */}
+            <rect x="31" y="44" width="1" height="1" fill="#BE185D" />
+            <rect x="33" y="44" width="1" height="1" fill="#BE185D" />
+            <rect x="31" y="45" width="3" height="1" fill="#BE185D" />
+            <rect x="32" y="46" width="1" height="1" fill="#BE185D" />
+
+            {/* Heart 3 */}
+            <rect x="47" y="44" width="1" height="1" fill="#BE185D" />
+            <rect x="49" y="44" width="1" height="1" fill="#BE185D" />
+            <rect x="47" y="45" width="3" height="1" fill="#BE185D" />
+            <rect x="48" y="46" width="1" height="1" fill="#BE185D" />
+
+            {/* --- TOP TIER --- */}
+            {/* Outline */}
+            <rect x="14" y="21" width="36" height="14" fill="#2E101D" />
+            {/* Sponge Body */}
+            <rect x="15" y="22" width="34" height="12" fill="#FB7185" />
+            {/* Jam Filling */}
+            <rect x="15" y="28" width="34" height="2" fill="#BE185D" />
+            {/* Shadow side */}
+            <rect x="44" y="22" width="5" height="12" fill="#E11D48" />
+
+            {/* Top White Icing & Drips */}
+            <rect x="15" y="22" width="34" height="3" fill="#FFFFFF" />
+            <rect x="17" y="25" width="2" height="3" fill="#FFFFFF" />
+            <rect x="23" y="25" width="3" height="2" fill="#FFFFFF" />
+            <rect x="30" y="25" width="2" height="4" fill="#FFFFFF" />
+            <rect x="36" y="25" width="3" height="2" fill="#FFFFFF" />
+            <rect x="42" y="25" width="2" height="3" fill="#FFFFFF" />
+
+            {/* Top Pixel Strawberries */}
+            {/* Berry 1 */}
+            <rect x="18" y="19" width="3" height="3" fill="#E11D48" />
+            <rect x="19" y="18" width="1" height="1" fill="#22C55E" />
+            <rect x="19" y="20" width="1" height="1" fill="#FFFFFF" />
+
+            {/* Berry 2 (Center) */}
+            <rect x="31" y="19" width="3" height="3" fill="#E11D48" />
+            <rect x="32" y="18" width="1" height="1" fill="#22C55E" />
+            <rect x="32" y="20" width="1" height="1" fill="#FFFFFF" />
+
+            {/* Berry 3 */}
+            <rect x="44" y="19" width="3" height="3" fill="#E11D48" />
+            <rect x="45" y="18" width="1" height="1" fill="#22C55E" />
+            <rect x="45" y="20" width="1" height="1" fill="#FFFFFF" />
+
+            {/* --- PIXEL CANDLES & FLAMES --- */}
+            {candlePositions.map((cx, idx) => {
+              const isLit = candles[idx];
+              return (
+                <g key={idx}>
+                  {/* Candle Outline & Body */}
+                  <rect x={cx - 1} y="14" width="4" height="8" fill="#2E101D" />
+                  <rect x={cx} y="14" width="2" height="7" fill={idx % 2 === 0 ? '#F472B6' : '#C084FC'} />
+                  <rect x={cx} y="16" width="2" height="1" fill="#FFFFFF" />
+                  <rect x={cx} y="19" width="2" height="1" fill="#FFFFFF" />
+
+                  {/* Candle Wick */}
+                  <rect x={cx} y="12" width="1" height="2" fill="#271406" />
+
+                  {/* Flame or Pixel Smoke */}
+                  {isLit ? (
+                    flameFrame === 0 ? (
+                      /* Flame Frame 0 */
+                      <g>
+                        <rect x={cx - 1} y="6" width="3" height="6" fill="#F97316" />
+                        <rect x={cx} y="7" width="1" height="4" fill="#FDE047" />
+                        <rect x={cx} y="8" width="1" height="1" fill="#FFFFFF" />
+                        <rect x={cx} y="4" width="1" height="1" fill="#FDE047" />
+                      </g>
+                    ) : (
+                      /* Flame Frame 1 */
+                      <g>
+                        <rect x={cx - 1} y="7" width="3" height="5" fill="#F97316" />
+                        <rect x={cx} y="8" width="1" height="3" fill="#FDE047" />
+                        <rect x={cx} y="9" width="1" height="1" fill="#FFFFFF" />
+                        <rect x={cx + 1} y="5" width="1" height="1" fill="#FDE047" />
+                      </g>
+                    )
+                  ) : (
+                    /* Pixel Smoke Puff when blown */
+                    <g>
+                      <rect x={cx - 1} y="9" width="2" height="2" fill="#94A3B8" />
+                      <rect x={cx} y="6" width="2" height="2" fill="#CBD5E1" />
+                      <rect x={cx - 1} y="3" width="1" height="2" fill="#E2E8F0" />
+                    </g>
+                  )}
+                </g>
+              );
+            })}
+          </svg>
         </div>
 
-        {/* Top Cake Tier */}
-        <div className="w-60 sm:w-72 h-14 bg-gradient-to-r from-[#FFF0F4] via-white to-[#FFF0F4] rounded-t-3xl border border-white/60 shadow-xl relative overflow-hidden flex items-center justify-around px-5 text-neutral-800">
-          <span className="text-sm">✨</span>
-          <span className="text-sm">🍓</span>
-          <span className="text-sm">✨</span>
-          <span className="text-sm">🍓</span>
-          <span className="text-sm">✨</span>
-        </div>
-
-        {/* Frosting accent */}
-        <div className="w-60 sm:w-72 h-3 bg-cosmic-blush rounded-full -mt-1 z-10 shadow-xs" />
-
-        {/* Bottom Cake Tier */}
-        <div className="w-76 sm:w-88 h-20 bg-gradient-to-r from-cosmic-light via-white to-cosmic-light rounded-t-2xl border border-white/70 shadow-2xl relative flex items-center justify-around px-6">
-          <div className="w-full flex items-center justify-around text-cosmic-rose">
-            <span className="font-serif italic text-sm tracking-widest text-neutral-700">★ ★ ★ ★ ★</span>
-          </div>
-        </div>
-
-        {/* Pedestal Stand */}
-        <div className="w-84 sm:w-98 h-4 bg-gradient-to-r from-neutral-200 via-white to-neutral-200 rounded-full shadow-2xl border border-white" />
+        {/* Retro Pixel Tag Underneath */}
+        <p className="text-[11px] font-mono tracking-widest text-cosmic-champagne/90 uppercase mt-2">
+          {isBlown ? "★ Candles Blown Out ★" : "✦ 8-Bit Birthday Cake • Tap to Blow ✦"}
+        </p>
       </div>
 
-      {/* Action */}
+      {/* Retro 8-bit Action Button */}
       <div className="relative z-10 flex flex-col items-center gap-4 mt-6">
         {!isBlown ? (
           <button
             onClick={handleBlowCandles}
-            className="luxury-button px-9 py-3.5 rounded-full text-white font-sans text-xs sm:text-sm font-semibold tracking-widest uppercase flex items-center gap-2.5 cursor-pointer shadow-xl hover:scale-105 active:scale-95 transition-transform"
+            className="px-8 py-3.5 bg-gradient-to-r from-cosmic-rose to-cosmic-deep text-white font-mono text-xs sm:text-sm font-bold tracking-widest uppercase border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all cursor-pointer"
           >
-            <Flame className="w-4 h-4 text-cosmic-champagne fill-cosmic-champagne" />
-            <span>Blow Out The Candles</span>
+            [ BLOW OUT CANDLES ]
           </button>
         ) : (
           <div className="flex flex-col items-center gap-4">
-            <div className="p-6 rounded-3xl glass-panel border border-white/30 max-w-md shadow-2xl animate-pulse-subtle">
+            <div className="p-6 rounded-2xl glass-panel border border-white/30 max-w-md shadow-2xl animate-pulse-subtle">
               <div className="flex items-center justify-center gap-2 text-cosmic-champagne font-serif text-xl sm:text-2xl mb-2">
                 <Sparkles className="w-5 h-5 text-cosmic-gold" />
                 <span>Wish Dispatched to the Universe</span>
@@ -162,10 +281,10 @@ export default function CakeSection() {
 
             <button
               onClick={handleRelight}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-full glass-pill hover:bg-white/20 text-white/80 hover:text-white font-sans text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer"
+              className="flex items-center gap-2 px-6 py-2.5 bg-white/10 hover:bg-white/20 text-white font-mono text-xs font-bold tracking-widest uppercase border-2 border-white/40 rounded-lg transition-all cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>Make Another Wish</span>
+              <span>[ RELIGHT PIXEL CAKE ]</span>
             </button>
           </div>
         )}

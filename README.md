@@ -1,16 +1,35 @@
-# React + Vite
+# 💖 Bestie's Birthday Celebration Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A modern, interactive 3D birthday celebration website built with React, Vite, Tailwind CSS, Three.js, and Framer Motion.
 
-Currently, two official plugins are available:
+## ✨ Features
+- **Interactive 3D Gift Box (Three.js)**: 3D box that tilts with mouse movement and bursts into celebration confetti when clicked.
+- **Ambient Melody Player**: Built-in soothing lo-fi birthday melody using Web Audio API (zero external broken links, instant play).
+- **Polaroid Memory Wall**: 3D tilt photo cards with aesthetic placeholder frames ready for real pictures.
+- **Heartfelt & Flirty Love Letters**: Interactive envelopes with tabs: Pure Heart, Flirty Teasing, Partners in Crime, and Birthday Vow.
+- **Virtual Birthday Cake**: 5 glowing candles that blow out on click with smoke animation, fanfare sound, and star wishes.
+- **10 Reasons Why You're Loved**: Claymorphic reason cards with micro-animations.
+- **Interactive Wish Capsule**: Read sweet wishes and drop custom wishes into the jar.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Quick Start
+```bash
+npm install
+npm run dev
+```
+Open `http://localhost:5173` in your browser.
 
-## React Compiler
+## 🎨 How to Customize Content & Add Photos
+Edit `src/config/birthdayData.js`:
+- `bestieName`: Change "Bestie" to your bestie's real name or nickname.
+- `photos`: Add your photo files to `public/photos/` and set `src: "/photos/your_pic.jpg"`.
+- `loveLetters`: Personalize the heartfelt and flirty messages.
+- `reasonsWhy`: Add your custom inside jokes and memories.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## 🔒 Push to Private GitHub Repository
+1. Create a new private repository on [GitHub](https://github.com/new).
+2. Run in terminal:
+```bash
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+git branch -M main
+git push -u origin main
+```

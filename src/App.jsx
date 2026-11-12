@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AudioPlayer from './components/AudioPlayer';
 import Hero from './components/Hero';
 import MemoryWall from './components/MemoryWall';
-import LoveLetters from './components/LoveLetters';
+import ParchmentLetter from './components/ParchmentLetter';
 import CakeSection from './components/CakeSection';
 import ReasonsGrid from './components/ReasonsGrid';
 import WishJar from './components/WishJar';
@@ -13,13 +13,12 @@ export default function App() {
   const [unwrapped, setUnwrapped] = useState(false);
 
   useEffect(() => {
-    // Gentle welcome confetti burst
     const timer = setTimeout(() => {
       confetti({
         particleCount: 30,
         spread: 60,
         origin: { y: 0.3 },
-        colors: ['#FF9EAA', '#E8D5FF', '#FFD166']
+        colors: ['#E8729B', '#FCD34D', '#FFFFFF', '#D64E7E']
       });
     }, 800);
 
@@ -31,7 +30,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen text-charcoal overflow-hidden">
+    <div className="relative min-h-screen text-white overflow-hidden">
       {/* Floating Audio Controller */}
       <AudioPlayer />
 
@@ -39,7 +38,7 @@ export default function App() {
       <main>
         <Hero onGiftOpen={handleGiftOpen} />
         <MemoryWall />
-        <LoveLetters />
+        <ParchmentLetter />
         <CakeSection />
         <ReasonsGrid />
         <WishJar />

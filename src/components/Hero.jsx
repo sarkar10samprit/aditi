@@ -53,7 +53,7 @@ export default function Hero({ onGiftOpen }) {
           className="flex items-center gap-2 px-5 py-2.5 rounded-full glass-pill hover:bg-white/20 text-white font-sans text-xs sm:text-sm font-medium tracking-wide transition-all active:scale-95 cursor-pointer"
         >
           <Mail className="w-4 h-4 text-cosmic-blush" />
-          <span>Private Letters</span>
+          <span>Letter for Coco</span>
         </button>
 
         <button

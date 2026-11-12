@@ -1,0 +1,66 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@layer base {
+  body {
+    background: radial-gradient(circle at 15% 15%, #FFF0F3 0%, #FFF9F5 45%, #F7F3FF 100%);
+    min-height: 100vh;
+  }
+}
+
+/* Custom aesthetic scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FFF0F3;
+}
+::-webkit-scrollbar-thumb {
+  background: #FFCCD5;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #FF9EAA;
+}
+
+/* Claymorphic Utility classes */
+.clay-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 
+    0 20px 40px -15px rgba(255, 158, 170, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.7),
+    inset 0 1px 2px rgba(255, 255, 255, 0.9);
+  border-radius: 24px;
+}
+
+.clay-button {
+  background: linear-gradient(135deg, #FFA3B5 0%, #FF7597 100%);
+  box-shadow: 
+    0 10px 20px -5px rgba(230, 93, 130, 0.4),
+    inset 0 2px 2px rgba(255, 255, 255, 0.6),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.clay-button:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 
+    0 14px 26px -6px rgba(230, 93, 130, 0.5),
+    inset 0 2px 2px rgba(255, 255, 255, 0.8);
+}
+
+.clay-button:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 
+    0 4px 10px -2px rgba(230, 93, 130, 0.4),
+    inset 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 12px rgba(255, 158, 170, 0.15);
+}

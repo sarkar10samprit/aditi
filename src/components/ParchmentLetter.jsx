@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { birthdayData } from '../config/birthdayData';
-import { Play, Pause, RotateCcw, FastForward, Heart, Volume2, VolumeX, Sparkles, Feather } from 'lucide-react';
+import { Play, Pause, RotateCcw, FastForward, Heart, Volume2, VolumeX, Feather, Gauge } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function ParchmentLetter() {
@@ -14,18 +14,18 @@ export default function ParchmentLetter() {
     { type: 'sender', text: letter.sender }
   ];
 
-  // Calculate total characters
   const totalCharacters = fullContent.reduce((sum, item) => sum + item.text.length, 0);
 
   const [visibleChars, setVisibleChars] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [typingSpeed, setTypingSpeed] = useState(68); // Decreased speed (68ms per character)
   const [soundEnabled, setSoundEnabled] = useState(false);
   const [heartCount, setHeartCount] = useState(0);
 
   const audioCtxRef = useRef(null);
   const timerRef = useRef(null);
 
-  // Soft vintage typewriter / quill click
+  // Soft vintage quill / typewriter click
   const playTypingSound = () => {
     if (!soundEnabled) return;
     try {
@@ -40,36 +40,35 @@ export default function ParchmentLetter() {
       const gain = ctx.createGain();
 
       osc.type = 'triangle';
-      osc.frequency.setValueAtTime(320 + Math.random() * 120, ctx.currentTime);
+      osc.frequency.setValueAtTime(300 + Math.random() * 100, ctx.currentTime);
 
-      gain.gain.setValueAtTime(0.012, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.035);
+      gain.gain.setValueAtTime(0.01, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.04);
 
       osc.connect(gain);
       gain.connect(ctx.destination);
 
       osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.035);
+      osc.stop(ctx.currentTime + 0.04);
     } catch (e) {
       // Audio fallback
     }
   };
 
-  // Typing animation loop
+  // Typing animation loop with decreased speed
   useEffect(() => {
     if (!isPlaying || visibleChars >= totalCharacters) return;
 
     timerRef.current = setTimeout(() => {
       setVisibleChars((prev) => {
         const next = prev + 1;
-        // Play click every few characters for a realistic typing rhythm
-        if (next % 3 === 0) playTypingSound();
+        if (next % 2 === 0) playTypingSound();
         return next;
       });
-    }, 28); // 28ms per character for smooth left-to-right flow
+    }, typingSpeed);
 
     return () => clearTimeout(timerRef.current);
-  }, [visibleChars, isPlaying, totalCharacters, soundEnabled]);
+  }, [visibleChars, isPlaying, totalCharacters, typingSpeed, soundEnabled]);
 
   const handleRestart = () => {
     setVisibleChars(0);
@@ -79,6 +78,19 @@ export default function ParchmentLetter() {
   const handleSkip = () => {
     setVisibleChars(totalCharacters);
     setIsPlaying(false);
+  };
+
+  const toggleSpeed = () => {
+    // Cycle between Gentle (68ms), Slower (95ms), and Brisk (42ms)
+    if (typingSpeed === 68) setTypingSpeed(95);
+    else if (typingSpeed === 95) setTypingSpeed(42);
+    else setTypingSpeed(68);
+  };
+
+  const getSpeedLabel = () => {
+    if (typingSpeed === 95) return 'Pace: Slow';
+    if (typingSpeed === 42) return 'Pace: Brisk';
+    return 'Pace: Gentle';
   };
 
   const handleSendLove = () => {
@@ -92,7 +104,7 @@ export default function ParchmentLetter() {
   };
 
   // Helper to render text with character-by-character blur-in animation
-  const renderAnimatedBlock = (text, globalOffset, isItalic = false, isBold = false) => {
+  const renderAnimatedBlock = (text, globalOffset) => {
     const chars = text.split('');
     const blockEnd = globalOffset + chars.length;
 
@@ -158,6 +170,15 @@ export default function ParchmentLetter() {
         >
           <RotateCcw className="w-3.5 h-3.5 text-cosmic-champagne" />
           <span>Restart</span>
+        </button>
+
+        <button
+          onClick={toggleSpeed}
+          className="flex items-center gap-1.5 px-4 py-2 rounded-full glass-pill hover:bg-white/20 text-white font-sans text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer"
+          title="Adjust letter reveal speed"
+        >
+          <Gauge className="w-3.5 h-3.5 text-cosmic-champagne" />
+          <span>{getSpeedLabel()}</span>
         </button>
 
         <button

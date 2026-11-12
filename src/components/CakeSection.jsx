@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { birthdayData } from '../config/birthdayData';
-import { Flame, Sparkles, RotateCcw, Heart, Gift } from 'lucide-react';
+import { Flame, Sparkles, RotateCcw } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function CakeSection() {
@@ -11,7 +11,7 @@ export default function CakeSection() {
     try {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       const ctx = new AudioCtx();
-      const freqs = [392, 523.25, 659.25, 783.99, 1046.5]; // G, C, E, G, C (fanfare)
+      const freqs = [392, 523.25, 659.25, 783.99, 1046.5];
       freqs.forEach((freq, idx) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
@@ -39,20 +39,19 @@ export default function CakeSection() {
 
     playFanfare();
 
-    // High intensity celebration fireworks confetti
     const end = Date.now() + 2.5 * 1000;
-    const colors = ['#FF9EAA', '#FFD166', '#E8D5FF', '#FFCCD5', '#98FF98'];
+    const colors = ['#E8729B', '#FCD34D', '#FFFFFF', '#D64E7E', '#FEF3C7'];
 
     (function frame() {
       confetti({
-        particleCount: 4,
+        particleCount: 5,
         angle: 60,
         spread: 60,
         origin: { x: 0 },
         colors: colors
       });
       confetti({
-        particleCount: 4,
+        particleCount: 5,
         angle: 120,
         spread: 60,
         origin: { x: 1 },
@@ -71,113 +70,102 @@ export default function CakeSection() {
   };
 
   return (
-    <section id="cake" className="py-20 px-4 sm:px-6 max-w-4xl mx-auto text-center relative">
-      {/* Decorative Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-sparkle/20 rounded-full blur-3xl pointer-events-none" />
-
-      {/* Header */}
-      <div className="mb-10 relative z-10">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-sparkle/20 text-charcoal font-heading text-xs font-semibold uppercase tracking-wider mb-3">
-          <Sparkles className="w-3.5 h-3.5 text-sparkle" />
-          <span>Interactive Virtual Cake</span>
+    <section id="cake" className="py-24 px-4 sm:px-6 max-w-4xl mx-auto text-center relative">
+      <div className="mb-12 relative z-10">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill text-cosmic-champagne font-sans text-xs font-semibold uppercase tracking-[0.2em] mb-4">
+          <Sparkles className="w-3.5 h-3.5 text-cosmic-gold" />
+          <span>Interactive Wish Ritual</span>
         </div>
-        <h2 className="font-heading text-3xl sm:text-5xl font-bold text-charcoal mb-4">
-          {birthdayData.cakeSection.title}
+        <h2 className="font-serif text-4xl sm:text-6xl font-normal text-white mb-4">
+          Make a Secret Birthday Wish
         </h2>
-        <p className="font-body text-charcoal/75 text-base sm:text-lg max-w-xl mx-auto">
-          {birthdayData.cakeSection.instructions}
+        <p className="font-sans text-white/80 text-base sm:text-lg max-w-xl mx-auto font-light leading-relaxed">
+          Close your eyes, think of the one dream that makes your heart race, and blow out the candles.
         </p>
       </div>
 
-      {/* Visual Cake Graphic */}
+      {/* Visual Cake with atmospheric styling */}
       <div className="relative inline-flex flex-col items-center justify-center my-8 z-10">
-        {/* 5 Birthday Candles */}
-        <div className="flex justify-center items-end gap-6 sm:gap-8 mb-[-4px] z-20">
+        {/* Candles */}
+        <div className="flex justify-center items-end gap-6 sm:gap-9 mb-[-4px] z-20">
           {candles.map((isLit, index) => (
             <div key={index} className="flex flex-col items-center">
-              {/* Flame or Smoke */}
               <div className="h-8 flex items-center justify-center">
                 {isLit ? (
                   <div className="relative cursor-pointer group" onClick={handleBlowCandles}>
-                    <div className="w-4 h-6 bg-gradient-to-t from-orange-400 via-yellow-300 to-white rounded-full animate-pulse shadow-glow-gold filter drop-shadow-md" />
-                    <div className="absolute inset-0 w-4 h-6 bg-yellow-400 rounded-full blur-xs opacity-75 animate-wiggle" />
+                    <div className="w-3.5 h-6 bg-gradient-to-t from-orange-400 via-amber-200 to-white rounded-full animate-pulse shadow-glow-gold filter drop-shadow-md" />
+                    <div className="absolute inset-0 w-3.5 h-6 bg-amber-300 rounded-full blur-2xs opacity-80 animate-wiggle" />
                   </div>
                 ) : (
                   <div className="flex flex-col items-center">
-                    <span className="w-1 h-3 bg-charcoal/40 rounded-full animate-bounce" />
-                    <span className="text-[10px] text-charcoal/50 font-mono">💨</span>
+                    <span className="w-1 h-3 bg-white/40 rounded-full animate-bounce" />
+                    <span className="text-[10px] text-white/60 font-mono">✨</span>
                   </div>
                 )}
               </div>
-              {/* Candle Wick */}
-              <div className="w-0.5 h-2 bg-charcoal/70" />
-              {/* Candle Body */}
+              <div className="w-0.5 h-2 bg-neutral-400" />
               <div
                 className={`w-3.5 sm:w-4 h-12 sm:h-14 rounded-t-sm shadow-md border-x border-t ${
                   index % 2 === 0
-                    ? 'bg-gradient-to-b from-blush-200 to-blush-400 border-blush-300'
-                    : 'bg-gradient-to-b from-lavender-200 to-lavender-400 border-lavender-300'
+                    ? 'bg-gradient-to-b from-cosmic-blush to-cosmic-rose border-white/30'
+                    : 'bg-gradient-to-b from-cosmic-champagne to-amber-300 border-white/30'
                 }`}
               />
             </div>
           ))}
         </div>
 
-        {/* Cake Layer 1 (Top Tier) */}
-        <div className="w-56 sm:w-64 h-14 bg-gradient-to-r from-blush-100 via-white to-blush-100 rounded-t-3xl border-2 border-blush-200 shadow-md relative overflow-hidden flex items-center justify-around px-4">
-          <span className="text-sm">🍓</span>
-          <span className="text-sm">✨</span>
-          <span className="text-sm">🍒</span>
+        {/* Top Cake Tier */}
+        <div className="w-60 sm:w-72 h-14 bg-gradient-to-r from-[#FFF0F4] via-white to-[#FFF0F4] rounded-t-3xl border border-white/60 shadow-xl relative overflow-hidden flex items-center justify-around px-5 text-neutral-800">
           <span className="text-sm">✨</span>
           <span className="text-sm">🍓</span>
+          <span className="text-sm">✨</span>
+          <span className="text-sm">🍓</span>
+          <span className="text-sm">✨</span>
         </div>
 
-        {/* Frosting Drips */}
-        <div className="w-56 sm:w-64 h-3 bg-blush-200 rounded-full -mt-1 z-10 shadow-xs" />
+        {/* Frosting accent */}
+        <div className="w-60 sm:w-72 h-3 bg-cosmic-blush rounded-full -mt-1 z-10 shadow-xs" />
 
-        {/* Cake Layer 2 (Bottom Tier) */}
-        <div className="w-72 sm:w-80 h-20 bg-gradient-to-r from-buttercream via-[#FFF2F4] to-buttercream rounded-t-2xl border-2 border-blush-200 shadow-lg relative flex items-center justify-around px-6">
-          <div className="w-full flex items-center justify-around text-blush-400/80">
-            <Heart className="w-4 h-4 fill-blush-300 text-blush-300" />
-            <Sparkles className="w-4 h-4 text-sparkle" />
-            <Heart className="w-4 h-4 fill-blush-300 text-blush-300" />
-            <Sparkles className="w-4 h-4 text-sparkle" />
-            <Heart className="w-4 h-4 fill-blush-300 text-blush-300" />
+        {/* Bottom Cake Tier */}
+        <div className="w-76 sm:w-88 h-20 bg-gradient-to-r from-cosmic-light via-white to-cosmic-light rounded-t-2xl border border-white/70 shadow-2xl relative flex items-center justify-around px-6">
+          <div className="w-full flex items-center justify-around text-cosmic-rose">
+            <span className="font-serif italic text-sm tracking-widest text-neutral-700">★ ★ ★ ★ ★</span>
           </div>
         </div>
 
-        {/* Cake Plate Stand */}
-        <div className="w-80 sm:w-96 h-4 bg-gradient-to-r from-gray-200 via-white to-gray-200 rounded-full shadow-lg border border-gray-300" />
+        {/* Pedestal Stand */}
+        <div className="w-84 sm:w-98 h-4 bg-gradient-to-r from-neutral-200 via-white to-neutral-200 rounded-full shadow-2xl border border-white" />
       </div>
 
-      {/* Action Buttons */}
+      {/* Action */}
       <div className="relative z-10 flex flex-col items-center gap-4 mt-6">
         {!isBlown ? (
           <button
             onClick={handleBlowCandles}
-            className="clay-button px-8 py-3.5 rounded-full text-white font-heading text-base font-bold flex items-center gap-2 cursor-pointer shadow-lg hover:scale-105 active:scale-95 transition-transform"
+            className="luxury-button px-9 py-3.5 rounded-full text-white font-sans text-xs sm:text-sm font-semibold tracking-widest uppercase flex items-center gap-2.5 cursor-pointer shadow-xl hover:scale-105 active:scale-95 transition-transform"
           >
-            <Flame className="w-5 h-5 text-yellow-200 fill-yellow-200" />
-            <span>Blow Out The Candles! 🎂</span>
+            <Flame className="w-4 h-4 text-cosmic-champagne fill-cosmic-champagne" />
+            <span>Blow Out The Candles</span>
           </button>
         ) : (
-          <div className="flex flex-col items-center gap-3">
-            <div className="p-5 rounded-2xl bg-white/95 border-2 border-blush-300 shadow-xl max-w-md animate-pulse-soft">
-              <div className="flex items-center justify-center gap-2 text-blush-600 font-heading font-bold text-lg mb-1">
-                <Sparkles className="w-5 h-5 text-sparkle" />
-                <span>Wish Dispatched to the Stars! ✨</span>
+          <div className="flex flex-col items-center gap-4">
+            <div className="p-6 rounded-3xl glass-panel border border-white/30 max-w-md shadow-2xl animate-pulse-subtle">
+              <div className="flex items-center justify-center gap-2 text-cosmic-champagne font-serif text-xl sm:text-2xl mb-2">
+                <Sparkles className="w-5 h-5 text-cosmic-gold" />
+                <span>Wish Dispatched to the Universe</span>
               </div>
-              <p className="font-body text-charcoal/80 text-sm">
+              <p className="font-sans text-white/85 text-sm font-light leading-relaxed">
                 {birthdayData.cakeSection.blownSuccessMessage}
               </p>
             </div>
 
             <button
               onClick={handleRelight}
-              className="flex items-center gap-2 px-5 py-2 rounded-full bg-white/80 border border-charcoal/10 text-charcoal/70 hover:text-blush-600 font-heading text-xs font-semibold shadow-xs hover:shadow-sm transition-all cursor-pointer"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-full glass-pill hover:bg-white/20 text-white/80 hover:text-white font-sans text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>Relight Candles (Make Another Wish)</span>
+              <span>Make Another Wish</span>
             </button>
           </div>
         )}

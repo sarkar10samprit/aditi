@@ -8,28 +8,28 @@ export default function Footer() {
   };
 
   return (
-    <footer className="py-14 px-4 text-center border-t border-blush-200/60 bg-white/40 backdrop-blur-sm relative">
+    <footer className="py-20 px-4 text-center border-t border-white/10 bg-black/30 backdrop-blur-md relative">
       <div className="max-w-md mx-auto space-y-4">
-        <div className="flex items-center justify-center gap-1.5 text-blush-500">
-          <Sparkles className="w-4 h-4 text-sparkle" />
-          <Heart className="w-5 h-5 fill-blush-500 animate-pulse" />
-          <Sparkles className="w-4 h-4 text-sparkle" />
+        <div className="flex items-center justify-center gap-2 text-cosmic-champagne">
+          <Sparkles className="w-4 h-4 text-cosmic-gold" />
+          <Heart className="w-5 h-5 fill-cosmic-rose text-cosmic-rose animate-pulse" />
+          <Sparkles className="w-4 h-4 text-cosmic-gold" />
         </div>
 
-        <p className="font-heading text-lg font-bold text-charcoal">
-          Made with infinite love, laughter & endless teasing for {birthdayData.bestieName} 💖
+        <p className="font-serif text-2xl font-normal text-white">
+          Dedicated to {birthdayData.bestieName}
         </p>
 
-        <p className="font-body text-xs text-charcoal/60 leading-relaxed max-w-sm mx-auto">
-          "Friendship isn't about who you've known the longest. It's about who walked into your life, said 'I'm here for you', and proved it."
+        <p className="font-sans text-xs text-white/70 leading-relaxed max-w-sm mx-auto font-light">
+          "Some people make the world more special just by being in it."
         </p>
 
-        <div className="pt-2">
+        <div className="pt-3">
           <button
             onClick={scrollToTop}
-            className="text-xs font-heading font-semibold text-blush-600 hover:text-blush-700 underline decoration-blush-300 underline-offset-4 cursor-pointer"
+            className="text-xs font-sans font-semibold text-cosmic-champagne hover:text-white uppercase tracking-widest underline decoration-cosmic-champagne/40 underline-offset-4 cursor-pointer"
           >
-            Back to Top ↑
+            Return to Top ↑
           </button>
         </div>
       </div>

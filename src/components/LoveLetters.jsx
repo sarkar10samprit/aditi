@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { birthdayData } from '../config/birthdayData';
-import { Mail, Heart, Sparkles, Feather, Flame, HeartHandshake } from 'lucide-react';
+import { Mail, Heart, Sparkles, Feather, Flame } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function LoveLetters() {
@@ -12,58 +12,55 @@ export default function LoveLetters() {
   const triggerHeartBurst = () => {
     setHeartCount((prev) => prev + 1);
     confetti({
-      particleCount: 25,
+      particleCount: 28,
       spread: 60,
       origin: { y: 0.7 },
-      colors: ['#FF9EAA', '#FFA3B5', '#FF7597']
+      colors: ['#E8729B', '#FCD34D', '#FFFFFF', '#D64E7E']
     });
   };
 
   const getTagBadge = (tag) => {
     if (tag.includes('Flirty')) {
       return (
-        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-peach/40 text-blush-600 font-heading text-xs font-semibold border border-blush-200">
-          <Flame className="w-3.5 h-3.5 text-blush-500 fill-blush-500" />
+        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-cosmic-rose/25 text-cosmic-champagne font-sans text-xs font-semibold border border-cosmic-rose/40">
+          <Flame className="w-3.5 h-3.5 text-cosmic-gold fill-cosmic-gold" />
           <span>{tag}</span>
         </span>
       );
     }
     if (tag.includes('Pure')) {
       return (
-        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-blush-100 text-blush-600 font-heading text-xs font-semibold border border-blush-200">
-          <Heart className="w-3.5 h-3.5 text-blush-500 fill-blush-500" />
+        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-cosmic-blush/25 text-white font-sans text-xs font-semibold border border-cosmic-blush/40">
+          <Heart className="w-3.5 h-3.5 text-cosmic-rose fill-cosmic-rose" />
           <span>{tag}</span>
         </span>
       );
     }
     return (
-      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-lavender-100 text-lavender-600 font-heading text-xs font-semibold border border-lavender-200">
-        <Sparkles className="w-3.5 h-3.5 text-sparkle" />
+      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/15 text-cosmic-champagne font-sans text-xs font-semibold border border-white/20">
+        <Sparkles className="w-3.5 h-3.5 text-cosmic-gold" />
         <span>{tag}</span>
       </span>
     );
   };
 
   return (
-    <section id="letters" className="py-20 px-4 sm:px-6 max-w-6xl mx-auto relative">
-      {/* Background ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blush-100/50 rounded-full blur-3xl pointer-events-none" />
-
+    <section id="letters" className="py-24 px-4 sm:px-6 max-w-5xl mx-auto relative">
       {/* Header */}
-      <div className="text-center max-w-2xl mx-auto mb-14 relative z-10">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blush-100 text-blush-600 font-heading text-xs font-semibold uppercase tracking-wider mb-3">
+      <div className="text-center max-w-2xl mx-auto mb-16 relative z-10">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill text-cosmic-champagne font-sans text-xs font-semibold uppercase tracking-[0.2em] mb-4">
           <Feather className="w-3.5 h-3.5" />
-          <span>From My Heart To Yours</span>
+          <span>Unfiltered Correspondence</span>
         </div>
-        <h2 className="font-heading text-3xl sm:text-5xl font-bold text-charcoal mb-4">
-          Letters You Were Meant To Read 💌
+        <h2 className="font-serif text-4xl sm:text-6xl font-normal text-white mb-4">
+          Letters Written Just for You
         </h2>
-        <p className="font-body text-charcoal/75 text-base sm:text-lg">
-          A blend of sincere affection, deep appreciation, and just a little bit of shameless flirting. Tap through the envelopes below.
+        <p className="font-sans text-white/80 text-base sm:text-lg font-light leading-relaxed">
+          The honest truth about how much you matter, how much you brighten every room, and why life without you would be dreadfully boring.
         </p>
       </div>
 
-      {/* Interactive Tabs / Envelope Selectors */}
+      {/* Tabs */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-8 relative z-10">
         {birthdayData.loveLetters.map((letter) => {
           const isSelected = letter.id === activeLetterId;
@@ -71,17 +68,17 @@ export default function LoveLetters() {
             <button
               key={letter.id}
               onClick={() => setActiveLetterId(letter.id)}
-              className={`text-left p-4 rounded-2xl transition-all duration-300 relative cursor-pointer ${
+              className={`text-left p-4 sm:p-5 rounded-2xl transition-all duration-300 relative cursor-pointer ${
                 isSelected
-                  ? 'bg-white shadow-clay-card border-2 border-blush-300 -translate-y-1'
-                  : 'bg-white/70 hover:bg-white/95 border border-blush-100 shadow-sm hover:shadow-md'
+                  ? 'glass-panel border-white/40 bg-white/20 -translate-y-1 shadow-glass-hover'
+                  : 'glass-panel hover:bg-white/10 opacity-75 hover:opacity-100'
               }`}
             >
-              <div className="mb-2">{getTagBadge(letter.tag)}</div>
-              <h3 className="font-heading text-sm sm:text-base font-bold text-charcoal line-clamp-1">
+              <div className="mb-2.5">{getTagBadge(letter.tag)}</div>
+              <h3 className="font-serif text-base sm:text-lg font-bold text-white line-clamp-1">
                 {letter.title}
               </h3>
-              <p className="font-body text-xs text-charcoal/60 mt-1 line-clamp-2">
+              <p className="font-sans text-xs text-white/70 mt-1 line-clamp-2 font-light">
                 {letter.preview}
               </p>
             </button>
@@ -89,53 +86,52 @@ export default function LoveLetters() {
         })}
       </div>
 
-      {/* Open Letter Display with Stationery Paper Styling */}
-      <div className="relative z-10 bg-white/95 backdrop-blur-md rounded-3xl p-6 sm:p-10 md:p-12 shadow-2xl border-2 border-blush-100 relative overflow-hidden">
-        {/* Decorative corner stamp */}
-        <div className="absolute top-6 right-6 w-16 h-16 sm:w-20 sm:h-20 border-2 border-dashed border-blush-300 rounded-2xl flex flex-col items-center justify-center rotate-6 pointer-events-none opacity-70">
-          <Heart className="w-6 h-6 text-blush-400 fill-blush-200" />
-          <span className="text-[10px] font-heading font-bold text-blush-400 uppercase tracking-widest mt-1">
-            AIR MAIL
+      {/* Open Letter Station */}
+      <div className="relative z-10 glass-panel p-8 sm:p-12 md:p-14 shadow-2xl border border-white/30 relative overflow-hidden">
+        {/* Decorative Watermark */}
+        <div className="absolute top-8 right-8 w-20 h-20 border border-white/20 rounded-full flex flex-col items-center justify-center rotate-12 pointer-events-none opacity-40">
+          <Heart className="w-7 h-7 text-cosmic-champagne" />
+          <span className="text-[9px] font-sans font-bold text-cosmic-champagne uppercase tracking-widest mt-1">
+            VERIFIED
           </span>
         </div>
 
-        {/* Letter Tag & Title */}
-        <div className="mb-6">
+        {/* Header inside letter */}
+        <div className="mb-8">
           {getTagBadge(activeLetter.tag)}
-          <h3 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold text-charcoal mt-3">
+          <h3 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-white mt-4 leading-tight">
             {activeLetter.title}
           </h3>
         </div>
 
-        {/* Letter Body */}
-        <div className="prose max-w-none">
+        {/* Letter Prose */}
+        <div className="space-y-5 max-w-3xl">
           {activeLetter.content.split('\n\n').map((paragraph, idx) => (
             <p
               key={idx}
-              className="font-body text-base sm:text-lg text-charcoal/85 leading-relaxed mb-4"
+              className="font-sans text-base sm:text-lg text-white/90 leading-relaxed font-light tracking-wide"
             >
               {paragraph}
             </p>
           ))}
         </div>
 
-        {/* Handwritten Signoff */}
-        <div className="mt-8 pt-6 border-t border-blush-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        {/* Signoff */}
+        <div className="mt-12 pt-8 border-t border-white/15 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div>
-            <p className="font-handwriting text-2xl sm:text-3xl text-blush-600">
-              Forever your biggest fan, confidant & partner in crime,
+            <p className="font-serif italic text-2xl sm:text-3xl text-cosmic-champagne">
+              Forever your biggest fan, confidant & partner in chaos,
             </p>
-            <p className="font-heading text-sm text-charcoal/60 font-semibold mt-0.5">
-              Always and without exception ✨
+            <p className="font-sans text-xs text-white/60 font-medium tracking-widest uppercase mt-1">
+              With unconditional devotion ✨
             </p>
           </div>
 
-          {/* Interactive Heart Reaction Button */}
           <button
             onClick={triggerHeartBurst}
-            className="group flex items-center gap-2 px-5 py-2.5 rounded-full bg-blush-50 hover:bg-blush-100 border border-blush-200 text-blush-600 font-heading text-xs sm:text-sm font-semibold transition-all active:scale-95 shadow-sm cursor-pointer"
+            className="flex items-center gap-2.5 px-6 py-3 rounded-full luxury-button text-white font-sans text-xs sm:text-sm font-semibold tracking-wider uppercase transition-all active:scale-95 cursor-pointer shadow-lg hover:shadow-glow-rose"
           >
-            <Heart className={`w-4 h-4 text-blush-500 fill-blush-400 group-hover:scale-125 transition-transform ${heartCount > 0 ? 'animate-bounce' : ''}`} />
+            <Heart className={`w-4 h-4 text-cosmic-champagne fill-cosmic-champagne ${heartCount > 0 ? 'scale-125' : ''} transition-transform`} />
             <span>Send Love Back ({heartCount})</span>
           </button>
         </div>

@@ -3,64 +3,82 @@
 
 @layer base {
   body {
-    background: radial-gradient(circle at 15% 15%, #FFF0F3 0%, #FFF9F5 45%, #F7F3FF 100%);
+    background-color: #4A1227;
+    background-image: 
+      radial-gradient(ellipse at 50% 20%, rgba(214, 78, 126, 0.25) 0%, rgba(30, 6, 16, 0.65) 100%),
+      url('/background.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #FFFFFF;
     min-height: 100vh;
+    overflow-x: hidden;
   }
 }
 
-/* Custom aesthetic scrollbar */
+/* Custom Luxury Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: #FFF0F3;
+  background: rgba(30, 6, 16, 0.8);
 }
 ::-webkit-scrollbar-thumb {
-  background: #FFCCD5;
+  background: rgba(232, 114, 155, 0.5);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #FF9EAA;
+  background: rgba(232, 114, 155, 0.85);
 }
 
-/* Claymorphic Utility classes */
-.clay-card {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  border: 2px solid rgba(255, 255, 255, 0.9);
+/* Professional Frosted Glass Panels */
+.glass-panel {
+  background: rgba(45, 12, 26, 0.45);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: 
-    0 20px 40px -15px rgba(255, 158, 170, 0.25),
-    0 0 0 1px rgba(255, 255, 255, 0.7),
-    inset 0 1px 2px rgba(255, 255, 255, 0.9);
+    0 24px 48px -12px rgba(0, 0, 0, 0.45),
+    inset 0 1px 1px rgba(255, 255, 255, 0.35);
+  border-radius: 28px;
+}
+
+.glass-card-light {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 
+    0 20px 45px -10px rgba(0, 0, 0, 0.3),
+    0 2px 6px rgba(0, 0, 0, 0.08);
   border-radius: 24px;
 }
 
-.clay-button {
-  background: linear-gradient(135deg, #FFA3B5 0%, #FF7597 100%);
+.luxury-button {
+  background: linear-gradient(135deg, rgba(232, 114, 155, 0.95) 0%, rgba(214, 78, 126, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 
-    0 10px 20px -5px rgba(230, 93, 130, 0.4),
-    inset 0 2px 2px rgba(255, 255, 255, 0.6),
-    inset 0 -2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    0 12px 28px -6px rgba(142, 40, 86, 0.6),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.clay-button:hover {
-  transform: translateY(-2px) scale(1.02);
+.luxury-button:hover {
+  transform: translateY(-2px);
   box-shadow: 
-    0 14px 26px -6px rgba(230, 93, 130, 0.5),
-    inset 0 2px 2px rgba(255, 255, 255, 0.8);
+    0 18px 36px -6px rgba(214, 78, 126, 0.7),
+    inset 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
-.clay-button:active {
-  transform: translateY(1px) scale(0.98);
-  box-shadow: 
-    0 4px 10px -2px rgba(230, 93, 130, 0.4),
-    inset 0 3px 6px rgba(0, 0, 0, 0.2);
+.luxury-button:active {
+  transform: translateY(1px);
 }
 
 .glass-pill {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 4px 12px rgba(255, 158, 170, 0.15);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }

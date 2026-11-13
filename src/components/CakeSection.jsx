@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { birthdayData } from '../config/birthdayData';
 
@@ -7,6 +8,8 @@ export default function CakeSection() {
   const [candles, setCandles] = useState([true, true, true, true, true]);
   const [flameFrame, setFlameFrame] = useState(0);
   const [floatingHearts, setFloatingHearts] = useState([]);
+  const [isCut, setIsCut] = useState(false);
+  const [isCutting, setIsCutting] = useState(false);
 
   // 8-bit Flame animation cycle (flickers every 180ms)
   useEffect(() => {
@@ -77,7 +80,7 @@ export default function CakeSection() {
         });
       }, 250);
     } catch (e) {
-      // Graceful fallback if shapeFromText unavailable
+      // Graceful fallback
     }
   };
 
@@ -85,18 +88,30 @@ export default function CakeSection() {
     if (isBlown) return;
     setIsBlown(true);
     setCandles([false, false, false, false, false]);
-
-    // Sound effect removed as requested (background song continues undisturbed)
-    // Flow floating heart emojis instead of confetti
     spawnFloatingHearts();
   };
 
+  const handleCutCake = () => {
+    setIsCutting(true);
+
+    setTimeout(() => {
+      setIsCut(true);
+      setIsCutting(false);
+    }, 450);
+
+    confetti({
+      particleCount: 75,
+      spread: 90,
+      origin: { y: 0.65 },
+      colors: ['#F472B6', '#FB7185', '#FDE047', '#FFFFFF', '#D64E7E', '#FEF3C7'],
+    });
+  };
 
   // 5 candle X positions on a 32x32 chunky pixel grid
   const candlePositions = [7, 11, 15, 19, 23];
 
   return (
-    <section id="cake" className="py-24 px-4 sm:px-6 max-w-4xl mx-auto text-center relative">
+    <section id="cake" className="py-24 px-4 sm:px-6 max-w-5xl mx-auto text-center relative">
       {/* Full-Screen Floating Emoji Ocean */}
       {floatingHearts.length > 0 && (
         <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
@@ -130,17 +145,18 @@ export default function CakeSection() {
         </p>
       </div>
 
-      {/* Ultra-Chunky 32x32 Retro Pixel Art Cake */}
-      <div className="relative inline-flex flex-col items-center justify-center my-6 z-10">
+      {/* Interactive Cake Area (Cake + Knife Cat beside it) */}
+      <div className="relative flex flex-col md:flex-row items-center justify-center gap-6 sm:gap-12 my-6 z-10">
+        {/* Ultra-Chunky 32x32 Retro Pixel Art Cake */}
         <div 
-          onClick={handleBlowCandles}
+          onClick={!isBlown ? handleBlowCandles : undefined}
           className="relative cursor-pointer group transition-transform duration-300 hover:scale-105 active:scale-95"
-          title="Click to blow out the chunky pixel candles!"
+          title={!isBlown ? "Click to blow out the chunky pixel candles!" : (isCut ? "A slice has been cut for Coco!" : "Candles extinguished!")}
         >
           {/* Scalable 32x32 Chunky Pixel Grid SVG */}
           <svg
             viewBox="0 0 32 32"
-            className="w-64 h-64 sm:w-80 sm:h-80 drop-shadow-[0_20px_40px_rgba(0,0,0,0.7)]"
+            className="w-64 h-64 sm:w-80 sm:h-80 drop-shadow-[0_20px_40px_rgba(0,0,0,0.7)] overflow-visible"
             style={{
               imageRendering: 'pixelated',
               shapeRendering: 'crispEdges',
@@ -150,116 +166,175 @@ export default function CakeSection() {
             <rect x="2" y="31" width="28" height="1" fill="rgba(0,0,0,0.3)" />
 
             {/* --- PEDESTAL & PLATE (Chunky 32x32) --- */}
-            {/* Stand Base */}
             <rect x="9" y="30" width="14" height="1" fill="#1C0612" />
             <rect x="10" y="29" width="12" height="1" fill="#CBD5E1" />
             <rect x="11" y="29" width="10" height="1" fill="#FFFFFF" />
 
-            {/* Stand Stem */}
             <rect x="14" y="27" width="4" height="2" fill="#1C0612" />
             <rect x="15" y="27" width="2" height="2" fill="#94A3B8" />
 
-            {/* Plate Rim */}
-            <rect x="2" y="25" width="28" height="2" fill="#1C0612" />
-            <rect x="3" y="25" width="26" height="1" fill="#FFFFFF" />
-            <rect x="3" y="26" width="26" height="1" fill="#CBD5E1" />
+            <rect x="2" y="25" width={isCut ? "30" : "28"} height="2" fill="#1C0612" />
+            <rect x="3" y="25" width={isCut ? "28" : "26"} height="1" fill="#FFFFFF" />
+            <rect x="3" y="26" width={isCut ? "28" : "26"} height="1" fill="#CBD5E1" />
 
-            {/* --- BOTTOM TIER (Chunky Blocks) --- */}
-            {/* Outline */}
-            <rect x="3" y="17" width="26" height="8" fill="#1C0612" />
-            {/* Cake Sponge Body */}
-            <rect x="4" y="18" width="24" height="7" fill="#F472B6" />
-            {/* Biscuit Cream Layer */}
-            <rect x="4" y="22" width="24" height="1" fill="#FDE047" />
-            {/* Shading on right edge */}
-            <rect x="25" y="18" width="3" height="7" fill="#DB2777" />
+            {/* --- MAIN BASE CAKE BODY (Left / Center section) --- */}
+            {/* Bottom Tier Base */}
+            <rect x="3" y="17" width="18" height="8" fill="#1C0612" />
+            <rect x="4" y="18" width="17" height="7" fill="#F472B6" />
+            <rect x="4" y="22" width="17" height="1" fill="#FDE047" />
 
-            {/* White Frosting & Chunky Drips */}
-            <rect x="4" y="18" width="24" height="2" fill="#FFFFFF" />
+            {/* Bottom Tier Frosting */}
+            <rect x="4" y="18" width="17" height="2" fill="#FFFFFF" />
             <rect x="5" y="20" width="2" height="2" fill="#FFFFFF" />
             <rect x="9" y="20" width="2" height="1" fill="#FFFFFF" />
             <rect x="13" y="20" width="2" height="2" fill="#FFFFFF" />
             <rect x="17" y="20" width="2" height="1" fill="#FFFFFF" />
-            <rect x="21" y="20" width="2" height="2" fill="#FFFFFF" />
-            <rect x="25" y="20" width="2" height="1" fill="#FFFFFF" />
 
-            {/* Chunky Pixel Hearts on Bottom Tier */}
-            {/* Heart 1 */}
+            {/* Pixel Hearts on Base Bottom Tier */}
             <rect x="7" y="23" width="1" height="1" fill="#BE185D" />
             <rect x="9" y="23" width="1" height="1" fill="#BE185D" />
             <rect x="7" y="24" width="3" height="1" fill="#BE185D" />
             <rect x="8" y="25" width="1" height="1" fill="#BE185D" />
 
-            {/* Heart 2 (Center) */}
             <rect x="15" y="23" width="1" height="1" fill="#BE185D" />
             <rect x="17" y="23" width="1" height="1" fill="#BE185D" />
             <rect x="15" y="24" width="3" height="1" fill="#BE185D" />
             <rect x="16" y="25" width="1" height="1" fill="#BE185D" />
 
-            {/* Heart 3 */}
-            <rect x="23" y="23" width="1" height="1" fill="#BE185D" />
-            <rect x="25" y="23" width="1" height="1" fill="#BE185D" />
-            <rect x="23" y="24" width="3" height="1" fill="#BE185D" />
-            <rect x="24" y="25" width="1" height="1" fill="#BE185D" />
+            {/* Top Tier Base */}
+            <rect x="6" y="10" width="14" height="7" fill="#1C0612" />
+            <rect x="7" y="11" width="13" height="6" fill="#FB7185" />
+            <rect x="7" y="14" width="13" height="1" fill="#BE185D" />
 
-            {/* --- TOP TIER (Chunky Blocks) --- */}
-            {/* Outline */}
-            <rect x="6" y="10" width="20" height="7" fill="#1C0612" />
-            {/* Cake Sponge Body */}
-            <rect x="7" y="11" width="18" height="6" fill="#FB7185" />
-            {/* Jam Filling */}
-            <rect x="7" y="14" width="18" height="1" fill="#BE185D" />
-            {/* Shading on right edge */}
-            <rect x="22" y="11" width="3" height="6" fill="#E11D48" />
-
-            {/* Top White Frosting & Chunky Drips */}
-            <rect x="7" y="11" width="18" height="2" fill="#FFFFFF" />
+            {/* Top Tier Frosting */}
+            <rect x="7" y="11" width="13" height="2" fill="#FFFFFF" />
             <rect x="8" y="13" width="2" height="2" fill="#FFFFFF" />
             <rect x="13" y="13" width="2" height="2" fill="#FFFFFF" />
             <rect x="18" y="13" width="2" height="2" fill="#FFFFFF" />
-            <rect x="22" y="13" width="2" height="1" fill="#FFFFFF" />
 
-            {/* Chunky Strawberries on Top Tier */}
-            {/* Berry 1 */}
+            {/* Strawberries 1 & 2 */}
             <rect x="9" y="9" width="2" height="2" fill="#E11D48" />
             <rect x="10" y="8" width="1" height="1" fill="#22C55E" />
             <rect x="10" y="9" width="1" height="1" fill="#FFFFFF" />
 
-            {/* Berry 2 */}
             <rect x="15" y="9" width="2" height="2" fill="#E11D48" />
             <rect x="16" y="8" width="1" height="1" fill="#22C55E" />
             <rect x="16" y="9" width="1" height="1" fill="#FFFFFF" />
 
-            {/* Berry 3 */}
-            <rect x="21" y="9" width="2" height="2" fill="#E11D48" />
-            <rect x="22" y="8" width="1" height="1" fill="#22C55E" />
-            <rect x="22" y="9" width="1" height="1" fill="#FFFFFF" />
+            {/* Exposed Cut Crumb Layers when sliced */}
+            {isCut && (
+              <g>
+                {/* Exposed Cut Line Top Tier */}
+                <rect x="20" y="10" width="1" height="7" fill="#1C0612" />
+                <rect x="20" y="11" width="1" height="2" fill="#FDE047" />
+                <rect x="20" y="13" width="1" height="1" fill="#FFFFFF" />
+                <rect x="20" y="14" width="1" height="1" fill="#BE185D" />
+                <rect x="20" y="15" width="1" height="2" fill="#FDE047" />
 
-            {/* --- CHUNKY CANDLES & PIXEL FLAMES --- */}
-            {candlePositions.map((cx, idx) => {
+                {/* Exposed Cut Line Bottom Tier */}
+                <rect x="21" y="17" width="1" height="8" fill="#1C0612" />
+                <rect x="21" y="18" width="1" height="2" fill="#FDE047" />
+                <rect x="21" y="20" width="1" height="1" fill="#FFFFFF" />
+                <rect x="21" y="21" width="1" height="1" fill="#BE185D" />
+                <rect x="21" y="22" width="1" height="3" fill="#FDE047" />
+              </g>
+            )}
+
+            {/* --- SEPARABLE / SLICED PIECE --- */}
+            <g
+              style={{
+                transform: isCut ? 'translate(4.5px, -1px)' : 'none',
+                transition: 'transform 0.5s cubic-bezier(0.34, 1.35, 0.64, 1)',
+              }}
+            >
+              {/* Exposed cut face on the slice itself */}
+              {isCut && (
+                <g>
+                  <rect x="20" y="10" width="1" height="7" fill="#1C0612" />
+                  <rect x="21" y="17" width="1" height="8" fill="#1C0612" />
+                </g>
+              )}
+
+              {/* Bottom Tier Slice */}
+              <rect x="21" y="17" width="8" height="8" fill="#1C0612" />
+              <rect x="21" y="18" width="7" height="7" fill="#F472B6" />
+              <rect x="21" y="22" width="7" height="1" fill="#FDE047" />
+              <rect x="26" y="18" width="2" height="7" fill="#DB2777" />
+
+              {/* Bottom Frosting */}
+              <rect x="21" y="18" width="7" height="2" fill="#FFFFFF" />
+              <rect x="21" y="20" width="2" height="2" fill="#FFFFFF" />
+              <rect x="25" y="20" width="2" height="1" fill="#FFFFFF" />
+
+              {/* Heart 3 on Slice */}
+              <rect x="23" y="23" width="1" height="1" fill="#BE185D" />
+              <rect x="25" y="23" width="1" height="1" fill="#BE185D" />
+              <rect x="23" y="24" width="3" height="1" fill="#BE185D" />
+              <rect x="24" y="25" width="1" height="1" fill="#BE185D" />
+
+              {/* Top Tier Slice */}
+              <rect x="20" y="10" width="6" height="7" fill="#1C0612" />
+              <rect x="20" y="11" width="5" height="6" fill="#FB7185" />
+              <rect x="20" y="14" width="5" height="1" fill="#BE185D" />
+              <rect x="23" y="11" width="2" height="6" fill="#E11D48" />
+
+              {/* Top Frosting on Slice */}
+              <rect x="20" y="11" width="5" height="2" fill="#FFFFFF" />
+              <rect x="22" y="13" width="2" height="1" fill="#FFFFFF" />
+
+              {/* Strawberry 3 on Slice */}
+              <rect x="21" y="9" width="2" height="2" fill="#E11D48" />
+              <rect x="22" y="8" width="1" height="1" fill="#22C55E" />
+              <rect x="22" y="9" width="1" height="1" fill="#FFFFFF" />
+
+              {/* Candle 5 on Slice */}
+              <g>
+                <rect x="23" y="5" width="2" height="5" fill="#1C0612" />
+                <rect x="23" y="5" width="1" height="4" fill="#F472B6" />
+                <rect x="24" y="5" width="1" height="4" fill="#FFFFFF" />
+                <rect x="23" y="4" width="1" height="1" fill="#271406" />
+
+                {candles[4] ? (
+                  flameFrame === 0 ? (
+                    <g>
+                      <rect x="22" y="1" width="3" height="3" fill="#F97316" />
+                      <rect x="23" y="1" width="1" height="2" fill="#FDE047" />
+                      <rect x="23" y="2" width="1" height="1" fill="#FFFFFF" />
+                    </g>
+                  ) : (
+                    <g>
+                      <rect x="22" y="2" width="3" height="2" fill="#F97316" />
+                      <rect x="23" y="1" width="1" height="2" fill="#FDE047" />
+                      <rect x="23" y="2" width="1" height="1" fill="#FFFFFF" />
+                    </g>
+                  )
+                ) : (
+                  <g>
+                    <rect x="23" y="3" width="1" height="1" fill="#94A3B8" />
+                    <rect x="22" y="1" width="2" height="1" fill="#CBD5E1" />
+                  </g>
+                )}
+              </g>
+            </g>
+
+            {/* --- CANDLES 1 through 4 (On Main Cake Body) --- */}
+            {candlePositions.slice(0, 4).map((cx, idx) => {
               const isLit = candles[idx];
               return (
                 <g key={idx}>
-                  {/* Candle Outline */}
                   <rect x={cx} y="5" width="2" height="5" fill="#1C0612" />
-                  {/* Candle Wax */}
                   <rect x={cx} y="5" width="1" height="4" fill={idx % 2 === 0 ? '#F472B6' : '#C084FC'} />
                   <rect x={cx + 1} y="5" width="1" height="4" fill="#FFFFFF" />
-
-                  {/* Candle Wick */}
                   <rect x={cx} y="4" width="1" height="1" fill="#271406" />
 
-                  {/* Chunky Pixel Flame / Smoke */}
                   {isLit ? (
                     flameFrame === 0 ? (
-                      /* Frame 0 */
                       <g>
                         <rect x={cx - 1} y="1" width="3" height="3" fill="#F97316" />
                         <rect x={cx} y="1" width="1" height="2" fill="#FDE047" />
                         <rect x={cx} y="2" width="1" height="1" fill="#FFFFFF" />
                       </g>
                     ) : (
-                      /* Frame 1 */
                       <g>
                         <rect x={cx - 1} y="2" width="3" height="2" fill="#F97316" />
                         <rect x={cx} y="1" width="1" height="2" fill="#FDE047" />
@@ -267,7 +342,6 @@ export default function CakeSection() {
                       </g>
                     )
                   ) : (
-                    /* Chunky Pixel Smoke Puff */
                     <g>
                       <rect x={cx} y="3" width="1" height="1" fill="#94A3B8" />
                       <rect x={cx - 1} y="1" width="2" height="1" fill="#CBD5E1" />
@@ -279,20 +353,78 @@ export default function CakeSection() {
           </svg>
         </div>
 
+        {/* --- SASSY KNIFE CAT (Appears after blowing out candles) --- */}
+        <AnimatePresence>
+          {isBlown && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.6, x: 40 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              exit={{ opacity: 0, scale: 0.6 }}
+              transition={{ type: 'spring', stiffness: 180, damping: 18 }}
+              className="relative flex flex-col items-center select-none"
+            >
+              {/* Sassy Floating Speech Bubble */}
+              <motion.div
+                animate={{ y: [0, -4, 0] }}
+                transition={{ repeat: Infinity, duration: 2.4, ease: 'easeInOut' }}
+                className="mb-2 px-4 py-1.5 rounded-full bg-white text-neutral-900 font-sans text-xs font-bold shadow-xl border border-cosmic-rose/40 flex items-center gap-1.5 whitespace-nowrap"
+              >
+                <span>{isCut ? "A slice just for Coco! 🍰💖" : "Ready to slice the cake! 🎀🔪"}</span>
+              </motion.div>
 
+              {/* Cat Image with Knife Slice Animation */}
+              <motion.div
+                animate={
+                  isCutting
+                    ? { rotate: [-16, 22, -10, 14, 0], scale: [1, 1.12, 1] }
+                    : { rotate: [-2, 2, -2] }
+                }
+                transition={
+                  isCutting
+                    ? { duration: 0.45, ease: 'easeInOut' }
+                    : { repeat: Infinity, duration: 3.2, ease: 'easeInOut' }
+                }
+                onClick={handleCutCake}
+                className="w-40 sm:w-52 h-auto cursor-pointer group"
+                title="Click to cut a slice of cake for Coco!"
+              >
+                <img
+                  src="/knife_cat.png"
+                  alt="Sassy Kitten with Pink Knife"
+                  className="w-full h-auto object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.65)] group-hover:scale-105 transition-transform"
+                />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      {/* Action Button */}
-      {!isBlown && (
-        <div className="relative z-10 flex flex-col items-center gap-4 mt-6">
+      {/* Action Button Section */}
+      <div className="relative z-10 flex flex-col items-center gap-4 mt-6">
+        {!isBlown ? (
           <button
             onClick={handleBlowCandles}
             className="px-8 py-3.5 bg-gradient-to-r from-cosmic-rose to-cosmic-deep text-white font-mono text-xs sm:text-sm font-bold tracking-widest uppercase border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all cursor-pointer"
           >
             [ BLOW OUT CANDLES ]
           </button>
-        </div>
-      )}
+        ) : (
+          <div className="flex flex-col items-center gap-3">
+            <button
+              onClick={handleCutCake}
+              className="px-8 py-3.5 bg-gradient-to-r from-pink-500 via-rose-500 to-cosmic-deep text-white font-mono text-xs sm:text-sm font-bold tracking-widest uppercase border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all cursor-pointer flex items-center gap-2"
+            >
+              <span>{isCut ? "[ CUT ANOTHER PIECE 🍰 ]" : "[ CUT A SLICE FOR COCO 🍰 ]"}</span>
+            </button>
+
+            {isCut && (
+              <div className="px-5 py-2 rounded-full bg-white/15 backdrop-blur-md border border-white/30 text-cosmic-champagne font-sans text-xs tracking-wide shadow-lg">
+                ✨ The first slice is served to Coco! Slay your birthday! 🍰💖
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </section>
   );
 }

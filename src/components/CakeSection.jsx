@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import confetti from 'canvas-confetti';
 import { birthdayData } from '../config/birthdayData';
-
 
 export default function CakeSection() {
   const [isBlown, setIsBlown] = useState(false);
@@ -17,25 +17,68 @@ export default function CakeSection() {
   }, []);
 
   const spawnFloatingHearts = () => {
-    const emojis = ['💖', '💕', '💓', '💗', '❤️', '✨', '🌸', '💝'];
-    const count = 45;
+    const emojis = ['💖', '💕', '💓', '💗', '❤️', '✨', '🌸', '💝', '🎀', '🍰', '🧁', '⭐', '💫', '🌷', '🤍'];
+    const count = 165; // Massive screen-filling ocean of emojis
     const newHearts = [];
 
     for (let i = 0; i < count; i++) {
       newHearts.push({
-        id: Date.now() + i,
+        id: `${Date.now()}-${i}`,
         emoji: emojis[Math.floor(Math.random() * emojis.length)],
-        left: 8 + Math.random() * 84, // percentage
-        bottom: -10 + Math.random() * 30, // px
-        size: 20 + Math.random() * 26, // px
-        duration: 3 + Math.random() * 2.5, // seconds
-        delay: Math.random() * 1.6, // seconds
-        sway: -35 + Math.random() * 70, // px horizontal sway
-        rot: -25 + Math.random() * 50, // deg rotation
+        left: Math.random() * 98, // 0vw to 98vw across the entire screen
+        bottom: -40 - Math.random() * 80, // Under the bottom of the screen
+        size: 22 + Math.random() * 32, // 22px to 54px variety
+        duration: 4.2 + Math.random() * 3.6, // 4.2s to 7.8s rise
+        delay: Math.random() * 2.8, // Continuous wave staggered over 2.8s
+        sway: -45 + Math.random() * 90, // px horizontal sway
+        rot: -30 + Math.random() * 60, // deg rotation
       });
     }
 
     setFloatingHearts(newHearts);
+
+    // Blast emoji cannons from the bottom of the screen
+    try {
+      const heartShape = confetti.shapeFromText({ text: '💖', scalar: 2.2 });
+      const starShape = confetti.shapeFromText({ text: '✨', scalar: 2 });
+      const flowerShape = confetti.shapeFromText({ text: '🌸', scalar: 2.2 });
+      const loveShape = confetti.shapeFromText({ text: '💕', scalar: 2.2 });
+
+      confetti({
+        shapes: [heartShape, starShape, flowerShape, loveShape],
+        particleCount: 55,
+        spread: 140,
+        startVelocity: 55,
+        origin: { x: 0.5, y: 1 },
+        scalar: 2.2,
+        ticks: 240,
+      });
+
+      setTimeout(() => {
+        confetti({
+          shapes: [heartShape, loveShape],
+          particleCount: 35,
+          angle: 65,
+          spread: 75,
+          startVelocity: 60,
+          origin: { x: 0.1, y: 1 },
+          scalar: 2.2,
+          ticks: 240,
+        });
+        confetti({
+          shapes: [flowerShape, starShape],
+          particleCount: 35,
+          angle: 115,
+          spread: 75,
+          startVelocity: 60,
+          origin: { x: 0.9, y: 1 },
+          scalar: 2.2,
+          ticks: 240,
+        });
+      }, 250);
+    } catch (e) {
+      // Graceful fallback if shapeFromText unavailable
+    }
   };
 
   const handleBlowCandles = () => {
@@ -53,25 +96,29 @@ export default function CakeSection() {
   const candlePositions = [7, 11, 15, 19, 23];
 
   return (
-    <section id="cake" className="py-24 px-4 sm:px-6 max-w-4xl mx-auto text-center relative overflow-hidden">
-      {/* Floating Heart Emojis Stream */}
-      {floatingHearts.map((heart) => (
-        <span
-          key={heart.id}
-          className="floating-heart-emoji"
-          style={{
-            left: `${heart.left}%`,
-            bottom: `${heart.bottom}px`,
-            fontSize: `${heart.size}px`,
-            animationDuration: `${heart.duration}s`,
-            animationDelay: `${heart.delay}s`,
-            '--sway': `${heart.sway}px`,
-            '--rot': `${heart.rot}deg`,
-          }}
-        >
-          {heart.emoji}
-        </span>
-      ))}
+    <section id="cake" className="py-24 px-4 sm:px-6 max-w-4xl mx-auto text-center relative">
+      {/* Full-Screen Floating Emoji Ocean */}
+      {floatingHearts.length > 0 && (
+        <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
+          {floatingHearts.map((heart) => (
+            <span
+              key={heart.id}
+              className="floating-heart-emoji"
+              style={{
+                left: `${heart.left}vw`,
+                bottom: `${heart.bottom}px`,
+                fontSize: `${heart.size}px`,
+                animationDuration: `${heart.duration}s`,
+                animationDelay: `${heart.delay}s`,
+                '--sway': `${heart.sway}px`,
+                '--rot': `${heart.rot}deg`,
+              }}
+            >
+              {heart.emoji}
+            </span>
+          ))}
+        </div>
+      )}
 
       {/* Header */}
       <div className="mb-10 relative z-10">

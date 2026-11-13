@@ -8,7 +8,7 @@ export default function AudioPlayer() {
   useEffect(() => {
     const audio = new Audio('/birthday_song.mp3');
     audio.loop = true;
-    audio.volume = 0.8;
+    audio.volume = 0.5;
     audioRef.current = audio;
 
     const handleEnded = () => {

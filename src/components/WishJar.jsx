@@ -34,12 +34,9 @@ export default function WishJar() {
             <Sparkles className="w-3.5 h-3.5 text-cosmic-gold" />
             <span>The Time Capsule</span>
           </div>
-          <h2 className="font-serif text-3xl sm:text-5xl font-normal text-white mb-3">
+          <h2 className="font-serif text-3xl sm:text-5xl font-normal text-white">
             Inscribe a Wish
           </h2>
-          <p className="font-sans text-white/75 text-sm sm:text-base font-light">
-            type your wish
-          </p>
         </div>
 
         {/* Typing Area / Form */}
@@ -49,7 +46,7 @@ export default function WishJar() {
               type="text"
               value={inputWish}
               onChange={(e) => setInputWish(e.target.value)}
-              placeholder="Type your wish for Coco here..."
+              placeholder="type your wish"
               className="w-full px-5 py-4 rounded-2xl bg-white/10 border border-white/25 focus:outline-none focus:ring-2 focus:ring-cosmic-rose font-sans text-sm text-white placeholder-white/40 backdrop-blur-md"
             />
           </div>

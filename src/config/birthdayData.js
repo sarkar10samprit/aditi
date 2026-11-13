@@ -14,6 +14,42 @@ export const birthdayData = {
   heroGreeting: "To my dearest Coco, the girl who makes the entire universe brighter...",
   heroSubtext: "A curated digital sanctuary built just for you, because an ordinary birthday card could never match your magic.",
   
+  // Scrapbook / Cheat Letter / Gift Items emerging from the 3D Gift Box
+  giftBoxItems: [
+    {
+      id: 1,
+      title: "Secret Cheat Note #01",
+      note: "Top Secret: You are officially my favorite human to bother 24/7.",
+      src: "", // Drop your PNG in public/gifts/ (e.g. "/gifts/item1.png")
+      rotation: "-4deg",
+      washi: "rgba(232, 114, 155, 0.6)"
+    },
+    {
+      id: 2,
+      title: "Scrapbook Memory",
+      note: "Evidence of our unhinged chaos and laughing till our ribs ached.",
+      src: "",
+      rotation: "3deg",
+      washi: "rgba(252, 211, 77, 0.6)"
+    },
+    {
+      id: 3,
+      title: "Cheat Note #02",
+      note: "Warning: Looking this gorgeous on a regular Tuesday is technically illegal.",
+      src: "",
+      rotation: "-2.5deg",
+      washi: "rgba(239, 164, 190, 0.6)"
+    },
+    {
+      id: 4,
+      title: "Sweet Token",
+      note: "Redeemable for infinite iced coffees and midnight rants with zero judgment.",
+      src: "",
+      rotation: "4.5deg",
+      washi: "rgba(254, 243, 199, 0.6)"
+    }
+  ],
+
   // Audio configuration
   ambientMusicTitle: "Cozy Lo-Fi Birthday Chime",
   

@@ -4,7 +4,6 @@ import confetti from 'canvas-confetti';
 
 export default function WishJar() {
   const [inputWish, setInputWish] = useState('');
-  const [inputAuthor, setInputAuthor] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleAddWish = (e) => {
@@ -13,7 +12,6 @@ export default function WishJar() {
 
     setIsSubmitted(true);
     setInputWish('');
-    setInputAuthor('');
 
     confetti({
       particleCount: 40,
@@ -40,26 +38,19 @@ export default function WishJar() {
             Inscribe a Wish
           </h2>
           <p className="font-sans text-white/75 text-sm sm:text-base font-light">
-            Leave an aspiration, a secret inside joke, or a blessing for Coco.
+            type your wish
           </p>
         </div>
 
         {/* Typing Area / Form */}
         <form onSubmit={handleAddWish} className="max-w-xl mx-auto space-y-4">
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div>
             <input
               type="text"
               value={inputWish}
               onChange={(e) => setInputWish(e.target.value)}
               placeholder="Type your wish for Coco here..."
-              className="flex-1 px-4 py-3.5 rounded-2xl bg-white/10 border border-white/25 focus:outline-none focus:ring-2 focus:ring-cosmic-rose font-sans text-sm text-white placeholder-white/40 backdrop-blur-md"
-            />
-            <input
-              type="text"
-              value={inputAuthor}
-              onChange={(e) => setInputAuthor(e.target.value)}
-              placeholder="Your name"
-              className="w-full sm:w-44 px-4 py-3.5 rounded-2xl bg-white/10 border border-white/25 focus:outline-none focus:ring-2 focus:ring-cosmic-rose font-sans text-sm text-white placeholder-white/40 backdrop-blur-md"
+              className="w-full px-5 py-4 rounded-2xl bg-white/10 border border-white/25 focus:outline-none focus:ring-2 focus:ring-cosmic-rose font-sans text-sm text-white placeholder-white/40 backdrop-blur-md"
             />
           </div>
 

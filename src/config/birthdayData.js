@@ -167,17 +167,61 @@ I promise to always celebrate your victories like they are my own, to always hyp
 
   // 10 Reasons Why Coco is Loved
   reasonsWhy: [
-    { number: "01", text: "Your laugh is genuinely the most contagious, serotonin-boosting sound in the universe, Coco." },
-    { number: "02", text: "You have a heart so gentle it makes everyone around you feel valued, heard, and safe." },
-    { number: "03", text: "You can turn an ordinary car ride or grocery run into an unforgettable, iconic adventure." },
-    { number: "04", text: "The way you tilt your head when you're being playfully sassy is ridiculously, dangerously cute." },
-    { number: "05", text: "You never give up on the people you care about, even when things get tough." },
-    { number: "06", text: "Your smile could literally resolve diplomatic conflicts and melt the coldest glaciers." },
-    { number: "07", text: "You listen to understand, not just to reply—a quality so rare nowadays." },
-    { number: "08", text: "You give the absolute warmest, most therapeutic hugs in human history." },
-    { number: "09", text: "You're effortlessly cool without even realizing how iconic you actually are, Coco." },
-    { number: "10", text: "Because you are Coco, and in this or any other multiverse, no one could ever take your place." }
+    {
+      number: "01",
+      title: "Your Beautiful Laugh",
+      text: "Your laugh is honestly my favourite sound ever. It's the kind of happiness that's impossible not to catch, and I hope you never stop laughing like that."
+    },
+    {
+      number: "02",
+      title: "Your Golden Heart",
+      text: "You have the softest heart. You make people feel heard, understood, and appreciated in ways you probably don't even realize. The world needs more hearts like yours."
+    },
+    {
+      number: "03",
+      title: "Every Little Adventure",
+      text: "Somehow, you can turn the most ordinary moments into the most unforgettable memories. Even doing absolutely nothing becomes something special when it's with you."
+    },
+    {
+      number: "04",
+      title: "Your Little Attitude",
+      text: "That adorable head tilt, your playful sass, and the way you act all innocent afterwards. Seriously, how can someone be this ridiculously cute? 😭"
+    },
+    {
+      number: "05",
+      title: "Your Loyalty",
+      text: "You don't give up on the people you love. You show up, you care, and you stay even when things aren't easy. That's something truly beautiful about you."
+    },
+    {
+      number: "06",
+      title: "That Magical Smile",
+      text: "I swear, your smile deserves its own award. It can turn a terrible day into a beautiful one, and I hope life always gives you a million reasons to wear it."
+    },
+    {
+      number: "07",
+      title: "The Way You Listen",
+      text: "You don't just hear people; you genuinely try to understand them. You make others feel like their words matter, and that's a rare kind of magic."
+    },
+    {
+      number: "08",
+      title: "A Hug We Still Owe Each Other",
+      text: "We haven't shared that first hug yet, but I already know it'll be one of those moments worth waiting for. Until then, consider this a virtual hug with a little promise attached: one day, no screens, no distance, just a real hug. 🫂💗"
+    },
+    {
+      number: "09",
+      title: "Your Unintentional Iconic Energy",
+      text: "You don't even have to try to be amazing. You're effortlessly funny, charming, and wonderfully you. I hope you see yourself through the eyes of the people who adore you."
+    },
+    {
+      number: "10",
+      title: "Simply Because You're You",
+      text: "And honestly, I could write a thousand more reasons, but none would be enough. There's only one you, and no matter how many people exist in this universe or any other, nobody could ever take your place."
+    }
   ],
+  reasonsClosing: {
+    title: "Happy Birthday, Coco! ❤️",
+    subtext: "Never forget that you are someone's favourite person, someone's reason to smile, and a once-in-a-lifetime kind of human."
+  },
 
   // Interactive Wish Jar
   initialWishes: [

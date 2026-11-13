@@ -8,10 +8,10 @@ export default function ReasonsGrid() {
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto mb-16">
         <h2 className="font-serif text-4xl sm:text-6xl font-normal text-white mb-4">
-          10 Reasons You’re Irreplaceable
+          🎀 10 Reasons You're Irreplaceable
         </h2>
-        <p className="font-sans text-white/80 text-base sm:text-lg font-light leading-relaxed">
-          In case you ever forget how radiant, rare, and deeply adored you truly are.
+        <p className="font-sans text-white/80 text-base sm:text-lg font-light leading-relaxed italic">
+          In case you ever forget just how special, beautiful, and incredibly loved you are.
         </p>
       </div>
 
@@ -27,9 +27,12 @@ export default function ReasonsGrid() {
               {reason.number}
             </div>
 
-            {/* Text */}
+            {/* Content */}
             <div className="flex-1 pt-1">
-              <p className="font-sans text-base sm:text-lg text-white/90 leading-relaxed font-light tracking-wide">
+              <h3 className="font-serif text-lg sm:text-xl font-normal text-white mb-2 group-hover:text-cosmic-champagne transition-colors">
+                {reason.title}
+              </h3>
+              <p className="font-sans text-sm sm:text-base text-white/80 leading-relaxed font-light tracking-wide">
                 {reason.text}
               </p>
             </div>
@@ -40,6 +43,18 @@ export default function ReasonsGrid() {
           </div>
         ))}
       </div>
+
+      {/* Closing Banner */}
+      {birthdayData.reasonsClosing && (
+        <div className="mt-14 text-center max-w-2xl mx-auto p-8 rounded-3xl glass-panel border border-white/20 shadow-glass-card">
+          <h3 className="font-serif text-2xl sm:text-4xl text-white mb-3 font-normal">
+            {birthdayData.reasonsClosing.title}
+          </h3>
+          <p className="font-sans text-white/85 text-sm sm:text-base italic font-light leading-relaxed max-w-xl mx-auto">
+            {birthdayData.reasonsClosing.subtext}
+          </p>
+        </div>
+      )}
     </section>
   );
 }

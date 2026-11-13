@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { birthdayData } from '../config/birthdayData';
-import { Sparkles, RotateCcw } from 'lucide-react';
+
 
 export default function CakeSection() {
   const [isBlown, setIsBlown] = useState(false);
@@ -48,11 +48,6 @@ export default function CakeSection() {
     spawnFloatingHearts();
   };
 
-  const handleRelight = () => {
-    setIsBlown(false);
-    setCandles([true, true, true, true, true]);
-    setFloatingHearts([]);
-  };
 
   // 5 candle X positions on a 32x32 chunky pixel grid
   const candlePositions = [7, 11, 15, 19, 23];
@@ -240,37 +235,17 @@ export default function CakeSection() {
 
       </div>
 
-      {/* Retro 8-bit Action Button */}
-      <div className="relative z-10 flex flex-col items-center gap-4 mt-6">
-        {!isBlown ? (
+      {/* Action Button */}
+      {!isBlown && (
+        <div className="relative z-10 flex flex-col items-center gap-4 mt-6">
           <button
             onClick={handleBlowCandles}
             className="px-8 py-3.5 bg-gradient-to-r from-cosmic-rose to-cosmic-deep text-white font-mono text-xs sm:text-sm font-bold tracking-widest uppercase border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all cursor-pointer"
           >
             [ BLOW OUT CANDLES ]
           </button>
-        ) : (
-          <div className="flex flex-col items-center gap-4">
-            <div className="p-6 rounded-2xl glass-panel border border-white/30 max-w-md shadow-2xl animate-pulse-subtle">
-              <div className="flex items-center justify-center gap-2 text-cosmic-champagne font-serif text-xl sm:text-2xl mb-2">
-                <Sparkles className="w-5 h-5 text-cosmic-gold" />
-                <span>Wish Dispatched to the Universe</span>
-              </div>
-              <p className="font-sans text-white/85 text-sm font-light leading-relaxed">
-                {birthdayData.cakeSection.blownSuccessMessage}
-              </p>
-            </div>
-
-            <button
-              onClick={handleRelight}
-              className="flex items-center gap-2 px-6 py-2.5 bg-white/10 hover:bg-white/20 text-white font-mono text-xs font-bold tracking-widest uppercase border-2 border-white/40 rounded-lg transition-all cursor-pointer"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>[ RELIGHT PIXEL CAKE ]</span>
-            </button>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
     </section>
   );
 }

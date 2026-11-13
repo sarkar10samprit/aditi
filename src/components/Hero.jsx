@@ -1,5 +1,5 @@
 import React from 'react';
-import ThreeGiftBox from './ThreeGiftBox';
+import InteractiveGiftBox from './InteractiveGiftBox';
 import { birthdayData } from '../config/birthdayData';
 import { Sparkles, Image as ImageIcon, Mail, Cake } from 'lucide-react';
 
@@ -33,9 +33,9 @@ export default function Hero({ onGiftOpen }) {
         To the one whose laugh turns chaos into poetry, whose warmth outshines the stars, and who remains effortlessly, dangerously unforgettable.
       </p>
 
-      {/* 3D Interactive Three.js Gift Box */}
+      {/* Luxury 3D Interactive Gift Box */}
       <div className="my-2 z-10">
-        <ThreeGiftBox onOpen={onGiftOpen} />
+        <InteractiveGiftBox onOpen={onGiftOpen} />
       </div>
 
       {/* Refined Frosted Navigation Actions */}

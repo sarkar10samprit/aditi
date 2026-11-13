@@ -80,10 +80,6 @@ export default function CakeSection() {
 
       {/* Header */}
       <div className="mb-10 relative z-10">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill text-cosmic-champagne font-sans text-xs font-semibold uppercase tracking-[0.2em] mb-4">
-          <Sparkles className="w-3.5 h-3.5 text-cosmic-gold" />
-          <span>Pixel Birthday Ritual</span>
-        </div>
         <h2 className="font-serif text-4xl sm:text-6xl font-normal text-white mb-4">
           Make a Secret Wish, Coco
         </h2>
@@ -241,10 +237,7 @@ export default function CakeSection() {
           </svg>
         </div>
 
-        {/* Retro Label */}
-        <p className="text-[11px] font-mono tracking-widest text-cosmic-champagne/90 uppercase mt-2">
-          {isBlown ? "★ Candles Extinguished ★" : "✦ 8-Bit Pixel Cake • Tap to Blow ✦"}
-        </p>
+
       </div>
 
       {/* Retro 8-bit Action Button */}

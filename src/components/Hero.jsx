@@ -20,13 +20,6 @@ export default function Hero({ onGiftOpen }) {
 
   return (
     <section className="relative min-h-[96vh] flex flex-col items-center justify-center pt-24 pb-20 px-4 text-center overflow-visible">
-      {/* Editorial Pill Tag */}
-      <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full glass-pill border border-white/25 text-white/90 font-sans text-xs font-semibold tracking-[0.2em] uppercase mb-8 shadow-sm">
-        <Sparkles className="w-3.5 h-3.5 text-cosmic-gold" />
-        <span>A Tribute to My Favorite Human</span>
-        <Sparkles className="w-3.5 h-3.5 text-cosmic-gold" />
-      </div>
-
       {/* Main Luxury Title with Editorial Serif */}
       <h1 className="font-serif text-5xl sm:text-7xl md:text-8xl font-normal tracking-tight text-white max-w-5xl leading-[1.08] mb-6 drop-shadow-md">
         Happy Birthday,{' '}

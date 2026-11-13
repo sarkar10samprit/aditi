@@ -7,10 +7,6 @@ export default function ReasonsGrid() {
     <section className="py-24 px-4 sm:px-6 max-w-6xl mx-auto relative">
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto mb-16">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill text-cosmic-champagne font-sans text-xs font-semibold uppercase tracking-[0.2em] mb-4">
-          <Star className="w-3.5 h-3.5 fill-cosmic-gold text-cosmic-gold" />
-          <span>The Compendium</span>
-        </div>
         <h2 className="font-serif text-4xl sm:text-6xl font-normal text-white mb-4">
           10 Reasons You’re Irreplaceable
         </h2>

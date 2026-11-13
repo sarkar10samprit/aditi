@@ -20,11 +20,7 @@ export default function MemoryWall() {
           Moments frozen in time—unapologetic laughter, quiet late-night truths, and every second in between.
         </p>
 
-        {/* Customization tip */}
-        <div className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-black/30 backdrop-blur-md border border-white/15 text-xs text-white/80 font-sans">
-          <span className="font-semibold text-cosmic-champagne">Photo placeholders ready:</span>
-          <span>Drop your image files in <code className="bg-white/10 px-1.5 py-0.5 rounded text-white font-mono">public/photos/</code> and link in <code className="bg-white/10 px-1.5 py-0.5 rounded text-white font-mono">birthdayData.js</code></span>
-        </div>
+
       </div>
 
       {/* Grid of Exhibition Polaroids */}

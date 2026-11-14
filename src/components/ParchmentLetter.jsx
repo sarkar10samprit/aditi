@@ -1,38 +1,54 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { birthdayData } from '../config/birthdayData';
-import { Feather, BookOpen, Heart, ArrowRight, ArrowLeft, BookMarked } from 'lucide-react';
+import { Feather, ArrowRight, ArrowLeft } from 'lucide-react';
 import { playPop } from '../utils/soundEffects';
 
 export default function ParchmentLetter() {
   const letter = birthdayData.parchmentLetter;
   const [currentPage, setCurrentPage] = useState(1);
   const [direction, setDirection] = useState(1);
-  const [isSpreadView, setIsSpreadView] = useState(false);
 
-  // Track revealed status for each page so re-reading doesn't re-trigger typing
-  const [revealedPages, setRevealedPages] = useState({ 1: false, 2: false });
+  // Track revealed status for each of the 4 pages so re-reading doesn't re-trigger typing
+  const [revealedPages, setRevealedPages] = useState({ 1: false, 2: false, 3: false, 4: false });
   const [hasScrolledIn, setHasScrolledIn] = useState(false);
-  const [visibleCharsPage1, setVisibleCharsPage1] = useState(0);
-  const [visibleCharsPage2, setVisibleCharsPage2] = useState(0);
+  const [visibleChars, setVisibleChars] = useState({ 1: 0, 2: 0, 3: 0, 4: 0 });
 
   const sectionRef = useRef(null);
   const timerRef = useRef(null);
 
-  // Content breakdown for Page 1
-  const page1Items = [
-    { type: 'recipient', text: letter.recipient },
-    ...(letter.page1Paragraphs || letter.paragraphs.slice(0, 4)).map((p) => ({ type: 'paragraph', text: p }))
+  // Prepare items for each page
+  const pagesData = letter.pages || [
+    {
+      pageNumber: 1,
+      paragraphs: letter.paragraphs.slice(0, 2)
+    },
+    {
+      pageNumber: 2,
+      paragraphs: letter.paragraphs.slice(2, 4)
+    },
+    {
+      pageNumber: 3,
+      paragraphs: letter.paragraphs.slice(4, 7)
+    },
+    {
+      pageNumber: 4,
+      paragraphs: letter.paragraphs.slice(7),
+      signoff: letter.signoff,
+      sender: letter.sender
+    }
   ];
-  const page1TotalChars = page1Items.reduce((sum, item) => sum + item.text.length, 0);
 
-  // Content breakdown for Page 2
-  const page2Items = [
-    ...(letter.page2Paragraphs || letter.paragraphs.slice(4)).map((p) => ({ type: 'paragraph', text: p })),
-    { type: 'signoff', text: letter.signoff },
-    { type: 'sender', text: letter.sender }
-  ];
-  const page2TotalChars = page2Items.reduce((sum, item) => sum + item.text.length, 0);
+  // Helper to compute page character counts
+  const getPageTotalChars = (pageIdx) => {
+    const page = pagesData[pageIdx];
+    let count = 0;
+    if (pageIdx === 0) count += (letter.recipient || '').length;
+    page.paragraphs.forEach((p) => { count += p.length; });
+    if (page.signoff) count += page.signoff.length;
+    if (page.sender) count += page.sender.length;
+    return count;
+  };
 
   // Trigger typing automatically when scrolling into the letter section
   useEffect(() => {
@@ -52,41 +68,30 @@ export default function ParchmentLetter() {
     return () => observer.disconnect();
   }, [hasScrolledIn]);
 
-  // Page 1 typing animation loop (28ms)
+  // Typing animation loop for the active page (28ms)
   useEffect(() => {
-    if (!hasScrolledIn || revealedPages[1] || visibleCharsPage1 >= page1TotalChars) {
-      if (visibleCharsPage1 >= page1TotalChars && !revealedPages[1]) {
-        setRevealedPages((prev) => ({ ...prev, 1: true }));
+    if (!hasScrolledIn) return;
+    const pageIdx = currentPage - 1;
+    const totalChars = getPageTotalChars(pageIdx);
+    const currentChars = visibleChars[currentPage] || 0;
+
+    if (revealedPages[currentPage] || currentChars >= totalChars) {
+      if (currentChars >= totalChars && !revealedPages[currentPage]) {
+        setRevealedPages((prev) => ({ ...prev, [currentPage]: true }));
       }
       return;
     }
 
     timerRef.current = setTimeout(() => {
-      setVisibleCharsPage1((prev) => prev + 1);
+      setVisibleChars((prev) => ({ ...prev, [currentPage]: (prev[currentPage] || 0) + 1 }));
     }, 28);
 
     return () => clearTimeout(timerRef.current);
-  }, [hasScrolledIn, visibleCharsPage1, page1TotalChars, revealedPages]);
-
-  // Page 2 typing animation loop (28ms) once on page 2
-  useEffect(() => {
-    if (!hasScrolledIn || currentPage !== 2 || revealedPages[2] || visibleCharsPage2 >= page2TotalChars) {
-      if (visibleCharsPage2 >= page2TotalChars && !revealedPages[2]) {
-        setRevealedPages((prev) => ({ ...prev, 2: true }));
-      }
-      return;
-    }
-
-    timerRef.current = setTimeout(() => {
-      setVisibleCharsPage2((prev) => prev + 1);
-    }, 28);
-
-    return () => clearTimeout(timerRef.current);
-  }, [hasScrolledIn, currentPage, visibleCharsPage2, page2TotalChars, revealedPages]);
+  }, [hasScrolledIn, currentPage, visibleChars, revealedPages]);
 
   // Turn page handler
   const handlePageChange = (newPage) => {
-    if (newPage === currentPage) return;
+    if (newPage < 1 || newPage > 4 || newPage === currentPage) return;
     setDirection(newPage > currentPage ? 1 : -1);
     setCurrentPage(newPage);
     try {
@@ -94,19 +99,16 @@ export default function ParchmentLetter() {
     } catch (e) {}
   };
 
-  // Instant reveal handler
-  const revealCurrentPage = (pageNumber) => {
-    if (pageNumber === 1) {
-      setVisibleCharsPage1(page1TotalChars);
-      setRevealedPages((prev) => ({ ...prev, 1: true }));
-    } else {
-      setVisibleCharsPage2(page2TotalChars);
-      setRevealedPages((prev) => ({ ...prev, 2: true }));
-    }
+  // Instant reveal handler when tapping on page
+  const revealActivePage = () => {
+    const pageIdx = currentPage - 1;
+    const totalChars = getPageTotalChars(pageIdx);
+    setVisibleChars((prev) => ({ ...prev, [currentPage]: totalChars }));
+    setRevealedPages((prev) => ({ ...prev, [currentPage]: true }));
   };
 
   // Helper to render animated or static text block
-  const renderTextBlock = (text, globalOffset, currentVisibleChars, isFullyRevealed) => {
+  const renderTextBlock = (text, globalOffset, currentChars, isFullyRevealed) => {
     if (isFullyRevealed) {
       return <span>{text}</span>;
     }
@@ -114,17 +116,17 @@ export default function ParchmentLetter() {
     const chars = text.split('');
     const blockEnd = globalOffset + chars.length;
 
-    if (currentVisibleChars < globalOffset) {
+    if (currentChars < globalOffset) {
       return null;
     }
 
-    const visibleInBlock = Math.min(chars.length, Math.max(0, currentVisibleChars - globalOffset));
-    const isCurrentlyTypingHere = currentVisibleChars >= globalOffset && currentVisibleChars < blockEnd;
+    const visibleInBlock = Math.min(chars.length, Math.max(0, currentChars - globalOffset));
+    const isCurrentlyTypingHere = currentChars >= globalOffset && currentChars < blockEnd;
 
     return (
       <span>
         {chars.slice(0, visibleInBlock).map((char, index) => {
-          const isLatest = globalOffset + index === currentVisibleChars - 1;
+          const isLatest = globalOffset + index === currentChars - 1;
           return (
             <span
               key={index}
@@ -139,149 +141,133 @@ export default function ParchmentLetter() {
     );
   };
 
-  // Render Page 1 Contents
-  const renderPage1Content = () => {
+  // Render content of any of the 4 pages
+  const renderPageContent = (pageNum) => {
+    const pageIdx = pageNum - 1;
+    const page = pagesData[pageIdx];
+    const isRevealed = revealedPages[pageNum] || (visibleChars[pageNum] || 0) >= getPageTotalChars(pageIdx);
+    const currentCharCount = visibleChars[pageNum] || 0;
     let cumulative = 0;
-    const isRevealed = revealedPages[1] || visibleCharsPage1 >= page1TotalChars;
 
     return (
       <div 
-        onClick={() => revealCurrentPage(1)}
+        onClick={revealActivePage}
         title="Tap to reveal full page"
         className="vintage-ink flex flex-col justify-between h-full select-text cursor-pointer"
       >
-        <div className="space-y-3 sm:space-y-3.5">
-          {/* Recipient */}
-          {(() => {
-            const item = page1Items[0];
-            const offset = cumulative;
-            cumulative += item.text.length;
-            return (
-              <h3 className="font-serif italic font-bold text-xl sm:text-2xl md:text-3xl tracking-tight mb-2 text-[#2E160C]">
-                {renderTextBlock(item.text, offset, visibleCharsPage1, isRevealed)}
-              </h3>
-            );
-          })()}
-
-          {/* Paragraphs 1 to 4 */}
-          {page1Items.slice(1).map((item, pIdx) => {
-            const offset = cumulative;
-            cumulative += item.text.length;
-            return (
-              <p
-                key={pIdx}
-                className="font-serif text-[12px] sm:text-[13.5px] md:text-[14.5px] leading-[1.65] sm:leading-[1.7] text-[#2E160C]/90 font-medium tracking-normal text-justify"
-              >
-                {renderTextBlock(item.text, offset, visibleCharsPage1, isRevealed)}
-              </p>
-            );
-          })}
-        </div>
-
-        {/* Page 1 Bottom Navigation - Elevated comfortably above torn edge */}
-        <div className="pt-4 pb-2 border-t border-[#8B5A2B]/25 flex items-center justify-between mt-auto">
-          <span className="font-serif italic text-xs sm:text-sm text-[#8B5A2B] font-semibold tracking-wide">
-            Page 1 of 2
-          </span>
-          {!isSpreadView && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handlePageChange(2);
-              }}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#8B5A2B]/20 to-[#8B5A2B]/35 hover:from-[#8B5A2B]/35 hover:to-[#8B5A2B]/50 border border-[#8B5A2B]/30 text-[#3D1407] font-serif text-xs sm:text-sm font-bold tracking-wide transition-all shadow-md hover:scale-105 active:scale-95 cursor-pointer"
-            >
-              <span>Turn to Page 2</span>
-              <ArrowRight className="w-4 h-4 text-[#8B5A2B]" />
-            </button>
+        <div className="space-y-4 sm:space-y-5">
+          {/* Recipient on Page 1 */}
+          {pageNum === 1 && (
+            <div>
+              {(() => {
+                const text = letter.recipient;
+                const offset = cumulative;
+                cumulative += text.length;
+                return (
+                  <h3 className="font-serif italic font-bold text-2xl sm:text-3xl md:text-4xl tracking-tight mb-2 text-[#2E160C]">
+                    {renderTextBlock(text, offset, currentCharCount, isRevealed)}
+                  </h3>
+                );
+              })()}
+            </div>
           )}
-        </div>
-      </div>
-    );
-  };
 
-  // Render Page 2 Contents
-  const renderPage2Content = () => {
-    let cumulative = 0;
-    const isRevealed = revealedPages[2] || visibleCharsPage2 >= page2TotalChars;
-    const paragraphs = page2Items.filter((i) => i.type === 'paragraph');
-    const signoffItem = page2Items.find((i) => i.type === 'signoff');
-    const senderItem = page2Items.find((i) => i.type === 'sender');
+          {/* Subheading header for continuation pages */}
+          {pageNum > 1 && (
+            <div className="flex items-center gap-2 mb-2">
+              <span className="font-serif italic text-xs sm:text-sm text-[#8B5A2B]/85 font-semibold tracking-wide">
+                Continued for Coco...
+              </span>
+            </div>
+          )}
 
-    return (
-      <div 
-        onClick={() => revealCurrentPage(2)}
-        title="Tap to reveal full page"
-        className="vintage-ink flex flex-col justify-between h-full select-text cursor-pointer"
-      >
-        <div className="space-y-3 sm:space-y-3.5">
-          {/* Header label */}
-          <div className="flex items-center gap-2 mb-1">
-            <span className="font-serif italic text-xs sm:text-sm text-[#8B5A2B]/85 font-semibold tracking-wide">
-              Continued for Coco...
-            </span>
-          </div>
-
-          {/* Paragraphs 5 to 10 */}
-          {paragraphs.map((item, pIdx) => {
+          {/* Paragraphs */}
+          {page.paragraphs.map((p, pIdx) => {
             const offset = cumulative;
-            cumulative += item.text.length;
-            const isHighlight = item.text.includes('Happy Birthday, Coco!');
+            cumulative += p.length;
+            const isHighlight = p.includes('Happy Birthday, Coco!');
+
             return (
               <p
                 key={pIdx}
-                className={`font-serif text-[12px] sm:text-[13.5px] md:text-[14.5px] leading-[1.65] sm:leading-[1.7] tracking-normal text-justify ${
+                className={`font-serif text-[13px] sm:text-[14.5px] md:text-[16px] leading-[1.75] sm:leading-[1.8] tracking-normal text-justify ${
                   isHighlight 
-                    ? 'font-bold text-[#5C2410] text-sm sm:text-base' 
+                    ? 'font-bold text-[#5C2410] text-base sm:text-lg my-1' 
                     : 'text-[#2E160C]/90 font-medium'
                 }`}
               >
-                {renderTextBlock(item.text, offset, visibleCharsPage2, isRevealed)}
+                {renderTextBlock(p, offset, currentCharCount, isRevealed)}
               </p>
             );
           })}
 
-          {/* Signoff & Sender */}
-          <div className="pt-2 sm:pt-3 border-t border-[#8B5A2B]/20">
-            {signoffItem && (() => {
-              const offset = cumulative;
-              cumulative += signoffItem.text.length;
-              return (
+          {/* Signoff and Sender on Page 4 */}
+          {page.signoff && (() => {
+            const offset = cumulative;
+            cumulative += page.signoff.length;
+            return (
+              <div className="pt-3 sm:pt-4 border-t border-[#8B5A2B]/20">
                 <p className="font-serif italic text-xs sm:text-sm text-[#2E160C]/85 font-semibold">
-                  {renderTextBlock(signoffItem.text, offset, visibleCharsPage2, isRevealed)}
+                  {renderTextBlock(page.signoff, offset, currentCharCount, isRevealed)}
                 </p>
-              );
-            })()}
-
-            {senderItem && (() => {
-              const offset = cumulative;
-              cumulative += senderItem.text.length;
-              return (
-                <p className="font-serif text-xs sm:text-sm font-bold text-[#5C2410] mt-0.5">
-                  {renderTextBlock(senderItem.text, offset, visibleCharsPage2, isRevealed)}
-                </p>
-              );
-            })()}
-          </div>
+                {page.sender && (() => {
+                  const sOffset = cumulative;
+                  cumulative += page.sender.length;
+                  return (
+                    <p className="font-serif text-xs sm:text-sm font-bold text-[#5C2410] mt-1">
+                      {renderTextBlock(page.sender, sOffset, currentCharCount, isRevealed)}
+                    </p>
+                  );
+                })()}
+              </div>
+            );
+          })()}
         </div>
 
-        {/* Page 2 Bottom Navigation - Elevated comfortably above torn edge */}
+        {/* Elevated Bottom Navigation Bar */}
         <div className="pt-4 pb-2 border-t border-[#8B5A2B]/25 flex items-center justify-between mt-auto">
-          {!isSpreadView && (
+          {/* Previous Button or Spacer */}
+          {pageNum > 1 ? (
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                handlePageChange(1);
+                handlePageChange(pageNum - 1);
               }}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#8B5A2B]/20 to-[#8B5A2B]/35 hover:from-[#8B5A2B]/35 hover:to-[#8B5A2B]/50 border border-[#8B5A2B]/30 text-[#3D1407] font-serif text-xs sm:text-sm font-bold tracking-wide transition-all shadow-md hover:scale-105 active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-full bg-gradient-to-r from-[#8B5A2B]/20 to-[#8B5A2B]/35 hover:from-[#8B5A2B]/35 hover:to-[#8B5A2B]/50 border border-[#8B5A2B]/30 text-[#3D1407] font-serif text-xs sm:text-sm font-bold tracking-wide transition-all shadow-md hover:scale-105 active:scale-95 cursor-pointer"
             >
-              <ArrowLeft className="w-4 h-4 text-[#8B5A2B]" />
-              <span>Back to Page 1</span>
+              <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#8B5A2B]" />
+              <span>Previous</span>
             </button>
+          ) : (
+            <span className="font-serif italic text-xs sm:text-sm text-[#8B5A2B] font-semibold tracking-wide">
+              Page 1 of 4
+            </span>
           )}
-          <span className="font-serif italic text-xs sm:text-sm text-[#8B5A2B] font-semibold tracking-wide ml-auto">
-            Page 2 of 2
-          </span>
+
+          {/* Center Page indicator on pages 2 & 3 */}
+          {(pageNum === 2 || pageNum === 3) && (
+            <span className="font-serif italic text-xs sm:text-sm text-[#8B5A2B] font-semibold tracking-wide">
+              {pageNum} of 4
+            </span>
+          )}
+
+          {/* Next Button or Final Sign */}
+          {pageNum < 4 ? (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handlePageChange(pageNum + 1);
+              }}
+              className="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-full bg-gradient-to-r from-[#8B5A2B]/20 to-[#8B5A2B]/35 hover:from-[#8B5A2B]/35 hover:to-[#8B5A2B]/50 border border-[#8B5A2B]/30 text-[#3D1407] font-serif text-xs sm:text-sm font-bold tracking-wide transition-all shadow-md hover:scale-105 active:scale-95 cursor-pointer ml-auto"
+            >
+              <span>Turn Page</span>
+              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#8B5A2B]" />
+            </button>
+          ) : (
+            <span className="font-serif italic text-xs sm:text-sm text-[#8B5A2B] font-semibold tracking-wide ml-auto">
+              Page 4 of 4 • Fin ❤️
+            </span>
+          )}
         </div>
       </div>
     );
@@ -291,139 +277,65 @@ export default function ParchmentLetter() {
     <section 
       id="letters" 
       ref={sectionRef} 
-      className="py-14 sm:py-20 px-6 sm:px-10 max-w-5xl mx-auto relative scroll-mt-10"
+      className="py-14 sm:py-20 px-6 sm:px-10 max-w-4xl mx-auto relative scroll-mt-10"
     >
-      {/* Header with generous bottom spacing */}
-      <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8 relative z-10">
+      {/* Clean Header with User's Requested Line */}
+      <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12 relative z-10">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill text-cosmic-champagne font-sans text-xs font-semibold uppercase tracking-[0.2em] mb-4">
           <Feather className="w-3.5 h-3.5" />
-          <span>Handwritten Foldable Parchment</span>
+          <span>Handwritten Parchment</span>
         </div>
-        <h2 className="font-serif text-4xl sm:text-6xl font-normal text-white mb-3">
+        <h2 className="font-serif text-4xl sm:text-6xl font-normal text-white mb-2.5">
           A Letter for My Dearest Coco
         </h2>
-        <p className="font-sans text-white/80 text-sm sm:text-base font-light leading-relaxed">
-          Foldable into two vintage pages—take your time reading both.
+        <p className="font-serif italic text-rose-200/90 text-sm sm:text-base font-light tracking-wide">
+          Don't forget to turn the page 📖✨
         </p>
       </div>
 
-      {/* Book Controls & Tabs - Generous margin below */}
-      <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-8 sm:mb-12 relative z-10">
-        {/* Page 1 Tab */}
-        <button
-          onClick={() => handlePageChange(1)}
-          className={`px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-sans font-medium transition-all flex items-center gap-2 cursor-pointer ${
-            currentPage === 1 && !isSpreadView
-              ? 'bg-gradient-to-r from-cosmic-rose to-pink-500 text-white shadow-lg shadow-pink-500/25 scale-105 font-semibold'
-              : 'glass-pill text-white/75 hover:text-white hover:bg-white/10'
-          }`}
-        >
-          <BookOpen className="w-3.5 h-3.5" />
-          <span>Page 1: Memories & Teasing</span>
-        </button>
+      {/* Foldable 4-Page Book with Silky Smooth 3D Page Turn */}
+      <div className="relative max-w-2xl mx-auto px-2 sm:px-4 [perspective:1400px]">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={currentPage}
+            initial={{ 
+              opacity: 0, 
+              rotateY: direction > 0 ? -22 : 22,
+              x: direction > 0 ? 25 : -25,
+              scale: 0.97
+            }}
+            animate={{ 
+              opacity: 1, 
+              rotateY: 0,
+              x: 0,
+              scale: 1 
+            }}
+            exit={{ 
+              opacity: 0, 
+              rotateY: direction > 0 ? 22 : -22,
+              x: direction > 0 ? -25 : 25,
+              scale: 0.97 
+            }}
+            transition={{ 
+              duration: 0.38, 
+              ease: [0.25, 1, 0.5, 1] 
+            }}
+            className="relative filter drop-shadow-[0_25px_45px_rgba(0,0,0,0.7)] origin-center"
+          >
+            {/* Transparent Cutout Torn Paper Background Image */}
+            <img
+              src={`${import.meta.env.BASE_URL}torn_paper.png`}
+              alt={`Vintage Torn Letter Page ${currentPage}`}
+              className="w-full h-auto block pointer-events-none select-none"
+            />
 
-        {/* Page 2 Tab */}
-        <button
-          onClick={() => handlePageChange(2)}
-          className={`px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-sans font-medium transition-all flex items-center gap-2 cursor-pointer ${
-            currentPage === 2 && !isSpreadView
-              ? 'bg-gradient-to-r from-cosmic-rose to-pink-500 text-white shadow-lg shadow-pink-500/25 scale-105 font-semibold'
-              : 'glass-pill text-white/75 hover:text-white hover:bg-white/10'
-          }`}
-        >
-          <Heart className="w-3.5 h-3.5" />
-          <span>Page 2: Wishes & Love</span>
-        </button>
-
-        {/* Desktop Side-by-Side Spread Toggle */}
-        <button
-          onClick={() => setIsSpreadView(!isSpreadView)}
-          className={`hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-sans font-medium transition-all cursor-pointer ${
-            isSpreadView
-              ? 'bg-cosmic-gold/25 border border-cosmic-gold text-amber-200 shadow-md'
-              : 'glass-pill text-white/70 hover:text-white hover:bg-white/10'
-          }`}
-        >
-          <BookMarked className="w-3.5 h-3.5" />
-          <span>{isSpreadView ? 'Fold to 1 Page 📜' : 'Open 2-Page Book 📖'}</span>
-        </button>
+            {/* Generous safe margins: side gap, top gap, elevated bottom buttons */}
+            <div className="absolute inset-0 pt-12 pb-20 px-10 sm:pt-18 sm:pb-24 sm:px-16 md:pt-22 md:pb-28 md:px-18 flex flex-col justify-between overflow-y-auto overflow-x-hidden">
+              {renderPageContent(currentPage)}
+            </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
-
-      {/* Main Container */}
-      {isSpreadView ? (
-        /* Desktop Two-Page Open Book Spread */
-        <div className="grid grid-cols-2 gap-8 max-w-5xl mx-auto filter drop-shadow-[0_25px_45px_rgba(0,0,0,0.7)]">
-          {/* Left Page (Page 1) */}
-          <div className="relative">
-            <img
-              src={`${import.meta.env.BASE_URL}torn_paper.png`}
-              alt="Vintage Torn Letter Page 1"
-              className="w-full h-auto block pointer-events-none select-none"
-            />
-            {/* Generous safe padding on left/right/top/bottom */}
-            <div className="absolute inset-0 pt-12 pb-20 px-10 sm:pt-18 sm:pb-24 sm:px-14 md:pt-20 md:pb-28 md:px-16 flex flex-col justify-between overflow-y-auto overflow-x-hidden">
-              {renderPage1Content()}
-            </div>
-          </div>
-
-          {/* Right Page (Page 2) */}
-          <div className="relative">
-            <img
-              src={`${import.meta.env.BASE_URL}torn_paper.png`}
-              alt="Vintage Torn Letter Page 2"
-              className="w-full h-auto block pointer-events-none select-none"
-            />
-            {/* Generous safe padding on left/right/top/bottom */}
-            <div className="absolute inset-0 pt-12 pb-20 px-10 sm:pt-18 sm:pb-24 sm:px-14 md:pt-20 md:pb-28 md:px-16 flex flex-col justify-between overflow-y-auto overflow-x-hidden">
-              {renderPage2Content()}
-            </div>
-          </div>
-        </div>
-      ) : (
-        /* Foldable Single-Page Book with Ultra-Smooth 3D Flip */
-        <div className="relative max-w-2xl mx-auto px-2 sm:px-4 [perspective:1400px]">
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={currentPage}
-              initial={{ 
-                opacity: 0, 
-                rotateY: direction > 0 ? -22 : 22,
-                x: direction > 0 ? 25 : -25,
-                scale: 0.97
-              }}
-              animate={{ 
-                opacity: 1, 
-                rotateY: 0,
-                x: 0,
-                scale: 1 
-              }}
-              exit={{ 
-                opacity: 0, 
-                rotateY: direction > 0 ? 22 : -22,
-                x: direction > 0 ? -25 : 25,
-                scale: 0.97 
-              }}
-              transition={{ 
-                duration: 0.42, 
-                ease: [0.25, 1, 0.5, 1] 
-              }}
-              className="relative filter drop-shadow-[0_25px_45px_rgba(0,0,0,0.7)] origin-center"
-            >
-              {/* Transparent Cutout Torn Paper Background Image */}
-              <img
-                src={`${import.meta.env.BASE_URL}torn_paper.png`}
-                alt={`Vintage Torn Letter Page ${currentPage}`}
-                className="w-full h-auto block pointer-events-none select-none"
-              />
-
-              {/* Generous safe padding: top gap, side gaps, elevated bottom buttons */}
-              <div className="absolute inset-0 pt-12 pb-20 px-10 sm:pt-18 sm:pb-24 sm:px-16 md:pt-22 md:pb-28 md:px-18 flex flex-col justify-between overflow-y-auto overflow-x-hidden">
-                {currentPage === 1 ? renderPage1Content() : renderPage2Content()}
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      )}
     </section>
   );
 }

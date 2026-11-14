@@ -28,10 +28,11 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
   const catSize = windowWidth < 480 ? 64 : windowWidth < 768 ? 80 : 96;
 
   // 7 Cutout Cats uniformly spaced (360° / 7 = 51.43°) so they never collide
+  const base = import.meta.env.BASE_URL;
   const catsData = [
     {
       id: 7,
-      src: '/cats/cat7.png',
+      src: `${base}cats/cat7.png`,
       alt: 'Cat with plate of momos',
       caption: 'Steaming hot momos for Coco! 🥟',
       angle: -90, // Top center
@@ -39,7 +40,7 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
     },
     {
       id: 3,
-      src: '/cats/cat3.png',
+      src: `${base}cats/cat3.png`,
       alt: 'Cat with pink bow and KitKat',
       caption: 'Break time with KitKat! 🎀',
       angle: -90 + (360 / 7) * 1, // ~ -38.6° (upper right)
@@ -47,7 +48,7 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
     },
     {
       id: 6,
-      src: '/cats/cat6.png',
+      src: `${base}cats/cat6.png`,
       alt: 'Cat with Biryani and Diet Coke',
       caption: 'Biryani & Diet Coke for Coco! 🍗',
       angle: -90 + (360 / 7) * 2, // ~ +12.9° (mid right)
@@ -55,7 +56,7 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
     },
     {
       id: 5,
-      src: '/cats/cat5.png',
+      src: `${base}cats/cat5.png`,
       alt: 'Cat with pink Monster Energy',
       caption: 'Pink Monster energy! ⚡',
       angle: -90 + (360 / 7) * 3, // ~ +64.3° (lower right)
@@ -63,7 +64,7 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
     },
     {
       id: 2,
-      src: '/cats/cat2.png',
+      src: `${base}cats/cat2.png`,
       alt: 'Cat with chocolate frappe',
       caption: 'Iced chocolate drink! 🥤',
       angle: -90 + (360 / 7) * 4, // ~ +115.7° (lower left)
@@ -71,7 +72,7 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
     },
     {
       id: 4,
-      src: '/cats/cat4.png',
+      src: `${base}cats/cat4.png`,
       alt: 'Cat with Kinder Joy',
       caption: 'Kinder Joy surprise! 🥚',
       angle: -90 + (360 / 7) * 5, // ~ +167.1° (mid left)
@@ -79,7 +80,7 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
     },
     {
       id: 1,
-      src: '/cats/cat1.png',
+      src: `${base}cats/cat1.png`,
       alt: 'Cat with NY cap and Dairy Milk Silk',
       caption: 'Silk just for Coco! 🍫',
       angle: -90 + (360 / 7) * 6, // ~ +218.6° (upper left)
@@ -249,7 +250,7 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
 
             {/* Luxury 3D Gift Box Image */}
             <img
-              src="/gift_box.png"
+              src={`${base}gift_box.png`}
               alt="Luxury 3D Birthday Gift Box"
               className={`w-full h-full object-contain relative z-10 transition-all duration-500 pointer-events-none select-none ${
                 isOpened ? 'brightness-105' : 'group-hover:brightness-105'

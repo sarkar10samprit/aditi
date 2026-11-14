@@ -367,7 +367,7 @@ export default function CakeSection() {
                 title="Click to cut a slice of cake for Coco!"
               >
                 <img
-                  src="/knife_cat.png"
+                  src={`${import.meta.env.BASE_URL}knife_cat.png`}
                   alt="Sassy Kitten with Pink Knife"
                   className="w-full h-auto object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.65)] group-hover:scale-105 transition-transform"
                 />

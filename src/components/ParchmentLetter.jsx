@@ -115,7 +115,7 @@ export default function ParchmentLetter() {
       <div className="relative max-w-2xl mx-auto filter drop-shadow-[0_25px_40px_rgba(0,0,0,0.65)] select-text">
         {/* Transparent Cutout Torn Paper Background Image */}
         <img
-          src="/torn_paper.png"
+          src={`${import.meta.env.BASE_URL}torn_paper.png`}
           alt="Vintage Torn Letter for Coco"
           className="w-full h-auto block pointer-events-none select-none"
         />

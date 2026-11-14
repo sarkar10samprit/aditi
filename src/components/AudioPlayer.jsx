@@ -8,7 +8,7 @@ export default function AudioPlayer() {
   const audioRef = useRef(null);
 
   useEffect(() => {
-    const audio = new Audio('/birthday_song.mp3');
+    const audio = new Audio(`${import.meta.env.BASE_URL}birthday_song.mp3`);
     audio.loop = true;
     audio.volume = 0.55;
     audioRef.current = audio;

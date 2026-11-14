@@ -24,7 +24,7 @@ async function loadMeowBuffer() {
   const ctx = getAudioContext();
   if (!ctx || meowBuffer) return;
   try {
-    const res = await fetch('/cat_meow.mp3');
+    const res = await fetch(`${import.meta.env.BASE_URL}cat_meow.mp3`);
     const arrayBuf = await res.arrayBuffer();
     ctx.decodeAudioData(arrayBuf, (decoded) => {
       meowBuffer = decoded;
@@ -61,7 +61,7 @@ export function playMeow() {
 
   // HTML5 Audio fallback for immediate playback
   try {
-    const audio = new Audio('/cat_meow.mp3');
+    const audio = new Audio(`${import.meta.env.BASE_URL}cat_meow.mp3`);
     audio.volume = 0.85;
     audio.play().catch(() => {});
   } catch (e) {}

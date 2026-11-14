@@ -8,26 +8,27 @@ export default function Footer() {
   };
 
   return (
-    <footer className="py-20 px-4 text-center border-t border-white/10 bg-black/30 backdrop-blur-md relative">
-      <div className="max-w-md mx-auto space-y-4">
+    <footer className="pt-6 pb-12 px-4 text-center relative">
+      <div className="max-w-xl mx-auto space-y-3">
         <div className="flex items-center justify-center gap-2 text-cosmic-champagne">
           <Sparkles className="w-4 h-4 text-cosmic-gold" />
           <Heart className="w-5 h-5 fill-cosmic-rose text-cosmic-rose animate-pulse" />
           <Sparkles className="w-4 h-4 text-cosmic-gold" />
         </div>
 
-        <p className="font-serif text-2xl font-normal text-white">
-          Dedicated to {birthdayData.bestieName}
-        </p>
+        <div className="space-y-2">
+          <p className="font-sans text-xl sm:text-2xl font-semibold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-cosmic-champagne via-cosmic-blush to-white drop-shadow-sm">
+            From your loving and caring meowww 🐾
+          </p>
+          <p className="font-sans text-sm sm:text-base text-white/90 font-light leading-relaxed max-w-md mx-auto drop-shadow-sm">
+            Again wishing you happiest birthdayyy to my beloved Coco ✨
+          </p>
+        </div>
 
-        <p className="font-sans text-xs text-white/70 leading-relaxed max-w-sm mx-auto font-light">
-          "Some people make the world more special just by being in it."
-        </p>
-
-        <div className="pt-3">
+        <div className="pt-2">
           <button
             onClick={scrollToTop}
-            className="text-xs font-sans font-semibold text-cosmic-champagne hover:text-white uppercase tracking-widest underline decoration-cosmic-champagne/40 underline-offset-4 cursor-pointer"
+            className="text-xs font-sans font-semibold text-cosmic-champagne/80 hover:text-white uppercase tracking-widest underline decoration-cosmic-champagne/40 underline-offset-4 cursor-pointer transition-colors"
           >
             Return to Top ↑
           </button>

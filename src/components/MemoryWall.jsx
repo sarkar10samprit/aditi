@@ -1,98 +1,102 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { birthdayData } from '../config/birthdayData';
-import { Camera, Sparkles, X, ZoomIn, Heart } from 'lucide-react';
+import { Camera, Sparkles, X, ZoomIn, ChevronLeft, ChevronRight } from 'lucide-react';
+import { playPop } from '../utils/soundEffects';
 
 export default function MemoryWall() {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
 
+  const currentIndex = selectedPhoto
+    ? birthdayData.photos.findIndex((p) => p.id === selectedPhoto.id)
+    : -1;
+
+  const handlePrev = useCallback((e) => {
+    if (e) e.stopPropagation();
+    playPop();
+    if (currentIndex === -1) return;
+    const prevIdx = (currentIndex - 1 + birthdayData.photos.length) % birthdayData.photos.length;
+    setSelectedPhoto(birthdayData.photos[prevIdx]);
+  }, [currentIndex]);
+
+  const handleNext = useCallback((e) => {
+    if (e) e.stopPropagation();
+    playPop();
+    if (currentIndex === -1) return;
+    const nextIdx = (currentIndex + 1) % birthdayData.photos.length;
+    setSelectedPhoto(birthdayData.photos[nextIdx]);
+  }, [currentIndex]);
+
+  useEffect(() => {
+    if (!selectedPhoto) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowLeft') handlePrev();
+      else if (e.key === 'ArrowRight') handleNext();
+      else if (e.key === 'Escape') setSelectedPhoto(null);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedPhoto, handlePrev, handleNext]);
+
   return (
-    <section id="memories" className="py-24 px-4 sm:px-6 max-w-7xl mx-auto relative">
+    <section id="memories" className="py-12 sm:py-16 px-4 sm:px-6 max-w-7xl mx-auto relative">
       {/* Header */}
-      <div className="text-center max-w-2xl mx-auto mb-16">
+      <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill text-cosmic-champagne font-sans text-xs font-semibold uppercase tracking-[0.2em] mb-4">
-          <Camera className="w-3.5 h-3.5" />
+          <Camera className="w-3.5 h-3.5 text-cosmic-gold" />
           <span>Curated Moments</span>
         </div>
         <h2 className="font-serif text-4xl sm:text-6xl font-normal text-white mb-4">
-          The Polaroid Archive
+          The Memory Archive
         </h2>
         <p className="font-sans text-white/80 text-base sm:text-lg font-light leading-relaxed">
-          Moments frozen in time—unapologetic laughter, quiet late-night truths, and every second in between.
+          Moments frozen in time—unapologetic laughter, quiet late-night truths, and memories saved forever.
         </p>
-
-
       </div>
 
-      {/* Grid of Exhibition Polaroids */}
+      {/* Grid of Exhibition Cards (Clean, Modern & Uncropped) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
-        {birthdayData.photos.map((item, index) => {
-          const hasCustomImage = Boolean(item.src && item.src.trim().length > 0);
-
+        {birthdayData.photos.map((item) => {
           return (
             <div
               key={item.id}
-              onClick={() => setSelectedPhoto(item)}
-              style={{
-                transform: `rotate(${item.rotation || '0deg'})`,
+              onClick={() => {
+                playPop();
+                setSelectedPhoto(item);
               }}
-              className="group relative glass-card-light p-5 sm:p-6 rounded-2xl shadow-glass-card hover:shadow-glass-hover transition-all duration-300 hover:scale-[1.03] hover:rotate-0 hover:z-20 cursor-pointer border border-white/60"
+              className="group relative glass-card-light p-4 sm:p-5 rounded-3xl shadow-glass-card hover:shadow-glass-hover transition-all duration-300 hover:scale-[1.025] hover:-translate-y-1 cursor-pointer border border-white/80"
             >
-              {/* Tape Accent */}
-              <div
-                style={{ backgroundColor: item.tapeColor || 'rgba(232, 114, 155, 0.45)' }}
-                className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-5 rounded-sm opacity-90 shadow-xs transform -rotate-1 pointer-events-none z-10"
-              />
+              {/* Photo Area with 9:16 vertical ratio matching the aesthetic collage */}
+              <div className="relative aspect-[9/16] w-full rounded-2xl overflow-hidden bg-neutral-900/10 shadow-md">
+                <img
+                  src={item.src}
+                  alt={item.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
 
-              {/* Memory Tag */}
-              <div className="absolute top-7 right-7 z-10 px-2.5 py-0.5 rounded-full bg-black/70 backdrop-blur-sm text-[10px] text-white/90 font-sans font-semibold tracking-wider uppercase">
-                {item.date}
-              </div>
-
-              {/* Photo Area */}
-              <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-gradient-to-br from-neutral-100 to-neutral-200 border border-neutral-300 flex flex-col items-center justify-center p-6 text-center">
-                {hasCustomImage ? (
-                  <img
-                    src={item.src}
-                    alt={item.title}
-                    className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500"
-                  />
-                ) : (
-                  <div className="flex flex-col items-center justify-center space-y-3 text-neutral-500">
-                    <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-neutral-400 group-hover:scale-110 group-hover:text-cosmic-rose transition-all duration-300">
-                      <Camera className="w-7 h-7 stroke-[1.5]" />
-                    </div>
-                    <div>
-                      <span className="font-serif text-base font-semibold text-neutral-800 block">
-                        Memory Frame #{index + 1}
-                      </span>
-                      <span className="font-sans text-xs text-neutral-500 block mt-0.5">
-                        Click to view memory note
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1 text-[11px] text-cosmic-deep bg-cosmic-blush/25 px-2.5 py-0.5 rounded-full font-sans font-medium">
-                      <Heart className="w-3 h-3 fill-cosmic-rose text-cosmic-rose" />
-                      <span>Ready for photo</span>
-                    </div>
-                  </div>
-                )}
+                {/* Date Tag */}
+                <div className="absolute top-3.5 right-3.5 z-10 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-[10px] text-white/95 font-sans font-semibold tracking-wider uppercase shadow-xs">
+                  {item.date}
+                </div>
 
                 {/* Hover overlay hint */}
-                <div className="absolute inset-0 bg-cosmic-deep/15 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-2xs">
-                  <div className="bg-white/95 px-3.5 py-1.5 rounded-full shadow-md flex items-center gap-1.5 text-xs font-sans font-semibold text-neutral-800">
+                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-2xs">
+                  <div className="bg-white/95 px-4 py-2 rounded-full shadow-lg flex items-center gap-1.5 text-xs font-sans font-semibold text-neutral-800">
                     <ZoomIn className="w-3.5 h-3.5 text-cosmic-rose" />
-                    <span>Expand</span>
+                    <span>Expand Photo</span>
                   </div>
                 </div>
               </div>
 
-              {/* Elegant Typography */}
-              <div className="pt-5 pb-1 text-center">
-                <h3 className="font-serif text-xl font-bold text-neutral-900 group-hover:text-cosmic-rose transition-colors">
+              {/* Title & Caption */}
+              <div className="pt-4 pb-1 text-center">
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-neutral-900 group-hover:text-cosmic-rose transition-colors leading-snug">
                   {item.title}
                 </h3>
-                <p className="font-serif italic text-base sm:text-lg text-neutral-700 mt-1.5 leading-snug line-clamp-2">
-                  "{item.caption}"
-                </p>
+                {item.caption && (
+                  <p className="font-sans text-xs sm:text-sm text-neutral-600 mt-1.5 leading-relaxed line-clamp-2 px-1 font-normal">
+                    "{item.caption}"
+                  </p>
+                )}
               </div>
             </div>
           );
@@ -103,58 +107,76 @@ export default function MemoryWall() {
       {selectedPhoto && (
         <div 
           onClick={() => setSelectedPhoto(null)}
-          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white max-w-lg w-full rounded-3xl p-6 sm:p-8 shadow-2xl relative border border-white/80"
+            className="bg-white max-w-lg w-full rounded-3xl p-5 sm:p-7 shadow-2xl relative border border-white/80 max-h-[95vh] overflow-y-auto"
           >
+            {/* Close Button */}
             <button
               onClick={() => setSelectedPhoto(null)}
-              className="absolute top-5 right-5 w-9 h-9 rounded-full bg-neutral-100 text-neutral-700 hover:bg-neutral-200 flex items-center justify-center transition-colors cursor-pointer"
+              className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-neutral-100 text-neutral-700 hover:bg-neutral-200 flex items-center justify-center transition-colors cursor-pointer shadow-xs"
+              aria-label="Close"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cosmic-blush/30 text-cosmic-deep text-xs font-sans font-semibold mb-3">
-              <Sparkles className="w-3.5 h-3.5 text-cosmic-gold" />
-              <span>{selectedPhoto.date}</span>
+            {/* Header Badge */}
+            <div className="flex items-center justify-between mb-2 pr-10">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cosmic-blush/30 text-cosmic-deep text-xs font-sans font-semibold">
+                <Sparkles className="w-3.5 h-3.5 text-cosmic-gold" />
+                <span>{selectedPhoto.date}</span>
+              </div>
+              <span className="font-mono text-xs text-neutral-400 font-semibold uppercase tracking-wider">
+                {currentIndex + 1} / {birthdayData.photos.length}
+              </span>
             </div>
 
-            <h3 className="font-serif text-2xl sm:text-3xl font-bold text-neutral-900 mb-2">
+            {/* Title */}
+            <h3 className="font-serif text-2xl sm:text-3xl font-bold text-neutral-900 mb-3 text-center">
               {selectedPhoto.title}
             </h3>
 
-            <div className="w-full aspect-video rounded-2xl bg-neutral-100 border border-neutral-200 flex flex-col items-center justify-center my-4 p-4 text-center">
-              {selectedPhoto.src ? (
-                <img
-                  src={selectedPhoto.src}
-                  alt={selectedPhoto.title}
-                  className="w-full h-full object-cover rounded-xl"
-                />
-              ) : (
-                <div className="space-y-2 text-neutral-500">
-                  <Camera className="w-9 h-9 mx-auto text-neutral-400" />
-                  <p className="font-serif text-sm font-semibold text-neutral-800">
-                    Blank Picture Frame Ready
-                  </p>
-                  <p className="text-xs text-neutral-500 max-w-xs font-sans">
-                    Place your photo inside <code className="bg-neutral-200 px-1 py-0.5 rounded text-neutral-800">public/photos/</code> and link it in <code className="bg-neutral-200 px-1 py-0.5 rounded text-neutral-800">birthdayData.js</code>.
-                  </p>
-                </div>
-              )}
+            {/* Full Uncropped Photo */}
+            <div className="relative w-full rounded-2xl bg-neutral-900/5 flex items-center justify-center overflow-hidden my-3 shadow-inner">
+              <img
+                src={selectedPhoto.src}
+                alt={selectedPhoto.title}
+                className="max-h-[62vh] w-auto max-w-full object-contain rounded-xl shadow-xs"
+              />
+
+              {/* Carousel Navigation Buttons */}
+              <button
+                onClick={handlePrev}
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-neutral-900 shadow-md flex items-center justify-center transition-all hover:scale-105 cursor-pointer z-10"
+                aria-label="Previous photo"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={handleNext}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-neutral-900 shadow-md flex items-center justify-center transition-all hover:scale-105 cursor-pointer z-10"
+                aria-label="Next photo"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
             </div>
 
-            <div className="bg-neutral-50 p-5 rounded-2xl border border-neutral-200">
-              <p className="font-serif italic text-lg sm:text-xl text-neutral-800 leading-relaxed">
-                "{selectedPhoto.caption}"
-              </p>
-            </div>
+            {/* Caption Box */}
+            {selectedPhoto.caption && (
+              <div className="bg-neutral-50 p-4 rounded-2xl border border-neutral-200 mt-3">
+                <p className="font-serif italic text-base sm:text-lg text-neutral-800 leading-relaxed text-center">
+                  "{selectedPhoto.caption}"
+                </p>
+              </div>
+            )}
 
-            <div className="mt-6 flex justify-end">
+            {/* Modal Footer */}
+            <div className="mt-4 flex items-center justify-end">
               <button
                 onClick={() => setSelectedPhoto(null)}
-                className="luxury-button px-6 py-2.5 rounded-full text-white font-sans text-xs font-semibold tracking-wider uppercase cursor-pointer"
+                className="luxury-button px-6 py-2 rounded-full text-white font-sans text-xs font-semibold tracking-wider uppercase cursor-pointer"
               >
                 Close Archive
               </button>

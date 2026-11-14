@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { birthdayData } from '../config/birthdayData';
+import { playChime, playPop } from '../utils/soundEffects';
 
 export default function CakeSection() {
   const [isBlown, setIsBlown] = useState(false);
@@ -20,65 +21,41 @@ export default function CakeSection() {
   }, []);
 
   const spawnFloatingHearts = () => {
-    const emojis = ['💖', '💕', '💓', '💗', '❤️', '✨', '🌸', '💝', '🎀', '🍰', '🧁', '⭐', '💫', '🌷', '🤍'];
-    const count = 165; // Massive screen-filling ocean of emojis
+    const emojis = ['💖', '💕', '✨', '🌸', '🍰', '🧁', '💝'];
+    const count = 18; // Optimized for smooth 60fps on tablets and mobile
     const newHearts = [];
 
     for (let i = 0; i < count; i++) {
       newHearts.push({
         id: `${Date.now()}-${i}`,
         emoji: emojis[Math.floor(Math.random() * emojis.length)],
-        left: Math.random() * 98, // 0vw to 98vw across the entire screen
-        bottom: -40 - Math.random() * 80, // Under the bottom of the screen
-        size: 22 + Math.random() * 32, // 22px to 54px variety
-        duration: 4.2 + Math.random() * 3.6, // 4.2s to 7.8s rise
-        delay: Math.random() * 2.8, // Continuous wave staggered over 2.8s
-        sway: -45 + Math.random() * 90, // px horizontal sway
-        rot: -30 + Math.random() * 60, // deg rotation
+        left: 5 + Math.random() * 90, // 5vw to 95vw
+        bottom: -20,
+        size: 24 + Math.random() * 16, // 24px to 40px
+        duration: 3.5 + Math.random() * 2.0, // 3.5s to 5.5s rise
+        delay: Math.random() * 1.2, // Staggered over 1.2s
+        sway: -25 + Math.random() * 50, // px horizontal sway
+        rot: -20 + Math.random() * 40, // deg rotation
       });
     }
 
     setFloatingHearts(newHearts);
 
-    // Blast emoji cannons from the bottom of the screen
+    // Auto-cleanup floating hearts after animation finishes
+    setTimeout(() => {
+      setFloatingHearts([]);
+    }, 6000);
+
+    // Lightweight smooth confetti burst (no heavy canvas text rasterization)
     try {
-      const heartShape = confetti.shapeFromText({ text: '💖', scalar: 2.2 });
-      const starShape = confetti.shapeFromText({ text: '✨', scalar: 2 });
-      const flowerShape = confetti.shapeFromText({ text: '🌸', scalar: 2.2 });
-      const loveShape = confetti.shapeFromText({ text: '💕', scalar: 2.2 });
-
       confetti({
-        shapes: [heartShape, starShape, flowerShape, loveShape],
-        particleCount: 55,
-        spread: 140,
-        startVelocity: 55,
-        origin: { x: 0.5, y: 1 },
-        scalar: 2.2,
-        ticks: 240,
+        particleCount: 35,
+        spread: 80,
+        startVelocity: 45,
+        origin: { x: 0.5, y: 0.8 },
+        colors: ['#F472B6', '#FB7185', '#FDE047', '#FFFFFF', '#D64E7E'],
+        ticks: 180,
       });
-
-      setTimeout(() => {
-        confetti({
-          shapes: [heartShape, loveShape],
-          particleCount: 35,
-          angle: 65,
-          spread: 75,
-          startVelocity: 60,
-          origin: { x: 0.1, y: 1 },
-          scalar: 2.2,
-          ticks: 240,
-        });
-        confetti({
-          shapes: [flowerShape, starShape],
-          particleCount: 35,
-          angle: 115,
-          spread: 75,
-          startVelocity: 60,
-          origin: { x: 0.9, y: 1 },
-          scalar: 2.2,
-          ticks: 240,
-        });
-      }, 250);
     } catch (e) {
       // Graceful fallback
     }
@@ -86,12 +63,15 @@ export default function CakeSection() {
 
   const handleBlowCandles = () => {
     if (isBlown) return;
+    playChime();
     setIsBlown(true);
     setCandles([false, false, false, false, false]);
     spawnFloatingHearts();
   };
 
   const handleCutCake = () => {
+    playPop();
+    playChime();
     setIsCutting(true);
 
     setTimeout(() => {
@@ -100,10 +80,11 @@ export default function CakeSection() {
     }, 450);
 
     confetti({
-      particleCount: 75,
-      spread: 90,
+      particleCount: 35,
+      spread: 75,
       origin: { y: 0.65 },
-      colors: ['#F472B6', '#FB7185', '#FDE047', '#FFFFFF', '#D64E7E', '#FEF3C7'],
+      colors: ['#F472B6', '#FB7185', '#FDE047', '#FFFFFF', '#D64E7E'],
+      ticks: 160,
     });
   };
 
@@ -111,7 +92,7 @@ export default function CakeSection() {
   const candlePositions = [7, 11, 15, 19, 23];
 
   return (
-    <section id="cake" className="py-24 px-4 sm:px-6 max-w-5xl mx-auto text-center relative">
+    <section id="cake" className="py-14 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto text-center relative">
       {/* Full-Screen Floating Emoji Ocean */}
       {floatingHearts.length > 0 && (
         <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
@@ -136,13 +117,10 @@ export default function CakeSection() {
       )}
 
       {/* Header */}
-      <div className="mb-10 relative z-10">
-        <h2 className="font-serif text-4xl sm:text-6xl font-normal text-white mb-4">
-          Make a Secret Wish, Coco
+      <div className="mb-6 relative z-10">
+        <h2 className="font-serif text-4xl sm:text-6xl font-normal text-white mb-2">
+          It's cake time !!!🥳🥳
         </h2>
-        <p className="font-sans text-white/80 text-base sm:text-lg max-w-xl mx-auto font-light leading-relaxed">
-          Close your eyes, make your wish, and tap the pixel cake to extinguish the candles.
-        </p>
       </div>
 
       {/* Ultra-Chunky 32x32 Retro Pixel Art Cake & Sassy Knife Cat */}
@@ -410,15 +388,17 @@ export default function CakeSection() {
           </button>
         ) : (
           <div className="flex flex-col items-center gap-3">
-            <button
-              onClick={handleCutCake}
-              className="px-8 py-3.5 bg-gradient-to-r from-pink-500 via-rose-500 to-cosmic-deep text-white font-mono text-xs sm:text-sm font-bold tracking-widest uppercase border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all cursor-pointer flex items-center gap-2"
-            >
-              <span>{isCut ? "[ CUT ANOTHER PIECE 🍰 ]" : "[ CUT A SLICE FOR COCO 🍰 ]"}</span>
-            </button>
+            {!isCut && (
+              <button
+                onClick={handleCutCake}
+                className="luxury-button px-8 py-3 rounded-full text-white font-sans text-sm font-semibold tracking-wide shadow-lg hover:shadow-glow-rose transition-all cursor-pointer flex items-center gap-2 active:scale-95"
+              >
+                <span>Cut a Slice</span>
+              </button>
+            )}
 
             {isCut && (
-              <div className="px-5 py-2 rounded-full bg-white/15 backdrop-blur-md border border-white/30 text-cosmic-champagne font-sans text-xs tracking-wide shadow-lg">
+              <div className="px-6 py-2.5 rounded-full bg-white/15 backdrop-blur-md border border-white/30 text-cosmic-champagne font-sans text-sm tracking-wide shadow-lg">
                 ✨ The first slice is served to Coco! Slay your birthday! 🍰💖
               </div>
             )}

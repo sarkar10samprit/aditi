@@ -26,10 +26,10 @@ export default function WishJar() {
   };
 
   return (
-    <section className="py-20 px-4 sm:px-6 max-w-4xl mx-auto relative">
-      <div className="glass-panel p-8 sm:p-14 border border-white/25 shadow-2xl relative overflow-hidden">
+    <section className="py-10 sm:py-14 px-4 sm:px-6 max-w-4xl mx-auto relative">
+      <div className="glass-panel p-6 sm:p-12 border border-white/25 shadow-2xl relative overflow-hidden">
         {/* Header */}
-        <div className="text-center max-w-xl mx-auto mb-10">
+        <div className="text-center max-w-xl mx-auto mb-6 sm:mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill text-cosmic-champagne font-sans text-xs font-semibold uppercase tracking-[0.2em] mb-4">
             <Sparkles className="w-3.5 h-3.5 text-cosmic-gold" />
             <span>The Time Capsule</span>

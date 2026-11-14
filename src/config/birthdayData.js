@@ -53,61 +53,88 @@ export const birthdayData = {
   // Audio configuration
   ambientMusicTitle: "Cozy Lo-Fi Birthday Chime",
   
-  // Photo Polaroids (Blank placeholders ready for real pictures)
+  // Photo Gallery (Curated memories of Coco)
   photos: [
     {
       id: 1,
-      title: "The Chaos Duo",
-      caption: "Proof that you and I make one unstoppable, completely chaotic team. Never stop being unhinged with me, Coco.",
-      src: "", // Place photo in public/photos/ and set e.g. "/photos/pic1.jpg"
-      date: "Coco & Me #01",
-      rotation: "-3deg",
-      tapeColor: "rgba(232, 114, 155, 0.45)"
+      title: "A little sunshine",
+      caption: "Bright yellow vibes, endless sunflowers, and that radiant smile that outshines the daylight.",
+      src: "/photos/photo1.jpg",
+      date: "Archive #01",
+      rotation: "0deg",
+      objectPosition: "center center"
     },
     {
       id: 2,
-      title: "Dangerously Gorgeous",
-      caption: "Still trying to figure out how someone manages to look this stunning while also being the biggest goofball alive.",
-      src: "",
-      date: "Coco & Me #02",
-      rotation: "2.5deg",
-      tapeColor: "rgba(252, 211, 77, 0.45)"
+      title: "Main character energy",
+      caption: "Pure cinematic presence in white, surrounded by mountain mist and endless greenery.",
+      src: "/photos/photo2.jpg",
+      date: "Archive #02",
+      rotation: "0deg",
+      objectPosition: "center center"
     },
     {
       id: 3,
-      title: "2 AM Therapy Sessions",
-      caption: "From deep existential talks to crying from laughter over literally nothing. My favorite conversations are always with you.",
-      src: "",
-      date: "Coco & Me #03",
-      rotation: "-2deg",
-      tapeColor: "rgba(232, 114, 155, 0.45)"
+      title: "The Cute one",
+      caption: "Cozy blue knit, perched by the window with that gentle, irresistible smile.",
+      src: "/photos/photo3.jpg",
+      date: "Archive #03",
+      rotation: "0deg",
+      objectPosition: "center center"
     },
     {
       id: 4,
-      title: "Effortless Radiance",
-      caption: "You don't need golden hour lighting when you naturally outshine the whole room every single day.",
-      src: "",
-      date: "Coco & Me #04",
-      rotation: "3deg",
-      tapeColor: "rgba(254, 243, 199, 0.45)"
+      title: "Too cute to handle",
+      caption: "Over-the-shoulder glance, iconic red elegance, and dangerously charming confidence.",
+      src: "/photos/photo4.jpg",
+      date: "Archive #04",
+      rotation: "0deg",
+      objectPosition: "center center"
     },
     {
       id: 5,
-      title: "The Unspoken Glance",
-      caption: "That exact look we share across the room when we both know something ridiculous just happened.",
-      src: "",
-      date: "Coco & Me #05",
-      rotation: "-1.5deg",
-      tapeColor: "rgba(232, 114, 155, 0.45)"
+      title: "The Hottest one 🌚",
+      caption: "Four iconic moods in one frame—goofy, adorable, and deliciously chaotic.",
+      src: "/photos/photo5.jpg",
+      date: "Archive #05",
+      rotation: "0deg",
+      objectPosition: "center center"
     },
     {
       id: 6,
-      title: "Lifelong Promise",
-      caption: "Growing older, but solemnly promising to never grow up without you right by my side, Coco.",
-      src: "",
-      date: "Coco & Me #06",
-      rotation: "2deg",
-      tapeColor: "rgba(252, 211, 77, 0.45)"
+      title: "This one also cute",
+      caption: "Holding a fresh bouquet with that warm, precious glow that makes everything softer.",
+      src: "/photos/photo6.jpg",
+      date: "Archive #06",
+      rotation: "0deg",
+      objectPosition: "center center"
+    },
+    {
+      id: 7,
+      title: "Flower Girl",
+      caption: "Reaching for vibrant bougainvillea blooms under the sun. Always reaching for beauty.",
+      src: "/photos/photo7.jpg",
+      date: "Archive #07",
+      rotation: "0deg",
+      objectPosition: "center center"
+    },
+    {
+      id: 8,
+      title: "Certified Drama Queen.",
+      caption: "Flower in hair, iconic playful pout, and the drama only Coco can pull off so cutely.",
+      src: "/photos/photo8.jpg",
+      date: "Archive #08",
+      rotation: "0deg",
+      objectPosition: "center center"
+    },
+    {
+      id: 9,
+      title: "The Pink Princess.",
+      caption: "Blush pink ruffles, birthday glam, and that queen energy conquering the evening.",
+      src: "/photos/photo9.jpg",
+      date: "Archive #09",
+      rotation: "0deg",
+      objectPosition: "center center"
     }
   ],
 

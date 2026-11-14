@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AudioPlayer from './components/AudioPlayer';
+import PawTrail from './components/PawTrail';
 import Hero from './components/Hero';
 import MemoryWall from './components/MemoryWall';
 import ParchmentLetter from './components/ParchmentLetter';
@@ -31,6 +32,9 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen text-white overflow-hidden">
+      {/* Interactive Paw-Print & Sparkle Trail */}
+      <PawTrail />
+
       {/* Floating Audio Controller */}
       <AudioPlayer />
 

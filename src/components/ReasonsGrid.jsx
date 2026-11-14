@@ -4,9 +4,9 @@ import { Star, Heart } from 'lucide-react';
 
 export default function ReasonsGrid() {
   return (
-    <section className="py-24 px-4 sm:px-6 max-w-6xl mx-auto relative">
+    <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-6xl mx-auto relative">
       {/* Header */}
-      <div className="text-center max-w-2xl mx-auto mb-16">
+      <div className="text-center max-w-2xl mx-auto mb-10">
         <h2 className="font-serif text-4xl sm:text-6xl font-normal text-white mb-4">
           🎀 10 Reasons You're Irreplaceable
         </h2>
@@ -46,7 +46,7 @@ export default function ReasonsGrid() {
 
       {/* Closing Banner */}
       {birthdayData.reasonsClosing && (
-        <div className="mt-14 text-center max-w-2xl mx-auto p-8 rounded-3xl glass-panel border border-white/20 shadow-glass-card">
+        <div className="mt-8 sm:mt-10 text-center max-w-2xl mx-auto p-6 sm:p-8 rounded-3xl glass-panel border border-white/20 shadow-glass-card">
           <h3 className="font-serif text-2xl sm:text-4xl text-white mb-3 font-normal">
             {birthdayData.reasonsClosing.title}
           </h3>

@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { Gift, Heart } from 'lucide-react';
+import { Gift } from 'lucide-react';
+import { playChime, playMeow } from '../utils/soundEffects';
 
 export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened }) {
   const [internalOpened, setInternalOpened] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
-  const [activeCatMessage, setActiveCatMessage] = useState(null);
+  const [activeCatId, setActiveCatId] = useState(null);
   const [windowWidth, setWindowWidth] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth : 1024
   );
@@ -21,18 +22,19 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Responsive orbit radius and dimensions
-  const orbitRadius = windowWidth < 480 ? 142 : windowWidth < 768 ? 190 : 255;
-  const catSize = windowWidth < 480 ? 80 : windowWidth < 768 ? 105 : 140;
+  // Collision-free responsive orbit dimensions (uniform 51.4° spacing with wide margin)
+  const orbitRadiusX = windowWidth < 480 ? 150 : windowWidth < 768 ? 210 : 270;
+  const orbitRadiusY = windowWidth < 480 ? 105 : windowWidth < 768 ? 140 : 175;
+  const catSize = windowWidth < 480 ? 64 : windowWidth < 768 ? 80 : 96;
 
-  // 7 Cutout Cats positioned symmetrically around 360 degrees
+  // 7 Cutout Cats uniformly spaced (360° / 7 = 51.43°) so they never collide
   const catsData = [
     {
       id: 7,
       src: '/cats/cat7.png',
       alt: 'Cat with plate of momos',
       caption: 'Steaming hot momos for Coco! 🥟',
-      angle: -90, // 12 o'clock (top)
+      angle: -90, // Top center
       rot: -2,
     },
     {
@@ -40,7 +42,7 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
       src: '/cats/cat3.png',
       alt: 'Cat with pink bow and KitKat',
       caption: 'Break time with KitKat! 🎀',
-      angle: -90 + (360 / 7) * 1, // ~ -38.6 deg
+      angle: -90 + (360 / 7) * 1, // ~ -38.6° (upper right)
       rot: 6,
     },
     {
@@ -48,7 +50,7 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
       src: '/cats/cat6.png',
       alt: 'Cat with Biryani and Diet Coke',
       caption: 'Biryani & Diet Coke for Coco! 🍗',
-      angle: -90 + (360 / 7) * 2, // ~ +12.9 deg
+      angle: -90 + (360 / 7) * 2, // ~ +12.9° (mid right)
       rot: 4,
     },
     {
@@ -56,7 +58,7 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
       src: '/cats/cat5.png',
       alt: 'Cat with pink Monster Energy',
       caption: 'Pink Monster energy! ⚡',
-      angle: -90 + (360 / 7) * 3, // ~ +64.3 deg
+      angle: -90 + (360 / 7) * 3, // ~ +64.3° (lower right)
       rot: -5,
     },
     {
@@ -64,7 +66,7 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
       src: '/cats/cat2.png',
       alt: 'Cat with chocolate frappe',
       caption: 'Iced chocolate drink! 🥤',
-      angle: -90 + (360 / 7) * 4, // ~ +115.7 deg
+      angle: -90 + (360 / 7) * 4, // ~ +115.7° (lower left)
       rot: 5,
     },
     {
@@ -72,7 +74,7 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
       src: '/cats/cat4.png',
       alt: 'Cat with Kinder Joy',
       caption: 'Kinder Joy surprise! 🥚',
-      angle: -90 + (360 / 7) * 5, // ~ +167.1 deg
+      angle: -90 + (360 / 7) * 5, // ~ +167.1° (mid left)
       rot: -4,
     },
     {
@@ -80,7 +82,7 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
       src: '/cats/cat1.png',
       alt: 'Cat with NY cap and Dairy Milk Silk',
       caption: 'Silk just for Coco! 🍫',
-      angle: -90 + (360 / 7) * 6, // ~ +218.6 deg
+      angle: -90 + (360 / 7) * 6, // ~ +218.6° (upper left)
       rot: -6,
     },
   ];
@@ -103,44 +105,27 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
   };
 
   const handleOpenGift = () => {
+    playChime();
     setInternalOpened(true);
 
+    // Single crisp, optimized celebration pop (tablet friendly)
     confetti({
-      particleCount: 95,
-      spread: 80,
+      particleCount: 35,
+      spread: 65,
       origin: { y: 0.6 },
-      colors: ['#E8729B', '#FCD34D', '#FFFFFF', '#D64E7E', '#FEF3C7'],
+      colors: ['#E8729B', '#FCD34D', '#FFFFFF', '#D64E7E'],
+      ticks: 140,
     });
-
-    setTimeout(() => {
-      confetti({
-        particleCount: 50,
-        angle: 60,
-        spread: 60,
-        origin: { x: 0.1 },
-        colors: ['#E8729B', '#FCD34D', '#FFFFFF'],
-      });
-      confetti({
-        particleCount: 50,
-        angle: 120,
-        spread: 60,
-        origin: { x: 0.9 },
-        colors: ['#E8729B', '#FCD34D', '#FFFFFF'],
-      });
-    }, 250);
 
     if (onOpen) onOpen();
   };
 
   const handleCatClick = (cat) => {
-    setActiveCatMessage(cat.caption);
-    confetti({
-      particleCount: 25,
-      spread: 55,
-      origin: { y: 0.4 },
-      colors: ['#E8729B', '#FCD34D', '#FFFFFF', '#D64E7E'],
-    });
-    setTimeout(() => setActiveCatMessage(null), 3000);
+    playMeow();
+    setActiveCatId(cat.id);
+    setTimeout(() => {
+      setActiveCatId((prev) => (prev === cat.id ? null : prev));
+    }, 2800);
   };
 
   return (
@@ -153,8 +138,8 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
             <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-visible">
               {catsData.map((cat, idx) => {
                 const rad = (cat.angle * Math.PI) / 180;
-                const targetX = Math.round(Math.cos(rad) * orbitRadius);
-                const targetY = Math.round(Math.sin(rad) * orbitRadius);
+                const targetX = Math.round(Math.cos(rad) * orbitRadiusX);
+                const targetY = Math.round(Math.sin(rad) * orbitRadiusY);
 
                 return (
                   <motion.div
@@ -217,8 +202,12 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
                         className="w-full h-full object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.65)] select-none pointer-events-none"
                       />
 
-                      {/* Cute Floating Tooltip on Hover */}
-                      <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-8 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-white/95 text-neutral-900 font-sans text-[11px] font-bold shadow-xl whitespace-nowrap pointer-events-none border border-cosmic-rose/40 z-50">
+                      {/* Cute Floating Tooltip above the Cat's Head */}
+                      <div
+                        className={`transition-all duration-300 absolute -top-8 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-white/95 text-neutral-900 font-sans text-[11px] font-bold shadow-xl whitespace-nowrap pointer-events-none border border-cosmic-rose/40 z-50 ${
+                          activeCatId === cat.id ? 'opacity-100 scale-105' : 'opacity-0 group-hover:opacity-100'
+                        }`}
+                      >
                         {cat.caption}
                       </div>
                     </motion.div>
@@ -270,16 +259,8 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
         </motion.div>
       </div>
 
-      {/* Toast Notification when a Cat is Tapped */}
-      {activeCatMessage && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 rounded-full bg-white/95 text-neutral-900 font-sans text-xs sm:text-sm font-bold shadow-2xl border border-cosmic-rose/50 animate-bounce flex items-center gap-2 pointer-events-none">
-          <Heart className="w-4 h-4 fill-cosmic-rose text-cosmic-rose" />
-          <span>{activeCatMessage}</span>
-        </div>
-      )}
-
       {/* Button Underneath */}
-      <div className="mt-4 flex flex-col items-center z-20">
+      <div className="mt-4 sm:mt-6 flex flex-col items-center relative z-20">
         <button
           onClick={handleOpenGift}
           className="group flex items-center gap-2.5 px-6 py-2.5 rounded-full luxury-button text-white font-sans text-xs sm:text-sm font-semibold tracking-wide uppercase shadow-lg hover:shadow-glow-rose transition-all cursor-pointer active:scale-95"

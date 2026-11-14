@@ -158,3 +158,84 @@
   border: 1px solid rgba(255, 255, 255, 0.22);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
+
+/* ==========================================================================
+   Pinterest Modern Scrapbook Styles (Torn Paper, Washi Tape, Deckled Edges)
+   ========================================================================== */
+
+/* Three Organic Ripped Deckled-Edge Paper Clip Paths */
+.scrapbook-torn-1 {
+  clip-path: polygon(0% 1px, 4% 3px, 8% 3px, 12% 1px, 16% 3px, 20% 2px, 24% 3px, 28% 4px, 32% 0px, 36% 4px, 40% 0px, 44% 0px, 48% 3px, 52% 2px, 56% 0px, 60% 1px, 64% 2px, 68% 1px, 72% 2px, 76% 1px, 80% 1px, 84% 1px, 88% 1px, 92% 2px, 96% 2px, 100% 3px, calc(100% - 1px) 0%, calc(100% - 3px) 5%, calc(100% - 3px) 10%, calc(100% - 4px) 15%, calc(100% - 2px) 20%, calc(100% - 3px) 25%, calc(100% - 1px) 30%, calc(100% - 0px) 35%, calc(100% - 1px) 40%, calc(100% - 0px) 45%, calc(100% - 4px) 50%, calc(100% - 3px) 55%, calc(100% - 1px) 60%, calc(100% - 4px) 65%, calc(100% - 1px) 70%, calc(100% - 1px) 75%, calc(100% - 1px) 80%, calc(100% - 0px) 85%, calc(100% - 1px) 90%, calc(100% - 3px) 95%, calc(100% - 3px) 100%, 100% calc(100% - 1px), 96% calc(100% - 4px), 92% calc(100% - 4px), 88% calc(100% - 0px), 84% calc(100% - 4px), 80% calc(100% - 1px), 76% calc(100% - 4px), 72% calc(100% - 4px), 68% calc(100% - 2px), 64% calc(100% - 4px), 60% calc(100% - 2px), 56% calc(100% - 4px), 52% calc(100% - 2px), 48% calc(100% - 4px), 44% calc(100% - 2px), 40% calc(100% - 3px), 36% calc(100% - 3px), 32% calc(100% - 0px), 28% calc(100% - 0px), 24% calc(100% - 2px), 20% calc(100% - 3px), 16% calc(100% - 2px), 12% calc(100% - 1px), 8% calc(100% - 3px), 4% calc(100% - 4px), 0% calc(100% - 3px), 4px 100%, 2px 95%, 1px 90%, 0px 85%, 4px 80%, 2px 75%, 1px 70%, 0px 65%, 2px 60%, 0px 55%, 0px 50%, 4px 45%, 1px 40%, 2px 35%, 4px 30%, 4px 25%, 1px 20%, 4px 15%, 2px 10%, 2px 5%, 3px 0%);
+}
+
+.scrapbook-torn-2 {
+  clip-path: polygon(0% 0px, 4% 1px, 8% 0px, 12% 1px, 16% 4px, 20% 2px, 24% 0px, 28% 3px, 32% 1px, 36% 0px, 40% 3px, 44% 2px, 48% 3px, 52% 3px, 56% 1px, 60% 1px, 64% 0px, 68% 2px, 72% 3px, 76% 2px, 80% 0px, 84% 3px, 88% 3px, 92% 1px, 96% 3px, 100% 2px, calc(100% - 0px) 0%, calc(100% - 1px) 5%, calc(100% - 1px) 10%, calc(100% - 3px) 15%, calc(100% - 3px) 20%, calc(100% - 1px) 25%, calc(100% - 1px) 30%, calc(100% - 3px) 35%, calc(100% - 3px) 40%, calc(100% - 0px) 45%, calc(100% - 4px) 50%, calc(100% - 1px) 55%, calc(100% - 4px) 60%, calc(100% - 2px) 65%, calc(100% - 0px) 70%, calc(100% - 1px) 75%, calc(100% - 4px) 80%, calc(100% - 1px) 85%, calc(100% - 0px) 90%, calc(100% - 4px) 95%, calc(100% - 2px) 100%, 100% calc(100% - 1px), 96% calc(100% - 3px), 92% calc(100% - 3px), 88% calc(100% - 4px), 84% calc(100% - 2px), 80% calc(100% - 2px), 76% calc(100% - 1px), 72% calc(100% - 0px), 68% calc(100% - 1px), 64% calc(100% - 2px), 60% calc(100% - 2px), 56% calc(100% - 4px), 52% calc(100% - 2px), 48% calc(100% - 0px), 44% calc(100% - 2px), 40% calc(100% - 4px), 36% calc(100% - 2px), 32% calc(100% - 4px), 28% calc(100% - 0px), 24% calc(100% - 1px), 20% calc(100% - 4px), 16% calc(100% - 1px), 12% calc(100% - 2px), 8% calc(100% - 0px), 4% calc(100% - 0px), 0% calc(100% - 3px), 2px 100%, 0px 95%, 2px 90%, 2px 85%, 0px 80%, 2px 75%, 2px 70%, 2px 65%, 0px 60%, 1px 55%, 0px 50%, 4px 45%, 4px 40%, 3px 35%, 1px 30%, 3px 25%, 3px 20%, 1px 15%, 0px 10%, 1px 5%, 4px 0%);
+}
+
+.scrapbook-torn-3 {
+  clip-path: polygon(0% 4px, 4% 2px, 8% 2px, 12% 0px, 16% 3px, 20% 2px, 24% 4px, 28% 3px, 32% 4px, 36% 4px, 40% 1px, 44% 1px, 48% 0px, 52% 3px, 56% 2px, 60% 2px, 64% 4px, 68% 1px, 72% 1px, 76% 0px, 80% 4px, 84% 4px, 88% 4px, 92% 0px, 96% 0px, 100% 2px, calc(100% - 2px) 0%, calc(100% - 4px) 5%, calc(100% - 0px) 10%, calc(100% - 4px) 15%, calc(100% - 2px) 20%, calc(100% - 4px) 25%, calc(100% - 2px) 30%, calc(100% - 0px) 35%, calc(100% - 0px) 40%, calc(100% - 0px) 45%, calc(100% - 4px) 50%, calc(100% - 1px) 55%, calc(100% - 3px) 60%, calc(100% - 2px) 65%, calc(100% - 0px) 70%, calc(100% - 4px) 75%, calc(100% - 1px) 80%, calc(100% - 0px) 85%, calc(100% - 3px) 90%, calc(100% - 3px) 95%, calc(100% - 0px) 100%, 100% calc(100% - 4px), 96% calc(100% - 2px), 92% calc(100% - 1px), 88% calc(100% - 3px), 84% calc(100% - 1px), 80% calc(100% - 3px), 76% calc(100% - 1px), 72% calc(100% - 2px), 68% calc(100% - 1px), 64% calc(100% - 4px), 60% calc(100% - 2px), 56% calc(100% - 3px), 52% calc(100% - 3px), 48% calc(100% - 1px), 44% calc(100% - 2px), 40% calc(100% - 4px), 36% calc(100% - 3px), 32% calc(100% - 1px), 28% calc(100% - 0px), 24% calc(100% - 0px), 20% calc(100% - 2px), 16% calc(100% - 3px), 12% calc(100% - 1px), 8% calc(100% - 4px), 4% calc(100% - 0px), 0% calc(100% - 2px), 4px 100%, 2px 95%, 0px 90%, 4px 85%, 4px 80%, 0px 75%, 2px 70%, 0px 65%, 1px 60%, 1px 55%, 2px 50%, 4px 45%, 1px 40%, 4px 35%, 2px 30%, 4px 25%, 4px 20%, 3px 15%, 0px 10%, 3px 5%, 3px 0%);
+}
+
+/* Cotton Rag & Parchment Paper Textures */
+.scrapbook-paper {
+  background-color: #FAF5EB;
+  background-image: 
+    radial-gradient(#E5D7C3 0.75px, transparent 0.75px),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(240, 226, 208, 0.35) 100%);
+  background-size: 16px 16px, 100% 100%;
+}
+
+.scrapbook-kraft {
+  background-color: #D6B588;
+  background-image: 
+    repeating-linear-gradient(45deg, rgba(160, 118, 75, 0.08) 0px, rgba(160, 118, 75, 0.08) 2px, transparent 2px, transparent 6px),
+    linear-gradient(120deg, rgba(190, 145, 100, 0.4) 0%, rgba(245, 222, 192, 0.35) 100%);
+}
+
+.scrapbook-rose-kraft {
+  background-color: #E6BAC9;
+  background-image: 
+    repeating-linear-gradient(-45deg, rgba(180, 80, 110, 0.08) 0px, rgba(180, 80, 110, 0.08) 2px, transparent 2px, transparent 6px),
+    linear-gradient(135deg, rgba(235, 160, 185, 0.35) 0%, rgba(255, 235, 242, 0.3) 100%);
+}
+
+.scrapbook-sage-kraft {
+  background-color: #C5CCA8;
+  background-image: linear-gradient(135deg, rgba(140, 150, 110, 0.3) 0%, rgba(240, 245, 225, 0.35) 100%);
+}
+
+/* Jagged Ripped Ends for Washi Tape */
+.washi-tape-tear {
+  clip-path: polygon(
+    0% 0%, 100% 0%,
+    97% 15%, 100% 30%, 96% 45%, 100% 60%, 97% 75%, 100% 90%, 96% 100%,
+    0% 100%,
+    3% 85%, 0% 70%, 4% 55%, 0% 40%, 3% 25%, 0% 10%
+  );
+}
+
+/* Washi Tape Patterns */
+.washi-gingham {
+  background: 
+    repeating-linear-gradient(0deg, rgba(232, 114, 155, 0.35) 0px, rgba(232, 114, 155, 0.35) 4px, transparent 4px, transparent 8px),
+    repeating-linear-gradient(90deg, rgba(232, 114, 155, 0.35) 0px, rgba(232, 114, 155, 0.35) 4px, transparent 4px, transparent 8px),
+    rgba(255, 255, 255, 0.88);
+}
+
+.washi-gold-dot {
+  background: 
+    radial-gradient(circle, rgba(200, 145, 20, 0.6) 1.5px, transparent 1.5px) 0 0 / 8px 8px,
+    linear-gradient(135deg, rgba(254, 243, 199, 0.9) 0%, rgba(252, 211, 77, 0.8) 100%);
+}
+
+.washi-kraft {
+  background: 
+    repeating-linear-gradient(45deg, rgba(140, 95, 55, 0.22) 0px, rgba(140, 95, 55, 0.22) 2px, transparent 2px, transparent 6px),
+    rgba(225, 195, 160, 0.88);
+}
+
+.washi-rose-stripe {
+  background: 
+    repeating-linear-gradient(-45deg, rgba(214, 78, 126, 0.32) 0px, rgba(214, 78, 126, 0.32) 4px, transparent 4px, transparent 10px),
+    rgba(254, 238, 244, 0.9);
+}

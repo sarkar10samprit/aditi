@@ -95,10 +95,10 @@ export default function ParchmentLetter() {
     <section 
       id="letters" 
       ref={sectionRef} 
-      className="py-24 px-4 sm:px-6 max-w-5xl mx-auto relative scroll-mt-10"
+      className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto relative scroll-mt-10"
     >
       {/* Header */}
-      <div className="text-center max-w-2xl mx-auto mb-10 relative z-10">
+      <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8 relative z-10">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill text-cosmic-champagne font-sans text-xs font-semibold uppercase tracking-[0.2em] mb-4">
           <Feather className="w-3.5 h-3.5" />
           <span>Handwritten Parchment for Coco</span>

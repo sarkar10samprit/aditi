@@ -60,7 +60,7 @@ export const birthdayData = {
     {
       id: 1,
       title: "A little sunshine",
-      caption: "Bright yellow vibes, endless sunflowers, and that radiant smile that outshines the daylight.",
+      caption: "No matter how chaotic my head gets, one text from you and my whole day feels lighter. You really have that effect on me.",
       src: `${base}photos/photo1.jpg`,
       date: "Archive #01",
       rotation: "0deg",
@@ -69,7 +69,7 @@ export const birthdayData = {
     {
       id: 2,
       title: "Main character energy",
-      caption: "Pure cinematic presence in white, surrounded by mountain mist and endless greenery.",
+      caption: "You don't even have to try—you just walk into a room and effortlessly steal all the attention. Honestly, I'm guilty of staring too.",
       src: `${base}photos/photo2.jpg`,
       date: "Archive #02",
       rotation: "0deg",
@@ -78,7 +78,7 @@ export const birthdayData = {
     {
       id: 3,
       title: "The Cute one",
-      caption: "Cozy blue knit, perched by the window with that gentle, irresistible smile.",
+      caption: "You have this ridiculously soft, sweet side that makes me want to protect your peace and make sure nobody ever dims that smile.",
       src: `${base}photos/photo3.jpg`,
       date: "Archive #03",
       rotation: "0deg",
@@ -87,7 +87,7 @@ export const birthdayData = {
     {
       id: 4,
       title: "Too cute to handle",
-      caption: "Over-the-shoulder glance, iconic red elegance, and dangerously charming confidence.",
+      caption: "It should honestly be illegal for you to look this gorgeous and still be this silly with me. How do you pull both off?",
       src: `${base}photos/photo4.jpg`,
       date: "Archive #04",
       rotation: "0deg",
@@ -96,7 +96,7 @@ export const birthdayData = {
     {
       id: 5,
       title: "The Hottest one 🌚",
-      caption: "Four iconic moods in one frame—goofy, adorable, and deliciously chaotic.",
+      caption: "I won't say too much, but you definitely know what you're doing here. Consider my jaw permanently on the floor.",
       src: `${base}photos/photo5.jpg`,
       date: "Archive #05",
       rotation: "0deg",
@@ -105,7 +105,7 @@ export const birthdayData = {
     {
       id: 6,
       title: "This one also cute",
-      caption: "Holding a fresh bouquet with that warm, precious glow that makes everything softer.",
+      caption: "Every time you smile like this, I secretly feel so lucky that I get to be the person who gets to hear your unfiltered laugh.",
       src: `${base}photos/photo6.jpg`,
       date: "Archive #06",
       rotation: "0deg",
@@ -114,7 +114,7 @@ export const birthdayData = {
     {
       id: 7,
       title: "Flower Girl",
-      caption: "Reaching for vibrant bougainvillea blooms under the sun. Always reaching for beauty.",
+      caption: "You bring so much gentle warmth into my life. I hope you always know how deeply cherished and special you are to me.",
       src: `${base}photos/photo7.jpg`,
       date: "Archive #07",
       rotation: "0deg",
@@ -123,7 +123,7 @@ export const birthdayData = {
     {
       id: 8,
       title: "Certified Drama Queen.",
-      caption: "Flower in hair, iconic playful pout, and the drama only Coco can pull off so cutely.",
+      caption: "You can be totally chaotic and dramatic, but I wouldn't trade your tantrums or your late-night talks for anyone else in the world.",
       src: `${base}photos/photo8.jpg`,
       date: "Archive #08",
       rotation: "0deg",
@@ -132,7 +132,7 @@ export const birthdayData = {
     {
       id: 9,
       title: "The Pink Princess.",
-      caption: "Blush pink ruffles, birthday glam, and that queen energy conquering the evening.",
+      caption: "My absolute favorite girl celebrating another year of being unforgettable. Happy Birthday, Coco—you truly have my whole heart.",
       src: `${base}photos/photo9.jpg`,
       date: "Archive #09",
       rotation: "0deg",

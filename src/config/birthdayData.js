@@ -140,7 +140,7 @@ export const birthdayData = {
     }
   ],
 
-  // Main Vintage Parchment Letter for Coco (4-Page Storybook)
+  // Main Vintage Parchment Letter for Coco (2 Complete, Beautifully Filled Pages)
   parchmentLetter: {
     recipient: "Dearest Coco, ❤️",
     pages: [
@@ -148,27 +148,17 @@ export const birthdayData = {
         pageNumber: 1,
         paragraphs: [
           "From the very first day I gave you that nickname, it stopped being just a word and quietly became my favorite name to say.",
-          "You know, I don't think you realize how effortlessly you make someone's day better just by being yourself. There's something about your smile, your little attitude, your random silliness, and the way you turn the most ordinary conversations into something worth remembering. You're honestly a whole package, Coco. A little sunshine, a little chaos, a little drama (okay, maybe a LOT of drama 😭), and a heart that deserves all the happiness in the world."
-        ]
-      },
-      {
-        pageNumber: 2,
-        paragraphs: [
+          "You know, I don't think you realize how effortlessly you make someone's day better just by being yourself. There's something about your smile, your little attitude, your random silliness, and the way you turn the most ordinary conversations into something worth remembering. You're honestly a whole package, Coco. A little sunshine, a little chaos, a little drama (okay, maybe a LOT of drama 😭), and a heart that deserves all the happiness in the world.",
           "I'm genuinely grateful to have you in my life. Thank you for listening to my nonsense, tolerating my questionable jokes, putting up with my random moods, and making even the most boring days feel a little less boring. I hope you know you never have to pretend to be someone else around me. I'll still be right here, cheering for you.",
           "And can we talk about how unfairly blessed you are? Pretty face, beautiful heart, smart brain, a little bit Gandu-ness 😅, and that ridiculously charming personality? Seriously, Coco, leave some good qualities for the rest of humanity. 😭 At this point, I'm convinced you were created with a little extra attention to detail. Don't let all this praise get to your head, though. You're still very much annoying, and I reserve the right to remind you of that whenever necessary. 😂"
         ]
       },
       {
-        pageNumber: 3,
+        pageNumber: 2,
         paragraphs: [
           "I know we still have so many little moments waiting for us. More laughs, more silly conversations, more random adventures, and hopefully that long-overdue first hug someday. Until then, here's a little reminder that distance doesn't make you any less important to me. 🫂",
           "On your birthday, I wish you all the happiness you can possibly hold. I hope you get countless reasons to smile, people who love you as genuinely as you deserve, dreams that come true, and beautiful little surprises when you least expect them. And whenever life gets difficult, I hope you never forget how strong, capable, and special you are.",
-          "Please keep being your wonderfully ridiculous self. Never dim that beautiful spark, never settle for less than you deserve, and never forget that there's someone out here who is ridiculously proud of you and will probably annoy you with birthday wishes even after your birthday is over. ❤️"
-        ]
-      },
-      {
-        pageNumber: 4,
-        paragraphs: [
+          "Please keep being your wonderfully ridiculous self. Never dim that beautiful spark, never settle for less than you deserve, and never forget that there's someone out here who is ridiculously proud of you and will probably annoy you with birthday wishes even after your birthday is over. ❤️",
           "Happy Birthday, Coco! 🎂💗",
           "Thank you for being you, for being my bestie, and for making this little corner of my world so much brighter.",
           "Now go enjoy your special day, birthday girl. You've officially earned the right to be extra spoiled today. Not that you weren't already extra. 😭😂"

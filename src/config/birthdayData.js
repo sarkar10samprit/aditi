@@ -11,11 +11,11 @@ export const birthdayData = {
   nickname: "Coco ✨",
   birthdayDate: "Happy Birthday!",
   ageMilestone: "Leveling Up Today, Coco ✨",
-  
+
   // Hero subtitle & teaser
   heroGreeting: "To my dearest Coco, the girl who makes the entire universe brighter...",
   heroSubtext: "A curated digital sanctuary built just for you, because an ordinary birthday card could never match your magic.",
-  
+
   // Scrapbook / Cheat Letter / Gift Items emerging from the 3D Gift Box
   giftBoxItems: [
     {
@@ -54,7 +54,7 @@ export const birthdayData = {
 
   // Audio configuration
   ambientMusicTitle: "Cozy Lo-Fi Birthday Chime",
-  
+
   // Photo Gallery (Curated memories of Coco)
   photos: [
     {

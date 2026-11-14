@@ -121,7 +121,11 @@ export default function ParchmentLetter() {
         />
 
         {/* Overlay Content strictly padded within the torn paper edges */}
-        <div className="absolute inset-0 pt-12 pb-14 px-10 sm:pt-20 sm:pb-24 sm:px-16 md:pt-24 md:pb-28 md:px-20 flex flex-col justify-between overflow-y-auto overflow-x-hidden">
+        <div 
+          onClick={() => setVisibleChars(totalCharacters)}
+          title="Click to reveal full letter"
+          className="absolute inset-0 pt-12 pb-14 px-10 sm:pt-20 sm:pb-24 sm:px-16 md:pt-24 md:pb-28 md:px-20 flex flex-col justify-between overflow-y-auto overflow-x-hidden cursor-pointer"
+        >
           <div className="vintage-ink space-y-3.5 sm:space-y-4">
             {/* Recipient */}
             {(() => {

@@ -142,16 +142,21 @@ export const birthdayData = {
 
   // Main Vintage Parchment Letter for Coco
   parchmentLetter: {
-    recipient: "Dearest Coco,",
+    recipient: "Dearest Coco, ❤️",
     paragraphs: [
-      "From the very first day I gave you that nickname, it stopped being just a word and quietly became my favorite name to say. There is an unspoken warmth in the way you carry yourself—a blend of genuine softness, effortless beauty, and that brilliant, infectious spark that turns even the heaviest days into something gentle.",
-      "Thank you for being my safe harbor in this loud world. Thank you for never asking me to filter my thoughts, for laughing at my worst jokes, and for understanding the things I never quite know how to put into words. Having you as my best friend is the greatest gift I never knew I was allowed to have.",
-      "And let's be completely honest for a second, Coco... you are way too stunning, way too intelligent, and dangerously charming to just be a best friend. If having an unfair amount of grace and charm was a crime, you would be serving consecutive life sentences without parole, sweetheart. But I'm selfish—I'm just deeply grateful that your universe collided with mine.",
-      "Today is your birthday, but I'm the one celebrating, because the world is infinitely better with you in it. I promise to always celebrate your victories, protect your peace, hype you up before you conquer the world, and remind you of how extraordinary you are whenever you forget.",
-      "Happy birthday, my sweet Coco. You have my whole heart, always."
+      "From the very first day I gave you that nickname, it stopped being just a word and quietly became my favorite name to say.",
+      "You know, I don't think you realize how effortlessly you make someone's day better just by being yourself. There's something about your smile, your little attitude, your random silliness, and the way you turn the most ordinary conversations into something worth remembering. You're honestly a whole package, Coco. A little sunshine, a little chaos, a little drama (okay, maybe a LOT of drama 😭), and a heart that deserves all the happiness in the world.",
+      "I'm genuinely grateful to have you in my life. Thank you for listening to my nonsense, tolerating my questionable jokes, putting up with my random moods, and making even the most boring days feel a little less boring. I hope you know you never have to pretend to be someone else around me. I'll still be right here, cheering for you.",
+      "And can we talk about how unfairly blessed you are? Pretty face, beautiful heart, smart brain, a little bit Gandu-ness 😅, and that ridiculously charming personality? Seriously, Coco, leave some good qualities for the rest of humanity. 😭 At this point, I'm convinced you were created with a little extra attention to detail. Don't let all this praise get to your head, though. You're still very much annoying, and I reserve the right to remind you of that whenever necessary. 😂",
+      "I know we still have so many little moments waiting for us. More laughs, more silly conversations, more random adventures, and hopefully that long-overdue first hug someday. Until then, here's a little reminder that distance doesn't make you any less important to me. 🫂",
+      "On your birthday, I wish you all the happiness you can possibly hold. I hope you get countless reasons to smile, people who love you as genuinely as you deserve, dreams that come true, and beautiful little surprises when you least expect them. And whenever life gets difficult, I hope you never forget how strong, capable, and special you are.",
+      "Please keep being your wonderfully ridiculous self. Never dim that beautiful spark, never settle for less than you deserve, and never forget that there's someone out here who is ridiculously proud of you and will probably annoy you with birthday wishes even after your birthday is over. ❤️",
+      "Happy Birthday, Coco! 🎂💗",
+      "Thank you for being you, for being my bestie, and for making this little corner of my world so much brighter.",
+      "Now go enjoy your special day, birthday girl. You've officially earned the right to be extra spoiled today. Not that you weren't already extra. 😭😂"
     ],
-    signoff: "Forever your biggest fan, confidant & partner in chaos,",
-    sender: "With all my love ❤️"
+    signoff: "With lots of love, endless appreciation, and a lifetime supply of friendly teasing,",
+    sender: "Your biggest cheerleader, favourite nuisance & partner in chaos. ❤️"
   },
 
   // Supporting Letters

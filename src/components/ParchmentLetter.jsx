@@ -178,9 +178,9 @@ export default function ParchmentLetter() {
           })}
         </div>
 
-        {/* Page 1 Bottom Navigation */}
-        <div className="pt-3 sm:pt-4 border-t border-[#8B5A2B]/20 flex items-center justify-between mt-auto">
-          <span className="font-serif italic text-xs sm:text-sm text-[#8B5A2B]/80 font-medium">
+        {/* Page 1 Bottom Navigation - Elevated comfortably above torn edge */}
+        <div className="pt-4 pb-2 border-t border-[#8B5A2B]/25 flex items-center justify-between mt-auto">
+          <span className="font-serif italic text-xs sm:text-sm text-[#8B5A2B] font-semibold tracking-wide">
             Page 1 of 2
           </span>
           {!isSpreadView && (
@@ -189,10 +189,10 @@ export default function ParchmentLetter() {
                 e.stopPropagation();
                 handlePageChange(2);
               }}
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#8B5A2B]/15 hover:bg-[#8B5A2B]/25 text-[#4A1D0E] font-serif text-xs sm:text-sm font-bold tracking-wide transition-all hover:scale-105 active:scale-95 shadow-2xs"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#8B5A2B]/20 to-[#8B5A2B]/35 hover:from-[#8B5A2B]/35 hover:to-[#8B5A2B]/50 border border-[#8B5A2B]/30 text-[#3D1407] font-serif text-xs sm:text-sm font-bold tracking-wide transition-all shadow-md hover:scale-105 active:scale-95 cursor-pointer"
             >
               <span>Turn to Page 2</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-4 h-4 text-[#8B5A2B]" />
             </button>
           )}
         </div>
@@ -217,7 +217,7 @@ export default function ParchmentLetter() {
         <div className="space-y-3 sm:space-y-3.5">
           {/* Header label */}
           <div className="flex items-center gap-2 mb-1">
-            <span className="font-serif italic text-xs sm:text-sm text-[#8B5A2B]/80 font-semibold tracking-wide">
+            <span className="font-serif italic text-xs sm:text-sm text-[#8B5A2B]/85 font-semibold tracking-wide">
               Continued for Coco...
             </span>
           </div>
@@ -265,21 +265,21 @@ export default function ParchmentLetter() {
           </div>
         </div>
 
-        {/* Page 2 Bottom Navigation */}
-        <div className="pt-3 sm:pt-4 border-t border-[#8B5A2B]/20 flex items-center justify-between mt-auto">
+        {/* Page 2 Bottom Navigation - Elevated comfortably above torn edge */}
+        <div className="pt-4 pb-2 border-t border-[#8B5A2B]/25 flex items-center justify-between mt-auto">
           {!isSpreadView && (
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 handlePageChange(1);
               }}
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#8B5A2B]/15 hover:bg-[#8B5A2B]/25 text-[#4A1D0E] font-serif text-xs sm:text-sm font-bold tracking-wide transition-all hover:scale-105 active:scale-95 shadow-2xs"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#8B5A2B]/20 to-[#8B5A2B]/35 hover:from-[#8B5A2B]/35 hover:to-[#8B5A2B]/50 border border-[#8B5A2B]/30 text-[#3D1407] font-serif text-xs sm:text-sm font-bold tracking-wide transition-all shadow-md hover:scale-105 active:scale-95 cursor-pointer"
             >
-              <ArrowLeft className="w-3.5 h-3.5" />
+              <ArrowLeft className="w-4 h-4 text-[#8B5A2B]" />
               <span>Back to Page 1</span>
             </button>
           )}
-          <span className="font-serif italic text-xs sm:text-sm text-[#8B5A2B]/80 font-medium ml-auto">
+          <span className="font-serif italic text-xs sm:text-sm text-[#8B5A2B] font-semibold tracking-wide ml-auto">
             Page 2 of 2
           </span>
         </div>
@@ -291,9 +291,9 @@ export default function ParchmentLetter() {
     <section 
       id="letters" 
       ref={sectionRef} 
-      className="py-12 sm:py-16 px-4 sm:px-6 max-w-6xl mx-auto relative scroll-mt-10"
+      className="py-14 sm:py-20 px-6 sm:px-10 max-w-5xl mx-auto relative scroll-mt-10"
     >
-      {/* Header */}
+      {/* Header with generous bottom spacing */}
       <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8 relative z-10">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill text-cosmic-champagne font-sans text-xs font-semibold uppercase tracking-[0.2em] mb-4">
           <Feather className="w-3.5 h-3.5" />
@@ -307,8 +307,8 @@ export default function ParchmentLetter() {
         </p>
       </div>
 
-      {/* Book Controls & Tabs */}
-      <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-6 relative z-10">
+      {/* Book Controls & Tabs - Generous margin below */}
+      <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-8 sm:mb-12 relative z-10">
         {/* Page 1 Tab */}
         <button
           onClick={() => handlePageChange(1)}
@@ -335,7 +335,7 @@ export default function ParchmentLetter() {
           <span>Page 2: Wishes & Love</span>
         </button>
 
-        {/* Desktop Side-by-Side Spread Toggle (hidden on mobile) */}
+        {/* Desktop Side-by-Side Spread Toggle */}
         <button
           onClick={() => setIsSpreadView(!isSpreadView)}
           className={`hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-sans font-medium transition-all cursor-pointer ${
@@ -352,7 +352,7 @@ export default function ParchmentLetter() {
       {/* Main Container */}
       {isSpreadView ? (
         /* Desktop Two-Page Open Book Spread */
-        <div className="grid grid-cols-2 gap-6 max-w-5xl mx-auto filter drop-shadow-[0_25px_40px_rgba(0,0,0,0.65)]">
+        <div className="grid grid-cols-2 gap-8 max-w-5xl mx-auto filter drop-shadow-[0_25px_45px_rgba(0,0,0,0.7)]">
           {/* Left Page (Page 1) */}
           <div className="relative">
             <img
@@ -360,7 +360,8 @@ export default function ParchmentLetter() {
               alt="Vintage Torn Letter Page 1"
               className="w-full h-auto block pointer-events-none select-none"
             />
-            <div className="absolute inset-0 pt-10 pb-12 px-8 sm:pt-16 sm:pb-18 sm:px-12 md:pt-18 md:pb-20 md:px-14 flex flex-col justify-between overflow-y-auto overflow-x-hidden">
+            {/* Generous safe padding on left/right/top/bottom */}
+            <div className="absolute inset-0 pt-12 pb-20 px-10 sm:pt-18 sm:pb-24 sm:px-14 md:pt-20 md:pb-28 md:px-16 flex flex-col justify-between overflow-y-auto overflow-x-hidden">
               {renderPage1Content()}
             </div>
           </div>
@@ -372,37 +373,41 @@ export default function ParchmentLetter() {
               alt="Vintage Torn Letter Page 2"
               className="w-full h-auto block pointer-events-none select-none"
             />
-            <div className="absolute inset-0 pt-10 pb-12 px-8 sm:pt-16 sm:pb-18 sm:px-12 md:pt-18 md:pb-20 md:px-14 flex flex-col justify-between overflow-y-auto overflow-x-hidden">
+            {/* Generous safe padding on left/right/top/bottom */}
+            <div className="absolute inset-0 pt-12 pb-20 px-10 sm:pt-18 sm:pb-24 sm:px-14 md:pt-20 md:pb-28 md:px-16 flex flex-col justify-between overflow-y-auto overflow-x-hidden">
               {renderPage2Content()}
             </div>
           </div>
         </div>
       ) : (
-        /* Foldable Single-Page Book with 3D Flip */
-        <div className="relative max-w-2xl mx-auto [perspective:1200px]">
-          <AnimatePresence mode="wait">
+        /* Foldable Single-Page Book with Ultra-Smooth 3D Flip */
+        <div className="relative max-w-2xl mx-auto px-2 sm:px-4 [perspective:1400px]">
+          <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={currentPage}
               initial={{ 
                 opacity: 0, 
-                rotateY: direction > 0 ? -18 : 18,
-                scale: 0.96 
+                rotateY: direction > 0 ? -22 : 22,
+                x: direction > 0 ? 25 : -25,
+                scale: 0.97
               }}
               animate={{ 
                 opacity: 1, 
                 rotateY: 0,
+                x: 0,
                 scale: 1 
               }}
               exit={{ 
                 opacity: 0, 
-                rotateY: direction > 0 ? 18 : -18,
-                scale: 0.96 
+                rotateY: direction > 0 ? 22 : -22,
+                x: direction > 0 ? -25 : 25,
+                scale: 0.97 
               }}
               transition={{ 
-                duration: 0.38, 
-                ease: [0.22, 1, 0.36, 1] 
+                duration: 0.42, 
+                ease: [0.25, 1, 0.5, 1] 
               }}
-              className="relative filter drop-shadow-[0_25px_40px_rgba(0,0,0,0.65)] origin-center"
+              className="relative filter drop-shadow-[0_25px_45px_rgba(0,0,0,0.7)] origin-center"
             >
               {/* Transparent Cutout Torn Paper Background Image */}
               <img
@@ -411,8 +416,8 @@ export default function ParchmentLetter() {
                 className="w-full h-auto block pointer-events-none select-none"
               />
 
-              {/* Overlay Content strictly padded within the torn paper edges */}
-              <div className="absolute inset-0 pt-10 pb-12 px-8 sm:pt-16 sm:pb-18 sm:px-12 md:pt-18 md:pb-20 md:px-14 flex flex-col justify-between overflow-y-auto overflow-x-hidden">
+              {/* Generous safe padding: top gap, side gaps, elevated bottom buttons */}
+              <div className="absolute inset-0 pt-12 pb-20 px-10 sm:pt-18 sm:pb-24 sm:px-16 md:pt-22 md:pb-28 md:px-18 flex flex-col justify-between overflow-y-auto overflow-x-hidden">
                 {currentPage === 1 ? renderPage1Content() : renderPage2Content()}
               </div>
             </motion.div>

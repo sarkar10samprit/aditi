@@ -314,8 +314,8 @@ export default function ParchmentLetter() {
               className="w-full h-auto block pointer-events-none select-none"
             />
 
-            {/* Generous safe margins: large top gap, large side gaps, elevated bottom buttons */}
-            <div className="absolute inset-0 pt-12 pb-14 px-8 sm:pt-16 sm:pb-16 sm:px-12 md:pt-18 md:pb-20 md:px-14 flex flex-col justify-between overflow-y-auto overflow-x-hidden">
+            {/* Generous safe margins: large top gap, expanded side gaps, elevated bottom buttons */}
+            <div className="absolute inset-0 pt-12 pb-14 px-10 sm:pt-16 sm:pb-16 sm:px-16 md:pt-18 md:pb-20 md:px-20 flex flex-col justify-between overflow-y-auto overflow-x-hidden">
               {renderPageContent(currentPage)}
             </div>
           </motion.div>

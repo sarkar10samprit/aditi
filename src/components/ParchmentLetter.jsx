@@ -9,10 +9,10 @@ export default function ParchmentLetter() {
   const [currentPage, setCurrentPage] = useState(1);
   const [direction, setDirection] = useState(1);
 
-  // Track revealed status for each of the 3 pages
-  const [revealedPages, setRevealedPages] = useState({ 1: false, 2: false, 3: false });
+  // Track revealed status for the 2 pages
+  const [revealedPages, setRevealedPages] = useState({ 1: false, 2: false });
   const [hasScrolledIn, setHasScrolledIn] = useState(false);
-  const [visibleChars, setVisibleChars] = useState({ 1: 0, 2: 0, 3: 0 });
+  const [visibleChars, setVisibleChars] = useState({ 1: 0, 2: 0 });
 
   const sectionRef = useRef(null);
   const timerRef = useRef(null);
@@ -20,15 +20,11 @@ export default function ParchmentLetter() {
   const pagesData = letter.pages || [
     {
       pageNumber: 1,
-      paragraphs: letter.paragraphs.slice(0, 3)
+      paragraphs: letter.paragraphs.slice(0, 4)
     },
     {
       pageNumber: 2,
-      paragraphs: letter.paragraphs.slice(3, 5)
-    },
-    {
-      pageNumber: 3,
-      paragraphs: letter.paragraphs.slice(5),
+      paragraphs: letter.paragraphs.slice(4),
       signoff: letter.signoff,
       sender: letter.sender
     }
@@ -81,8 +77,8 @@ export default function ParchmentLetter() {
     }
 
     timerRef.current = setTimeout(() => {
-      setVisibleChars((prev) => ({ ...prev, [currentPage]: (prev[currentPage] || 0) + 1 }));
-    }, 28);
+      setVisibleChars((prev) => ({ ...prev, [currentPage]: (prev[currentPage] || 0) + 3 }));
+    }, 16);
 
     return () => clearTimeout(timerRef.current);
   }, [hasScrolledIn, currentPage, visibleChars, revealedPages]);
@@ -153,10 +149,10 @@ export default function ParchmentLetter() {
         title="Tap to reveal full page"
         className="vintage-ink flex flex-col justify-between h-full select-text cursor-pointer"
       >
-        <div className="space-y-3.5 sm:space-y-4">
+        <div className="space-y-3 sm:space-y-3.5">
           {/* Recipient on Page 1 */}
           {pageNum === 1 && (
-            <div className="mb-2">
+            <div className="mb-1.5 sm:mb-2">
               {(() => {
                 const text = letter.recipient;
                 const offset = cumulative;
@@ -172,14 +168,14 @@ export default function ParchmentLetter() {
 
           {/* Subheading header for continuation pages */}
           {pageNum > 1 && (
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2 mb-1.5 sm:mb-2">
               <span className="font-serif italic text-xs sm:text-sm text-[#8B5A2B]/85 font-semibold tracking-wide">
                 Continued for Coco...
               </span>
             </div>
           )}
 
-          {/* Paragraphs with spacious line-height */}
+          {/* Paragraphs with balanced line-height and size to fill parchment cleanly */}
           {page.paragraphs.map((p, pIdx) => {
             const offset = cumulative;
             cumulative += p.length;
@@ -188,9 +184,9 @@ export default function ParchmentLetter() {
             return (
               <p
                 key={pIdx}
-                className={`font-serif text-[12.5px] sm:text-[14px] md:text-[15px] leading-[1.75] sm:leading-[1.82] tracking-normal text-justify ${
+                className={`font-serif text-[12px] sm:text-[13.5px] md:text-[14.5px] leading-[1.62] sm:leading-[1.68] md:leading-[1.72] tracking-normal text-justify ${
                   isHighlight 
-                    ? 'font-bold text-[#5C2410] text-base sm:text-lg my-1' 
+                    ? 'font-bold text-[#5C2410] text-[13.5px] sm:text-[15.5px] md:text-[16.5px] my-1' 
                     : 'text-[#2E160C]/90 font-medium'
                 }`}
               >
@@ -204,7 +200,7 @@ export default function ParchmentLetter() {
             const offset = cumulative;
             cumulative += page.signoff.length;
             return (
-              <div className="pt-3 sm:pt-4 border-t border-[#8B5A2B]/20">
+              <div className="pt-2.5 sm:pt-3 border-t border-[#8B5A2B]/20">
                 <p className="font-serif italic text-xs sm:text-sm text-[#2E160C]/85 font-semibold">
                   {renderTextBlock(page.signoff, offset, currentCharCount, isRevealed)}
                 </p>
@@ -223,7 +219,7 @@ export default function ParchmentLetter() {
         </div>
 
         {/* Elevated Navigation Bar inside the paper */}
-        <div className="pt-4 pb-1 border-t border-[#8B5A2B]/25 flex items-center justify-between mt-4 sm:mt-5">
+        <div className="pt-3 pb-1 border-t border-[#8B5A2B]/25 flex items-center justify-between mt-3 sm:mt-4">
           {pageNum > 1 ? (
             <button
               onClick={(e) => {
@@ -233,17 +229,11 @@ export default function ParchmentLetter() {
               className="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-full bg-gradient-to-r from-[#8B5A2B]/20 to-[#8B5A2B]/35 hover:from-[#8B5A2B]/35 hover:to-[#8B5A2B]/50 border border-[#8B5A2B]/35 text-[#3D1407] font-serif text-xs sm:text-sm font-bold tracking-wide transition-all shadow-md hover:scale-105 active:scale-95 cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#8B5A2B]" />
-              <span>Previous</span>
+              <span>Back to Page 1</span>
             </button>
           ) : (
             <span className="font-serif italic text-xs sm:text-sm text-[#8B5A2B] font-semibold tracking-wide">
               Page 1 of {totalPages}
-            </span>
-          )}
-
-          {pageNum > 1 && pageNum < totalPages && (
-            <span className="font-serif italic text-xs sm:text-sm text-[#8B5A2B] font-semibold tracking-wide">
-              {pageNum} of {totalPages}
             </span>
           )}
 
@@ -255,12 +245,12 @@ export default function ParchmentLetter() {
               }}
               className="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-full bg-gradient-to-r from-[#8B5A2B]/20 to-[#8B5A2B]/35 hover:from-[#8B5A2B]/35 hover:to-[#8B5A2B]/50 border border-[#8B5A2B]/35 text-[#3D1407] font-serif text-xs sm:text-sm font-bold tracking-wide transition-all shadow-md hover:scale-105 active:scale-95 cursor-pointer ml-auto"
             >
-              <span>Turn Page</span>
+              <span>Turn to Page 2</span>
               <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#8B5A2B]" />
             </button>
           ) : (
             <span className="font-serif italic text-xs sm:text-sm text-[#8B5A2B] font-semibold tracking-wide ml-auto">
-              Page {totalPages} of {totalPages} • Fin ❤️
+              Page 2 of 2 • Fin ❤️
             </span>
           )}
         </div>
@@ -325,7 +315,7 @@ export default function ParchmentLetter() {
             />
 
             {/* Generous safe margins: large top gap, large side gaps, elevated bottom buttons */}
-            <div className="absolute inset-0 pt-16 pb-20 px-12 sm:pt-22 sm:pb-24 sm:px-18 md:pt-26 md:pb-28 md:px-20 flex flex-col justify-between overflow-y-auto overflow-x-hidden">
+            <div className="absolute inset-0 pt-12 pb-14 px-8 sm:pt-16 sm:pb-16 sm:px-12 md:pt-18 md:pb-20 md:px-14 flex flex-col justify-between overflow-y-auto overflow-x-hidden">
               {renderPageContent(currentPage)}
             </div>
           </motion.div>
@@ -334,23 +324,21 @@ export default function ParchmentLetter() {
 
       {/* Prominent Quick-Switch Navigation Bar right below the letter */}
       <div className="flex items-center justify-center gap-3 sm:gap-4 mt-5 relative z-20">
-        {currentPage > 1 && (
+        {currentPage === 1 ? (
           <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-pill hover:bg-white/15 text-white font-serif text-xs sm:text-sm font-semibold transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-md"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Previous Page</span>
-          </button>
-        )}
-
-        {currentPage < totalPages && (
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
+            onClick={() => handlePageChange(2)}
             className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-cosmic-rose to-pink-500 hover:from-pink-500 hover:to-rose-400 text-white font-serif text-xs sm:text-sm font-bold shadow-lg shadow-pink-500/30 hover:scale-105 active:scale-95 transition-all cursor-pointer"
           >
-            <span>Turn to Page {currentPage + 1}</span>
+            <span>Turn to Page 2</span>
             <ArrowRight className="w-4 h-4" />
+          </button>
+        ) : (
+          <button
+            onClick={() => handlePageChange(1)}
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full glass-pill hover:bg-white/15 text-white font-serif text-xs sm:text-sm font-semibold transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-md"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Page 1</span>
           </button>
         )}
       </div>

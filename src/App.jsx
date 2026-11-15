@@ -14,11 +14,13 @@ import Footer from './components/Footer';
 import { preloadAllAssets } from './utils/preloadAssets';
 
 export default function App() {
+  const isPreviewLoading = typeof window !== 'undefined' && window.location.search.includes('preview=loading');
   const [isLoading, setIsLoading] = useState(true);
-  const [loadProgress, setLoadProgress] = useState(0);
+  const [loadProgress, setLoadProgress] = useState(isPreviewLoading ? 76 : 0);
   const [unwrapped, setUnwrapped] = useState(false);
 
   useEffect(() => {
+    if (isPreviewLoading) return;
     let isMounted = true;
 
     preloadAllAssets((progress) => {

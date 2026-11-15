@@ -115,7 +115,10 @@ export default function AudioPlayer({ autoPlay = false }) {
     setCurrentTrackIndex(index);
 
     // Direct source change without audio.load() to prevent AbortError
-    audio.src = playlist[index].src;
+    if (audio.src !== playlist[index].src) {
+      audio.src = playlist[index].src;
+    }
+    audio.volume = volumeRef.current; // Immediate 20% default sound
 
     // Pre-cache next song in the background
     const upcomingIndex = (index + 1) % playlist.length;
@@ -127,7 +130,7 @@ export default function AudioPlayer({ autoPlay = false }) {
         p.then(() => {
           setIsPlaying(true);
           isPlayingRef.current = true;
-          smoothFadeIn(audio, volumeRef.current, 1400);
+          audio.volume = volumeRef.current;
         }).catch((err) => {
           console.warn('Track transition play deferred, waiting for canplay:', err);
           const onCanPlay = () => {
@@ -135,7 +138,7 @@ export default function AudioPlayer({ autoPlay = false }) {
             audio.play().then(() => {
               setIsPlaying(true);
               isPlayingRef.current = true;
-              smoothFadeIn(audio, volumeRef.current, 1400);
+              audio.volume = volumeRef.current;
             }).catch((e) => console.error('canplay play failed:', e));
           };
           audio.addEventListener('canplay', onCanPlay, { once: true });
@@ -149,7 +152,7 @@ export default function AudioPlayer({ autoPlay = false }) {
   useEffect(() => {
     const audio = new Audio(playlist[0].src);
     audio.loop = false; // Must be false so 'ended' fires to switch tracks!
-    audio.volume = 0.20; // Default gentle ambient background level
+    audio.volume = 0.20; // Default 20% ambient sound
     audioRef.current = audio;
 
     // Immediately pre-cache Track 2 into browser memory
@@ -167,7 +170,27 @@ export default function AudioPlayer({ autoPlay = false }) {
 
     const startPlayback = () => {
       if (audioRef.current && !isPlayingRef.current) {
-        playTrack(trackIndexRef.current);
+        audioRef.current.volume = volumeRef.current;
+        const p = audioRef.current.play();
+        if (p !== undefined) {
+          p.then(() => {
+            setIsPlaying(true);
+            isPlayingRef.current = true;
+          }).catch((err) => {
+            console.warn('Auto-playback waiting for touch/click interaction:', err);
+            const gestureStart = () => {
+              if (audioRef.current && !isPlayingRef.current) {
+                audioRef.current.volume = volumeRef.current;
+                audioRef.current.play().then(() => {
+                  setIsPlaying(true);
+                  isPlayingRef.current = true;
+                }).catch(() => {});
+              }
+            };
+            window.addEventListener('click', gestureStart, { once: true });
+            window.addEventListener('touchstart', gestureStart, { once: true });
+          });
+        }
       }
     };
 
@@ -186,15 +209,16 @@ export default function AudioPlayer({ autoPlay = false }) {
     };
   }, []);
 
-  // React to autoPlay prop update (when unlocking)
+  // React to autoPlay prop update (when entering main page)
   useEffect(() => {
     if (autoPlay && !isPlaying && audioRef.current) {
       if (!isPlayingRef.current) {
+        audioRef.current.volume = volumeRef.current; // 20% default sound
         audioRef.current.play().then(() => {
           setIsPlaying(true);
-          smoothFadeIn(audioRef.current, volumeRef.current, 1800);
+          isPlayingRef.current = true;
         }).catch((err) => {
-          console.warn('autoPlay prop blocked by browser policy:', err);
+          console.warn('autoPlay prop waiting for gesture:', err);
         });
       }
     }

@@ -1,21 +1,58 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Volume2, VolumeX, Heart, Sparkles } from 'lucide-react';
+import { Volume2, VolumeX, Heart, Sparkles, SkipForward } from 'lucide-react';
+import { birthdayData } from '../config/birthdayData';
 import { playPop } from '../utils/soundEffects';
 
 export default function AudioPlayer() {
+  const playlist = birthdayData.playlist || [
+    {
+      id: 1,
+      title: 'Her',
+      artist: 'JVKE',
+      src: `${import.meta.env.BASE_URL}birthday_song.mp3`
+    },
+    {
+      id: 2,
+      title: 'This Love',
+      artist: 'Elliot James Reay',
+      src: `${import.meta.env.BASE_URL}this_love.mp3`
+    }
+  ];
+
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [floatingNotes, setFloatingNotes] = useState([]);
+  
   const audioRef = useRef(null);
+  const trackIndexRef = useRef(0);
+  const isPlayingRef = useRef(false);
+
+  // Sync ref values for access in async events
+  trackIndexRef.current = currentTrackIndex;
+  isPlayingRef.current = isPlaying;
+
+  const currentTrack = playlist[currentTrackIndex] || playlist[0];
 
   useEffect(() => {
-    const audio = new Audio(`${import.meta.env.BASE_URL}birthday_song.mp3`);
-    audio.loop = true;
+    const audio = new Audio(playlist[0].src);
+    audio.loop = false; // Must be false so 'ended' fires to switch tracks!
     audio.volume = 0.55;
     audioRef.current = audio;
 
     const handleEnded = () => {
+      // Loop sequentially: Track 1 -> Track 2 -> Track 1 -> Track 2...
+      const nextIndex = (trackIndexRef.current + 1) % playlist.length;
+      trackIndexRef.current = nextIndex;
+      setCurrentTrackIndex(nextIndex);
+
+      audio.src = playlist[nextIndex].src;
       audio.currentTime = 0;
-      audio.play().catch(() => {});
+      audio.load();
+      audio.play().then(() => {
+        setIsPlaying(true);
+      }).catch((err) => {
+        console.warn('Playback transition error:', err);
+      });
     };
 
     audio.addEventListener('ended', handleEnded);
@@ -51,17 +88,36 @@ export default function AudioPlayer() {
 
   const toggleMusic = () => {
     playPop();
-    if (!audioRef.current) return;
+    const audio = audioRef.current;
+    if (!audio) return;
 
     if (isPlaying) {
-      audioRef.current.pause();
+      audio.pause();
       setIsPlaying(false);
     } else {
-      audioRef.current.play().then(() => {
+      audio.play().then(() => {
         setIsPlaying(true);
       }).catch((err) => {
         console.warn('Audio playback error:', err);
       });
+    }
+  };
+
+  const nextTrack = (e) => {
+    if (e) e.stopPropagation();
+    playPop();
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const nextIndex = (currentTrackIndex + 1) % playlist.length;
+    trackIndexRef.current = nextIndex;
+    setCurrentTrackIndex(nextIndex);
+
+    audio.src = playlist[nextIndex].src;
+    audio.currentTime = 0;
+    audio.load();
+    if (isPlaying) {
+      audio.play().catch((err) => console.warn('Audio error:', err));
     }
   };
 
@@ -176,12 +232,12 @@ export default function AudioPlayer() {
         </div>
 
         {/* Text & Equalizer */}
-        <div className="flex flex-col">
+        <div className="flex flex-col min-w-[70px]">
           <div className="flex items-center gap-1.5">
-            <span className="font-serif text-xs font-medium text-pink-100 tracking-wide">
-              Melody
+            <span className="font-serif text-xs font-semibold text-pink-100 tracking-wide truncate max-w-[90px]">
+              {currentTrack.title}
             </span>
-            {isPlaying && <Sparkles className="w-3 h-3 text-pink-300 animate-pulse" />}
+            {isPlaying && <Sparkles className="w-3 h-3 text-pink-300 animate-pulse shrink-0" />}
           </div>
 
           <div className="flex items-center gap-1.5">
@@ -193,7 +249,7 @@ export default function AudioPlayer() {
                   <span className="w-0.5 bg-pink-400 rounded-full animate-pulse h-1.5" style={{ animationDelay: '0.3s' }}></span>
                   <span className="w-0.5 bg-rose-200 rounded-full animate-pulse h-2.5" style={{ animationDelay: '0.45s' }}></span>
                 </div>
-                <span className="font-sans text-[10px] text-pink-200/90 font-medium">Playing ♪</span>
+                <span className="font-sans text-[10px] text-pink-200/90 font-medium">Track {currentTrackIndex + 1}/2 ♪</span>
               </>
             ) : (
               <span className="font-sans text-[10px] text-white/60 font-medium">Paused</span>
@@ -201,13 +257,23 @@ export default function AudioPlayer() {
           </div>
         </div>
 
-        {/* Sound toggle icon */}
-        <div className="ml-1 text-white/70 group-hover:text-pink-300 transition-colors">
-          {isPlaying ? (
-            <Volume2 className="w-4 h-4 text-pink-300" />
-          ) : (
-            <VolumeX className="w-4 h-4 text-white/40" />
-          )}
+        {/* Action icons: Skip to next track & Sound toggle */}
+        <div className="flex items-center gap-1 pl-0.5">
+          <button
+            type="button"
+            onClick={nextTrack}
+            title={`Skip to ${playlist[(currentTrackIndex + 1) % playlist.length].title}`}
+            className="p-1 rounded-full text-white/60 hover:text-pink-300 hover:bg-white/10 active:scale-90 transition-all cursor-pointer"
+          >
+            <SkipForward className="w-3.5 h-3.5" />
+          </button>
+          <div className="text-white/70 group-hover:text-pink-300 transition-colors">
+            {isPlaying ? (
+              <Volume2 className="w-4 h-4 text-pink-300" />
+            ) : (
+              <VolumeX className="w-4 h-4 text-white/40" />
+            )}
+          </div>
         </div>
       </div>
 

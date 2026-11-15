@@ -52,8 +52,21 @@ export const birthdayData = {
     }
   ],
 
-  // Audio configuration
-  ambientMusicTitle: "Cozy Lo-Fi Birthday Chime",
+  // Ambient Music Playlist (Plays "Her" first, then "This Love", continuously looping 1 -> 2 -> 1 -> 2)
+  playlist: [
+    {
+      id: 1,
+      title: "Her",
+      artist: "JVKE",
+      src: `${base}birthday_song.mp3`
+    },
+    {
+      id: 2,
+      title: "This Love",
+      artist: "Elliot James Reay",
+      src: `${base}this_love.mp3`
+    }
+  ],
 
   // Photo Gallery (Curated memories of Coco)
   photos: [

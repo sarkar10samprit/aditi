@@ -3,7 +3,7 @@ import { Volume2, VolumeX, Heart, Sparkles } from 'lucide-react';
 import { birthdayData } from '../config/birthdayData';
 import { playPop } from '../utils/soundEffects';
 
-export default function AudioPlayer() {
+export default function AudioPlayer({ autoPlay = false }) {
   const playlist = birthdayData.playlist || [
     {
       id: 1,
@@ -123,13 +123,55 @@ export default function AudioPlayer() {
 
     audio.addEventListener('ended', handleEnded);
 
+    const startPlayback = () => {
+      if (audioRef.current && !isPlayingRef.current) {
+        audioRef.current.play().then(() => {
+          setIsPlaying(true);
+          smoothFadeIn(audioRef.current, volumeRef.current, 1800);
+        }).catch((err) => {
+          console.warn('Auto-playback waiting for touch/click interaction:', err);
+          const gestureStart = () => {
+            if (audioRef.current && !isPlayingRef.current) {
+              audioRef.current.play().then(() => {
+                setIsPlaying(true);
+                smoothFadeIn(audioRef.current, volumeRef.current, 1800);
+              }).catch(() => {});
+            }
+          };
+          window.addEventListener('click', gestureStart, { once: true });
+          window.addEventListener('touchstart', gestureStart, { once: true });
+        });
+      }
+    };
+
+    const handleUnlockAudio = () => {
+      startPlayback();
+    };
+
+    window.addEventListener('unlock-success', handleUnlockAudio);
+
     return () => {
       cancelFade();
       audio.pause();
       audio.removeEventListener('ended', handleEnded);
+      window.removeEventListener('unlock-success', handleUnlockAudio);
       audioRef.current = null;
     };
   }, []);
+
+  // React to autoPlay prop update (when unlocking)
+  useEffect(() => {
+    if (autoPlay && !isPlaying && audioRef.current) {
+      if (!isPlayingRef.current) {
+        audioRef.current.play().then(() => {
+          setIsPlaying(true);
+          smoothFadeIn(audioRef.current, volumeRef.current, 1800);
+        }).catch((err) => {
+          console.warn('autoPlay prop blocked by browser policy:', err);
+        });
+      }
+    }
+  }, [autoPlay, isPlaying]);
 
   // Float musical notes while playing
   useEffect(() => {

@@ -109,7 +109,7 @@ export default function App() {
       <PawTrail />
 
       {/* Floating Audio Controller */}
-      <AudioPlayer />
+      <AudioPlayer autoPlay={isUnlocked} />
 
       {/* Hidden Hardware DOM Pre-mount for 0ms Instant Cat & Media Decoding */}
       <div

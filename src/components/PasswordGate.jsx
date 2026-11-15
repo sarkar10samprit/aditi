@@ -50,6 +50,12 @@ export default function PasswordGate({ onUnlock }) {
     if (codeToVerify === CORRECT_PASS) {
       playChime();
       setIsVerifying(true);
+
+      // Trigger instant background music start on direct user click/tap gesture
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('unlock-success'));
+      }
+
       confetti({
         particleCount: 50,
         spread: 80,

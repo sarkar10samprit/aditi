@@ -84,7 +84,6 @@ export const ASSETS_TO_PRELOAD = [
   'stickers/romantic/fingerprint_heart.webp',
   'stickers/romantic/coca_cola.webp',
   'stickers/romantic/spiderman.webp',
-  'stickers/romantic/lips.webp',
 ];
 
 /**

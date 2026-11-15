@@ -295,13 +295,6 @@ export default function ParchmentLetter() {
         rotate={8}
         size="w-14 sm:w-20 md:w-24"
       />
-      <AestheticSticker
-        name="lips"
-        alt="Lipstick Kiss Stamp"
-        className="bottom-6 -right-2 sm:right-0 lg:-right-8"
-        rotate={-12}
-        size="w-14 sm:w-18 md:w-22"
-      />
       {/* Clean Header with User's Requested Line */}
       <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8 relative z-10">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill text-cosmic-champagne font-sans text-xs font-semibold uppercase tracking-[0.2em] mb-3">

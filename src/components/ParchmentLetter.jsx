@@ -14,7 +14,7 @@ export default function ParchmentLetter() {
   const [hasScrolledIn, setHasScrolledIn] = useState(false);
   const [visibleChars, setVisibleChars] = useState({ 1: 0, 2: 0 });
 
-  const sectionRef = useRef(null);
+  const letterPageRef = useRef(null);
   const timerRef = useRef(null);
 
   const pagesData = letter.pages || [
@@ -44,9 +44,9 @@ export default function ParchmentLetter() {
     return count;
   };
 
-  // Trigger typing automatically when scrolling into letter section
+  // Trigger typing automatically ONLY when the top of the parchment letter page enters the viewport from the bottom
   useEffect(() => {
-    const element = sectionRef.current;
+    const element = letterPageRef.current;
     if (!element) return;
 
     const observer = new IntersectionObserver(
@@ -55,7 +55,10 @@ export default function ParchmentLetter() {
           setHasScrolledIn(true);
         }
       },
-      { threshold: 0.15 }
+      { 
+        threshold: 0.05,
+        rootMargin: '0px 0px -40px 0px'
+      }
     );
 
     observer.observe(element);
@@ -274,7 +277,6 @@ export default function ParchmentLetter() {
   return (
     <section 
       id="letters" 
-      ref={sectionRef} 
       className="py-14 sm:py-20 px-4 sm:px-8 max-w-4xl mx-auto relative scroll-mt-10"
     >
       {/* Clean Header with User's Requested Line */}
@@ -292,7 +294,10 @@ export default function ParchmentLetter() {
       </div>
 
       {/* Foldable Book with Silky Smooth 3D Flip */}
-      <div className="relative max-w-2xl mx-auto px-2 sm:px-4 [perspective:1400px]">
+      <div 
+        ref={letterPageRef}
+        className="relative max-w-2xl mx-auto px-2 sm:px-4 [perspective:1400px]"
+      >
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={currentPage}

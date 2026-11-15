@@ -98,49 +98,76 @@ export default function AudioPlayer({ autoPlay = false }) {
 
   const currentTrack = playlist[currentTrackIndex] || playlist[0];
 
+  const preloadUpcomingTrack = (src) => {
+    try {
+      const p = new Audio();
+      p.preload = 'auto';
+      p.src = src;
+    } catch (e) {}
+  };
+
+  const playTrack = (index) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    cancelFade();
+    trackIndexRef.current = index;
+    setCurrentTrackIndex(index);
+
+    // Direct source change without audio.load() to prevent AbortError
+    audio.src = playlist[index].src;
+
+    // Pre-cache next song in the background
+    const upcomingIndex = (index + 1) % playlist.length;
+    preloadUpcomingTrack(playlist[upcomingIndex].src);
+
+    const doPlay = () => {
+      const p = audio.play();
+      if (p !== undefined) {
+        p.then(() => {
+          setIsPlaying(true);
+          isPlayingRef.current = true;
+          smoothFadeIn(audio, volumeRef.current, 1400);
+        }).catch((err) => {
+          console.warn('Track transition play deferred, waiting for canplay:', err);
+          const onCanPlay = () => {
+            audio.removeEventListener('canplay', onCanPlay);
+            audio.play().then(() => {
+              setIsPlaying(true);
+              isPlayingRef.current = true;
+              smoothFadeIn(audio, volumeRef.current, 1400);
+            }).catch((e) => console.error('canplay play failed:', e));
+          };
+          audio.addEventListener('canplay', onCanPlay, { once: true });
+        });
+      }
+    };
+
+    doPlay();
+  };
+
   useEffect(() => {
     const audio = new Audio(playlist[0].src);
     audio.loop = false; // Must be false so 'ended' fires to switch tracks!
     audio.volume = 0.20; // Default gentle ambient background level
     audioRef.current = audio;
 
+    // Immediately pre-cache Track 2 into browser memory
+    if (playlist.length > 1) {
+      preloadUpcomingTrack(playlist[1].src);
+    }
+
     const handleEnded = () => {
       // Loop sequentially: Track 1 -> Track 2 -> Track 1 -> Track 2...
       const nextIndex = (trackIndexRef.current + 1) % playlist.length;
-      trackIndexRef.current = nextIndex;
-      setCurrentTrackIndex(nextIndex);
-
-      audio.src = playlist[nextIndex].src;
-      audio.currentTime = 0;
-      audio.load();
-      audio.play().then(() => {
-        setIsPlaying(true);
-        smoothFadeIn(audio, volumeRef.current, 1800);
-      }).catch((err) => {
-        console.warn('Playback transition error:', err);
-      });
+      playTrack(nextIndex);
     };
 
     audio.addEventListener('ended', handleEnded);
 
     const startPlayback = () => {
       if (audioRef.current && !isPlayingRef.current) {
-        audioRef.current.play().then(() => {
-          setIsPlaying(true);
-          smoothFadeIn(audioRef.current, volumeRef.current, 1800);
-        }).catch((err) => {
-          console.warn('Auto-playback waiting for touch/click interaction:', err);
-          const gestureStart = () => {
-            if (audioRef.current && !isPlayingRef.current) {
-              audioRef.current.play().then(() => {
-                setIsPlaying(true);
-                smoothFadeIn(audioRef.current, volumeRef.current, 1800);
-              }).catch(() => {});
-            }
-          };
-          window.addEventListener('click', gestureStart, { once: true });
-          window.addEventListener('touchstart', gestureStart, { once: true });
-        });
+        playTrack(trackIndexRef.current);
       }
     };
 
@@ -217,21 +244,8 @@ export default function AudioPlayer({ autoPlay = false }) {
   const nextTrack = (e) => {
     if (e) e.stopPropagation();
     playPop();
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const nextIndex = (currentTrackIndex + 1) % playlist.length;
-    trackIndexRef.current = nextIndex;
-    setCurrentTrackIndex(nextIndex);
-
-    audio.src = playlist[nextIndex].src;
-    audio.currentTime = 0;
-    audio.load();
-    if (isPlaying) {
-      audio.play().then(() => {
-        smoothFadeIn(audio, volumeRef.current, 1500);
-      }).catch((err) => console.warn('Audio error:', err));
-    }
+    const nextIndex = (trackIndexRef.current + 1) % playlist.length;
+    playTrack(nextIndex);
   };
 
   return (

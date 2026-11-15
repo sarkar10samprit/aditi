@@ -84,8 +84,10 @@ export async function preloadAllAssets(onProgress) {
   const total = ASSETS_TO_PRELOAD.length;
   let loaded = 0;
 
-  // Pre-decode cat meow sound
+  // Pre-cache audio tracks into browser cache so track transitions are instantaneous
   try {
+    fetch(`${base}birthday_song.mp3`).catch(() => {});
+    fetch(`${base}this_love.mp3`).catch(() => {});
     fetch(`${base}cat_meow.mp3`).catch(() => {});
   } catch (e) {}
 

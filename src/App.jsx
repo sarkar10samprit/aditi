@@ -18,7 +18,6 @@ import { KNIFE_CAT_DATA } from './assets/knifeCatBase64';
 
 export default function App() {
   const isPreviewLoading = typeof window !== 'undefined' && window.location.search.includes('preview=loading');
-  const showMemeCorner = typeof window !== 'undefined' && window.location.search.includes('view=memes');
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [unlockMode, setUnlockMode] = useState('romantic'); // 'romantic' | 'memes'
   const [isAssetsReady, setIsAssetsReady] = useState(false);
@@ -188,26 +187,27 @@ export default function App() {
         <img src={`${import.meta.env.BASE_URL}cats/cat7.webp`} decoding="sync" loading="eager" alt="" />
       </div>
 
-      {/* Main Content Sections */}
-      <main>
-        <Hero onGiftOpen={handleGiftOpen} />
-        <MemoryWall />
+      {/* Content Rendering: Secret Meme Sight (654) vs Romantic Sanctuary (456) */}
+      {unlockMode === 'memes' ? (
         <FunnyCorner
-          initialOpen={unlockMode === 'memes'}
-          isMemeMode={unlockMode === 'memes'}
           onBack={() => {
             setIsUnlocked(false);
             setUnlockMode('romantic');
           }}
         />
-        <ParchmentLetter />
-        <CakeSection />
-        <ReasonsGrid />
-        <WishJar />
-      </main>
-
-      {/* Footer */}
-      <Footer />
+      ) : (
+        <>
+          <main>
+            <Hero onGiftOpen={handleGiftOpen} />
+            <MemoryWall />
+            <ParchmentLetter />
+            <CakeSection />
+            <ReasonsGrid />
+            <WishJar />
+          </main>
+          <Footer />
+        </>
+      )}
     </div>
   );
 }

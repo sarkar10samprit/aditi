@@ -40,7 +40,7 @@ export default function FunnyCorner({ onBack }) {
             The meme corner 😂🌚
           </h3>
           <p className="font-sans text-xs sm:text-sm text-pink-200/80 font-normal mt-0.5">
-            🎉 Secret Passcode 654 Unlocked! Birthday pe ye vi toh chalta haiii
+            Birthday pe ye vi toh chalta haiii
           </p>
         </div>
 

@@ -4,6 +4,7 @@ import confetti from 'canvas-confetti';
 import { birthdayData } from '../config/birthdayData';
 import { playChime, playPop } from '../utils/soundEffects';
 import { KNIFE_CAT_DATA } from '../assets/knifeCatBase64';
+import AestheticSticker from './AestheticSticker';
 
 // Pre-decode Base64 knife cat in memory for 0ms instant display on blow
 if (typeof window !== 'undefined') {
@@ -102,7 +103,29 @@ export default function CakeSection() {
   const candlePositions = [7, 11, 15, 19, 23];
 
   return (
-    <section id="cake" className="py-14 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto text-center relative">
+    <section id="cake" className="py-14 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto text-center relative overflow-visible">
+      {/* Aesthetic Scrapbook Stickers */}
+      <AestheticSticker
+        name="bunny"
+        alt="Bunny with Headphones"
+        className="top-10 left-2 sm:left-6 lg:left-10"
+        rotate={-8}
+        size="w-16 sm:w-22 md:w-26"
+      />
+      <AestheticSticker
+        name="star_large"
+        alt="Crimson Star"
+        className="top-8 right-2 sm:right-8 lg:right-14"
+        rotate={12}
+        size="w-12 sm:w-16 md:w-20"
+      />
+      <AestheticSticker
+        name="star_small"
+        alt="Crimson Mini Star"
+        className="top-24 right-5 sm:right-16 lg:right-24"
+        rotate={-10}
+        size="w-8 sm:w-11 md:w-14"
+      />
       {/* Full-Screen Floating Emoji Ocean */}
       {floatingHearts.length > 0 && (
         <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">

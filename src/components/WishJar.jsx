@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Send, Sparkles, CheckCircle2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { birthdayData } from '../config/birthdayData';
+import AestheticSticker from './AestheticSticker';
 
 export default function WishJar() {
   const [inputWish, setInputWish] = useState('');
@@ -69,7 +70,22 @@ export default function WishJar() {
   };
 
   return (
-    <section className="py-10 sm:py-14 px-4 sm:px-6 max-w-4xl mx-auto relative">
+    <section className="py-10 sm:py-14 px-4 sm:px-6 max-w-4xl mx-auto relative overflow-visible">
+      {/* Aesthetic Scrapbook Stickers */}
+      <AestheticSticker
+        name="billiard_ball"
+        alt="Crimson 7 Billiard Ball"
+        className="top-6 left-1 sm:left-4 lg:-left-10"
+        rotate={-8}
+        size="w-14 sm:w-18 md:w-22"
+      />
+      <AestheticSticker
+        name="spiderman"
+        alt="Spider-Man Badge"
+        className="top-8 right-1 sm:right-4 lg:-right-10"
+        rotate={10}
+        size="w-14 sm:w-18 md:w-22"
+      />
       <div className="glass-panel p-6 sm:p-12 border border-white/25 shadow-2xl relative overflow-hidden">
         {/* Header */}
         <div className="text-center max-w-xl mx-auto mb-6 sm:mb-8">

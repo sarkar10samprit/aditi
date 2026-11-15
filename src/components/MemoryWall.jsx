@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { birthdayData } from '../config/birthdayData';
 import { Camera, Sparkles, X, ZoomIn, ChevronLeft, ChevronRight } from 'lucide-react';
 import { playPop } from '../utils/soundEffects';
+import AestheticSticker from './AestheticSticker';
 
 export default function MemoryWall() {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
@@ -38,7 +39,29 @@ export default function MemoryWall() {
   }, [selectedPhoto, handlePrev, handleNext]);
 
   return (
-    <section id="memories" className="py-12 sm:py-16 px-4 sm:px-6 max-w-7xl mx-auto relative">
+    <section id="memories" className="py-12 sm:py-16 px-4 sm:px-6 max-w-7xl mx-auto relative overflow-visible">
+      {/* Aesthetic Scrapbook Stickers */}
+      <AestheticSticker
+        name="canon_camera"
+        alt="Vintage Canon Camera"
+        className="top-10 left-2 sm:left-4 lg:-left-10"
+        rotate={-8}
+        size="w-16 sm:w-22 md:w-26"
+      />
+      <AestheticSticker
+        name="moon"
+        alt="Full Moon"
+        className="top-8 right-2 sm:right-6 lg:-right-8"
+        rotate={14}
+        size="w-12 sm:w-16 md:w-20"
+      />
+      <AestheticSticker
+        name="vinyl_record"
+        alt="Vinyl Record"
+        className="-bottom-4 right-3 sm:right-8 lg:-right-10"
+        rotate={22}
+        size="w-14 sm:w-20 md:w-24"
+      />
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill text-cosmic-champagne font-sans text-xs font-semibold uppercase tracking-[0.2em] mb-4">

@@ -66,6 +66,25 @@ export const ASSETS_TO_PRELOAD = [
   'stickers/cat_sticker_10.png',
   'stickers/cat_sticker_11.png',
   'stickers/cat_sticker_12.png',
+
+  // Aesthetic Romantic Stickers
+  'stickers/romantic/ribbon_bow.webp',
+  'stickers/romantic/snoopy.webp',
+  'stickers/romantic/cherries.webp',
+  'stickers/romantic/canon_camera.webp',
+  'stickers/romantic/moon.webp',
+  'stickers/romantic/star_large.webp',
+  'stickers/romantic/headphones.webp',
+  'stickers/romantic/guitar.webp',
+  'stickers/romantic/vinyl_record.webp',
+  'stickers/romantic/star_small.webp',
+  'stickers/romantic/bunny.webp',
+  'stickers/romantic/hello_kitty.webp',
+  'stickers/romantic/billiard_ball.webp',
+  'stickers/romantic/fingerprint_heart.webp',
+  'stickers/romantic/coca_cola.webp',
+  'stickers/romantic/spiderman.webp',
+  'stickers/romantic/lips.webp',
 ];
 
 /**

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { birthdayData } from '../config/birthdayData';
 import { Feather, ArrowRight, ArrowLeft } from 'lucide-react';
 import { playPop } from '../utils/soundEffects';
+import AestheticSticker from './AestheticSticker';
 
 export default function ParchmentLetter() {
   const letter = birthdayData.parchmentLetter;
@@ -277,8 +278,30 @@ export default function ParchmentLetter() {
   return (
     <section 
       id="letters" 
-      className="py-14 sm:py-20 px-4 sm:px-8 max-w-4xl mx-auto relative scroll-mt-10"
+      className="py-14 sm:py-20 px-4 sm:px-8 max-w-4xl mx-auto relative scroll-mt-10 overflow-visible"
     >
+      {/* Aesthetic Scrapbook Stickers */}
+      <AestheticSticker
+        name="hello_kitty"
+        alt="Hello Kitty"
+        className="top-10 -right-2 sm:-right-8 lg:-right-12"
+        rotate={-6}
+        size="w-16 sm:w-22 md:w-26"
+      />
+      <AestheticSticker
+        name="fingerprint_heart"
+        alt="Fingerprint Heart"
+        className="top-36 -left-3 sm:-left-8 lg:-left-12"
+        rotate={8}
+        size="w-14 sm:w-20 md:w-24"
+      />
+      <AestheticSticker
+        name="lips"
+        alt="Lipstick Kiss Stamp"
+        className="bottom-6 -right-2 sm:right-0 lg:-right-8"
+        rotate={-12}
+        size="w-14 sm:w-18 md:w-22"
+      />
       {/* Clean Header with User's Requested Line */}
       <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8 relative z-10">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill text-cosmic-champagne font-sans text-xs font-semibold uppercase tracking-[0.2em] mb-3">

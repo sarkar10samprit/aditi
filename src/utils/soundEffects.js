@@ -35,6 +35,7 @@ async function loadMeowBuffer() {
 }
 
 if (typeof window !== 'undefined') {
+  loadMeowBuffer().catch(() => {});
   window.addEventListener('click', loadMeowBuffer, { once: true });
   window.addEventListener('touchstart', loadMeowBuffer, { once: true });
 }

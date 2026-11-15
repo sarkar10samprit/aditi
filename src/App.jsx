@@ -12,33 +12,27 @@ import CakeSection from './components/CakeSection';
 import ReasonsGrid from './components/ReasonsGrid';
 import WishJar from './components/WishJar';
 import Footer from './components/Footer';
+import PasswordGate from './components/PasswordGate';
 import { preloadAllAssets } from './utils/preloadAssets';
 
 export default function App() {
   const isPreviewLoading = typeof window !== 'undefined' && window.location.search.includes('preview=loading');
   const showMemeCorner = typeof window !== 'undefined' && window.location.search.includes('view=memes');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [isAssetsReady, setIsAssetsReady] = useState(false);
   const [loadProgress, setLoadProgress] = useState(isPreviewLoading ? 76 : 0);
   const [unwrapped, setUnwrapped] = useState(false);
 
   useEffect(() => {
-    if (isPreviewLoading) return;
     let isMounted = true;
 
+    // Eagerly pre-cache and hardware-decode all assets in the background while typing password
     preloadAllAssets((progress) => {
       if (isMounted) setLoadProgress(progress);
     }).then(() => {
       if (isMounted) {
+        setIsAssetsReady(true);
         setLoadProgress(100);
-        setTimeout(() => {
-          setIsLoading(false);
-          confetti({
-            particleCount: 35,
-            spread: 65,
-            origin: { y: 0.3 },
-            colors: ['#E8729B', '#FCD34D', '#FFFFFF', '#D64E7E']
-          });
-        }, 400);
       }
     });
 
@@ -47,15 +41,26 @@ export default function App() {
     };
   }, []);
 
+  const handleUnlock = () => {
+    setIsUnlocked(true);
+  };
+
   const handleGiftOpen = () => {
     setUnwrapped(true);
   };
 
   return (
     <div className="relative min-h-screen text-white overflow-hidden">
-      {/* Luxury Initial Entrance & Eager Asset Preloader */}
+      {/* Background-Loading Security Password Gate (Passcode: 456) */}
+      <AnimatePresence>
+        {!isUnlocked && (
+          <PasswordGate onUnlock={handleUnlock} isAssetsReady={isAssetsReady} />
+        )}
+      </AnimatePresence>
+
+      {/* Legacy Preview Loading Screen (Only active if ?preview=loading is in URL) */}
       <AnimatePresence mode="wait">
-        {isLoading && (
+        {isPreviewLoading && !isUnlocked && (
           <motion.div
             key="preloader"
             initial={{ opacity: 1 }}

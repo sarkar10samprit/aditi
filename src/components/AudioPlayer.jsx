@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Volume2, VolumeX, Heart, Sparkles, SkipForward } from 'lucide-react';
+import { Volume2, VolumeX, Heart, Sparkles } from 'lucide-react';
 import { birthdayData } from '../config/birthdayData';
 import { playPop } from '../utils/soundEffects';
 
@@ -328,21 +328,12 @@ export default function AudioPlayer() {
           </div>
         </div>
 
-        {/* Action icons: Skip, Volume Icon & Mini Background Volume Slider */}
+        {/* Action icons: Volume Icon & 0-100 Volume Slider */}
         <div
-          className="flex items-center gap-1 pl-0.5"
+          className="flex items-center gap-1.5 pl-0.5"
           onMouseEnter={() => setShowVolumeSlider(true)}
           onMouseLeave={() => setShowVolumeSlider(false)}
         >
-          <button
-            type="button"
-            onClick={nextTrack}
-            title={`Skip to ${playlist[(currentTrackIndex + 1) % playlist.length].title}`}
-            className="p-1 rounded-full text-white/60 hover:text-pink-300 hover:bg-white/10 active:scale-90 transition-all cursor-pointer"
-          >
-            <SkipForward className="w-3.5 h-3.5" />
-          </button>
-
           {/* Volume toggle & slider trigger */}
           <button
             type="button"
@@ -350,17 +341,17 @@ export default function AudioPlayer() {
               e.stopPropagation();
               setShowVolumeSlider((prev) => !prev);
             }}
-            title={`Ambient background volume (Currently ${Math.round(volume * 100)}%)`}
-            className="p-1 rounded-full text-white/70 hover:text-pink-300 hover:bg-white/10 transition-colors cursor-pointer"
+            title={`Adjust volume (Currently ${Math.round(volume * 100)}%)`}
+            className="p-1.5 rounded-full text-white/70 hover:text-pink-300 hover:bg-white/10 transition-colors cursor-pointer"
           >
-            {isPlaying ? (
+            {isPlaying && volume > 0 ? (
               <Volume2 className="w-4 h-4 text-pink-300" />
             ) : (
               <VolumeX className="w-4 h-4 text-white/40" />
             )}
           </button>
 
-          {/* Smooth Ambient Slider (Reveals on hover or tap) */}
+          {/* Smooth 0-100 Volume Slider (Reveals on hover or tap) */}
           <div
             onClick={(e) => e.stopPropagation()}
             className={`transition-all duration-300 flex items-center gap-1.5 overflow-hidden ${
@@ -369,22 +360,22 @@ export default function AudioPlayer() {
           >
             <input
               type="range"
-              min="0.04"
-              max="0.55"
+              min="0"
+              max="1"
               step="0.01"
               value={volume}
               onChange={(e) => {
                 const newVol = parseFloat(e.target.value);
                 setVolume(newVol);
                 volumeRef.current = newVol;
-                if (audioRef.current && isPlaying) {
+                if (audioRef.current) {
                   audioRef.current.volume = newVol;
                 }
               }}
-              className="w-14 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-pink-400"
-              title={`Background Volume: ${Math.round(volume * 100)}%`}
+              className="w-16 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-pink-400"
+              title={`Volume: ${Math.round(volume * 100)}%`}
             />
-            <span className="font-mono text-[9px] text-pink-200/80 font-bold shrink-0">
+            <span className="font-mono text-[9px] text-pink-200/80 font-bold shrink-0 min-w-[24px]">
               {Math.round(volume * 100)}%
             </span>
           </div>

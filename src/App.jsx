@@ -9,6 +9,7 @@ import MemoryWall from './components/MemoryWall';
 import FunnyCorner from './components/FunnyCorner';
 import ParchmentLetter from './components/ParchmentLetter';
 import CakeSection from './components/CakeSection';
+import ConstellationMap from './components/ConstellationMap';
 import ReasonsGrid from './components/ReasonsGrid';
 import WishJar from './components/WishJar';
 import Footer from './components/Footer';
@@ -128,6 +129,7 @@ export default function App() {
         {showMemeCorner && <FunnyCorner />}
         <ParchmentLetter />
         <CakeSection />
+        <ConstellationMap />
         <ReasonsGrid />
         <WishJar />
       </main>

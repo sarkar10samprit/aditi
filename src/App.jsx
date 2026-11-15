@@ -6,6 +6,7 @@ import AudioPlayer from './components/AudioPlayer';
 import PawTrail from './components/PawTrail';
 import Hero from './components/Hero';
 import MemoryWall from './components/MemoryWall';
+import FunnyCorner from './components/FunnyCorner';
 import ParchmentLetter from './components/ParchmentLetter';
 import CakeSection from './components/CakeSection';
 import ReasonsGrid from './components/ReasonsGrid';
@@ -123,6 +124,7 @@ export default function App() {
       <main>
         <Hero onGiftOpen={handleGiftOpen} />
         <MemoryWall />
+        <FunnyCorner />
         <ParchmentLetter />
         <CakeSection />
         <ReasonsGrid />

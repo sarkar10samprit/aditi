@@ -337,5 +337,63 @@ I promise to always celebrate your victories like they are my own, to always hyp
     title: "Make a Birthday Wish, Coco ✨",
     instructions: "Close your eyes, think of the one dream your heart desires most this year, and blow out the candles! 🎂",
     blownSuccessMessage: "Your wish has been dispatched to the stars, Coco! May every single one of your dreams come true! 🎉💖"
-  }
+  },
+
+  // The Meme Vault & Chaos Corner (Awaiting User Photo Uploads)
+  funnyMemes: [
+    {
+      id: 1,
+      title: "Threat Level: Unhinged 🚨",
+      caption: "Whatever face you were making here, it belongs in an international meme museum.",
+      badge: "💀 CAUGHT IN 4K",
+      reaction: "😂",
+      src: `${base}memes/meme1.jpg`,
+      rotation: "-2deg"
+    },
+    {
+      id: 2,
+      title: "Side-Eye of the Century 💅",
+      caption: "The exact look you give when someone says something ridiculously stupid.",
+      badge: "💅 ILLEGAL ANGLE",
+      reaction: "💀",
+      src: `${base}memes/meme2.jpg`,
+      rotation: "2.5deg"
+    },
+    {
+      id: 3,
+      title: "No Context Coco 🗿",
+      caption: "Even scientists and top psychologists cannot explain what was happening here.",
+      badge: "🗿 EMOTIONAL DAMAGE",
+      reaction: "😭",
+      src: `${base}memes/meme3.jpg`,
+      rotation: "-1.5deg"
+    },
+    {
+      id: 4,
+      title: "The Dramatic Meltdown 🎭",
+      caption: "World-class actress having a 5-alarm crisis over absolutely nothing.",
+      badge: "🎭 100% CHAOS",
+      reaction: "🤡",
+      src: `${base}memes/meme4.jpg`,
+      rotation: "3deg"
+    },
+    {
+      id: 5,
+      title: "Sticker-Worthy Masterpiece 👑",
+      caption: "Permanently saved in my WhatsApp stickers to destroy your arguments.",
+      badge: "👑 STICKER MATERIAL",
+      reaction: "🔥",
+      src: `${base}memes/meme5.jpg`,
+      rotation: "-2.5deg"
+    },
+    {
+      id: 6,
+      title: "The Ultimate Derp 🤪",
+      caption: "Proof that behind that pretty face lives a chaotic little gremlin.",
+      badge: "🚨 CERTIFIED DERP",
+      reaction: "✨",
+      src: `${base}memes/meme6.jpg`,
+      rotation: "1.8deg"
+    }
+  ]
 };

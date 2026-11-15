@@ -32,11 +32,7 @@ export default function PasswordGate({ onUnlock }) {
     playPop();
     setError(false);
     if (pin.length < 3) {
-      const nextPin = pin + digit;
-      setPin(nextPin);
-      if (nextPin.length === 3) {
-        verifyPin(nextPin);
-      }
+      setPin((prev) => prev + digit);
     }
   };
 

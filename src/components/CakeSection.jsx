@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { birthdayData } from '../config/birthdayData';
@@ -8,11 +8,9 @@ export default function CakeSection() {
   const [isBlown, setIsBlown] = useState(false);
   const [candles, setCandles] = useState([true, true, true, true, true]);
   const [flameFrame, setFlameFrame] = useState(0);
+  const [floatingHearts, setFloatingHearts] = useState([]);
   const [isCut, setIsCut] = useState(false);
   const [isCutting, setIsCutting] = useState(false);
-
-  const canvasRef = useRef(null);
-  const animFrameRef = useRef(null);
 
   // 8-bit Flame animation cycle (flickers every 180ms)
   useEffect(() => {
@@ -22,129 +20,45 @@ export default function CakeSection() {
     return () => clearInterval(timer);
   }, []);
 
-  // Cleanup animation frame on unmount
-  useEffect(() => {
-    return () => {
-      if (animFrameRef.current) {
-        cancelAnimationFrame(animFrameRef.current);
-      }
-    };
-  }, []);
+  const spawnFloatingHearts = () => {
+    const emojis = ['💖', '💕', '✨', '🌸', '🍰', '🧁', '💝'];
+    const count = 18; // Optimized for smooth 60fps on tablets and mobile
+    const newHearts = [];
 
-  // Zero-lag, 60fps GPU-accelerated full-screen rising emoji celebration
-  const startEmojiStorm = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    // Viewport dimensions with capped DPR for smooth rendering on tablets and mobile
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
-    ctx.scale(dpr, dpr);
-
-    // Festive emoji collection
-    const emojis = ['💖', '🎂', '✨', '💕', '🌸', '🍰', '🥳', '🧁', '🎀', '💫', '🧸', '💝', '🎉', '🌟'];
-
-    // Pre-rasterize emojis onto offscreen canvases once (zero text rasterization during flight)
-    const spriteCache = emojis.map((emoji) => {
-      const offscreen = document.createElement('canvas');
-      offscreen.width = 72;
-      offscreen.height = 72;
-      const octx = offscreen.getContext('2d');
-      octx.font = '52px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
-      octx.textAlign = 'center';
-      octx.textBaseline = 'middle';
-      octx.fillText(emoji, 36, 38);
-      return offscreen;
-    });
-
-    // High density across entire screen: 85 emojis on phones, 140 on tablets/desktop
-    const particleCount = width < 640 ? 85 : 140;
-    const particles = [];
-
-    for (let i = 0; i < particleCount; i++) {
-      const sprite = spriteCache[Math.floor(Math.random() * spriteCache.length)];
-      const size = 26 + Math.random() * 26; // 26px to 52px
-      const baseX = Math.random() * width;
-      const delaySec = Math.random() * 2.2; // Staggered rising entry over 2.2s
-      const speedY = 2.0 + Math.random() * 2.5; // Upward velocity
-      const swayAmp = 18 + Math.random() * 32; // Horizontal floating drift
-      const swayFreq = 0.002 + Math.random() * 0.003;
-      const phase = Math.random() * Math.PI * 2;
-      const opacity = 0.88 + Math.random() * 0.12;
-
-      particles.push({
-        sprite,
-        size,
-        baseX,
-        x: baseX,
-        y: height + 20 + delaySec * speedY * 60,
-        speedY,
-        swayAmp,
-        swayFreq,
-        phase,
-        opacity,
+    for (let i = 0; i < count; i++) {
+      newHearts.push({
+        id: `${Date.now()}-${i}`,
+        emoji: emojis[Math.floor(Math.random() * emojis.length)],
+        left: 5 + Math.random() * 90, // 5vw to 95vw
+        bottom: -20,
+        size: 24 + Math.random() * 16, // 24px to 40px
+        duration: 3.5 + Math.random() * 2.0, // 3.5s to 5.5s rise
+        delay: Math.random() * 1.2, // Staggered over 1.2s
+        sway: -25 + Math.random() * 50, // px horizontal sway
+        rot: -20 + Math.random() * 40, // deg rotation
       });
     }
 
-    const render = (now) => {
-      ctx.clearRect(0, 0, width, height);
+    setFloatingHearts(newHearts);
 
-      let activeCount = 0;
+    // Auto-cleanup floating hearts after animation finishes
+    setTimeout(() => {
+      setFloatingHearts([]);
+    }, 6000);
 
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-        p.y -= p.speedY;
-        p.x = p.baseX + Math.sin(now * p.swayFreq + p.phase) * p.swayAmp;
-
-        if (p.y > -p.size && p.y < height + 80) {
-          activeCount++;
-
-          // Smooth fade-out near top of viewport
-          let alpha = p.opacity;
-          if (p.y < 120) {
-            alpha = Math.max(0, (p.y + p.size) / (120 + p.size) * p.opacity);
-          }
-
-          ctx.globalAlpha = alpha;
-          ctx.drawImage(p.sprite, p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
-        } else if (p.y >= height + 80) {
-          // Waiting to emerge from bottom
-          activeCount++;
-        }
-      }
-
-      ctx.globalAlpha = 1;
-
-      if (activeCount > 0) {
-        animFrameRef.current = requestAnimationFrame(render);
-      } else {
-        ctx.clearRect(0, 0, width, height);
-      }
-    };
-
-    if (animFrameRef.current) {
-      cancelAnimationFrame(animFrameRef.current);
-    }
-    animFrameRef.current = requestAnimationFrame(render);
-
-    // Celebratory confetti burst from the cake
+    // Lightweight smooth confetti burst (no heavy canvas text rasterization)
     try {
       confetti({
-        particleCount: 45,
-        spread: 90,
+        particleCount: 35,
+        spread: 80,
         startVelocity: 45,
-        origin: { x: 0.5, y: 0.75 },
+        origin: { x: 0.5, y: 0.8 },
         colors: ['#F472B6', '#FB7185', '#FDE047', '#FFFFFF', '#D64E7E'],
-        ticks: 200,
+        ticks: 180,
       });
-    } catch (e) {}
+    } catch (e) {
+      // Graceful fallback
+    }
   };
 
   const handleBlowCandles = () => {
@@ -152,7 +66,7 @@ export default function CakeSection() {
     playChime();
     setIsBlown(true);
     setCandles([false, false, false, false, false]);
-    startEmojiStorm();
+    spawnFloatingHearts();
   };
 
   const handleCutCake = () => {
@@ -179,11 +93,28 @@ export default function CakeSection() {
 
   return (
     <section id="cake" className="py-14 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto text-center relative">
-      {/* Zero-Lag GPU-Accelerated Floating Emoji Canvas */}
-      <canvas
-        ref={canvasRef}
-        className="fixed inset-0 pointer-events-none z-50 w-full h-full"
-      />
+      {/* Full-Screen Floating Emoji Ocean */}
+      {floatingHearts.length > 0 && (
+        <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
+          {floatingHearts.map((heart) => (
+            <span
+              key={heart.id}
+              className="floating-heart-emoji"
+              style={{
+                left: `${heart.left}vw`,
+                bottom: `${heart.bottom}px`,
+                fontSize: `${heart.size}px`,
+                animationDuration: `${heart.duration}s`,
+                animationDelay: `${heart.delay}s`,
+                '--sway': `${heart.sway}px`,
+                '--rot': `${heart.rot}deg`,
+              }}
+            >
+              {heart.emoji}
+            </span>
+          ))}
+        </div>
+      )}
 
       {/* Header */}
       <div className="mb-6 relative z-10">

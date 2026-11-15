@@ -21,16 +21,10 @@ export default function AudioPlayer({ autoPlay = false, mode = 'romantic' }) {
 
   const memePlaylist = birthdayData.memePlaylist || [
     {
-      id: 'meme-1',
-      title: 'Ale Le Le',
-      artist: 'Desi Meme',
-      src: `${import.meta.env.BASE_URL}ale-le-le.mp3`
-    },
-    {
-      id: 'meme-2',
-      title: 'Aji Mangal',
-      artist: 'Classic Meme',
-      src: `${import.meta.env.BASE_URL}aji-mangal.mp3`
+      id: 'meme-bado-badi',
+      title: 'Bado Badi',
+      artist: 'Chahat Fateh Ali Khan',
+      src: `${import.meta.env.BASE_URL}bado_badi.mp3`
     }
   ];
 

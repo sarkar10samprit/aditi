@@ -3,16 +3,20 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Lock, Unlock, Sparkles } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { playChime, playPop } from '../utils/soundEffects';
+import RobotCaptcha from './RobotCaptcha';
 
 export default function PasswordGate({ onUnlock }) {
+  const [stage, setStage] = useState('pin'); // 'pin' | 'captcha'
   const [pin, setPin] = useState('');
   const [error, setError] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
 
   const CORRECT_PASS = '456';
 
-  // Listen to physical keyboard events (0-9, Backspace, Enter)
+  // Listen to physical keyboard events (0-9, Backspace, Enter) only while on PIN screen
   useEffect(() => {
+    if (stage !== 'pin') return;
+
     const handleKeyDown = (e) => {
       if (/^[0-9]$/.test(e.key)) {
         if (pin.length < 3) {
@@ -26,7 +30,7 @@ export default function PasswordGate({ onUnlock }) {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [pin]);
+  }, [pin, stage]);
 
   const handleDigitPress = (digit) => {
     playPop();
@@ -51,21 +55,17 @@ export default function PasswordGate({ onUnlock }) {
       playChime();
       setIsVerifying(true);
 
-      // Trigger instant background music start on direct user click/tap gesture
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('unlock-success'));
-      }
-
       confetti({
-        particleCount: 50,
-        spread: 80,
+        particleCount: 35,
+        spread: 70,
         origin: { y: 0.5 },
         colors: ['#F472B6', '#FCD34D', '#34D399', '#FFFFFF']
       });
 
       setTimeout(() => {
-        onUnlock();
-      }, 700);
+        setIsVerifying(false);
+        setStage('captcha');
+      }, 550);
     } else {
       setError(true);
       playPop();
@@ -82,17 +82,20 @@ export default function PasswordGate({ onUnlock }) {
       <div className="absolute top-1/4 -left-20 w-80 h-80 bg-rose-500/20 rounded-full blur-[100px] pointer-events-none animate-pulse" />
       <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-amber-400/15 rounded-full blur-[100px] pointer-events-none animate-pulse" style={{ animationDelay: '1.5s' }} />
 
-      {/* Central Glassmorphism Liquid Card */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.94, y: 15 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 1.04, filter: 'blur(10px)' }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 w-full max-w-[340px] sm:max-w-[370px] rounded-[32px] p-6 sm:p-7 flex flex-col items-center border border-white/20 shadow-[0_30px_70px_rgba(0,0,0,0.7),inset_0_1px_1px_rgba(255,255,255,0.25)] backdrop-blur-2xl"
-        style={{
-          background: 'linear-gradient(160deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 60%, rgba(232, 114, 155, 0.08) 100%)',
-        }}
-      >
+      {/* Central Glassmorphism Liquid Card or Robot Captcha Challenge */}
+      <AnimatePresence mode="wait">
+        {stage === 'pin' ? (
+          <motion.div
+            key="pin-card"
+            initial={{ opacity: 0, scale: 0.94, y: 15 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.92, y: -10, filter: 'blur(8px)' }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-10 w-full max-w-[340px] sm:max-w-[370px] rounded-[32px] p-6 sm:p-7 flex flex-col items-center border border-white/20 shadow-[0_30px_70px_rgba(0,0,0,0.7),inset_0_1px_1px_rgba(255,255,255,0.25)] backdrop-blur-2xl"
+            style={{
+              background: 'linear-gradient(160deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 60%, rgba(232, 114, 155, 0.08) 100%)',
+            }}
+          >
         {/* Liquid Glowing Lock Emblem */}
         <div className="w-14 h-14 rounded-2xl mb-3 flex items-center justify-center relative shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_10px_25px_rgba(0,0,0,0.4)] border border-white/25 bg-gradient-to-b from-white/20 to-white/5 backdrop-blur-md">
           {isVerifying ? (
@@ -216,7 +219,11 @@ export default function PasswordGate({ onUnlock }) {
             </svg>
           </motion.button>
         </div>
-      </motion.div>
+          </motion.div>
+        ) : (
+          <RobotCaptcha key="captcha-card" onSuccess={onUnlock} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -9,6 +9,17 @@ export const ASSETS_TO_PRELOAD = [
   'torn_paper.png',
   'background.jpg',
 
+  // Robot Captcha Challenge Images
+  'captcha/cat_stare.webp',
+  'captcha/cat_rose.webp',
+  'captcha/cat_thug.webp',
+  'captcha/cat_cute.webp',
+  'captcha/tiger_squat.webp',
+  'captcha/dog_rock.webp',
+  'captcha/dog_shiba.webp',
+  'captcha/horse_eyebrow.webp',
+  'captcha/monkey_plot.webp',
+
   // All 7 Interactive Orbiting Cats (Ultra-fast WebP + PNG)
   'cats/cat1.webp',
   'cats/cat2.webp',

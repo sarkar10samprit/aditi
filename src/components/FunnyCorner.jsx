@@ -110,12 +110,16 @@ export default function FunnyCorner() {
               {/* Photo Area */}
               <div className="relative aspect-[4/5] w-full rounded-xl overflow-hidden bg-neutral-900 flex items-center justify-center border border-neutral-200/80 shadow-inner group">
                 {!hasError ? (
-                  <img
-                    src={meme.src}
-                    alt={meme.title}
-                    onError={() => handleImageError(meme.id)}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
+                  <picture className="w-full h-full flex items-center justify-center">
+                    {meme.webp && <source srcSet={meme.webp} type="image/webp" />}
+                    <img
+                      src={meme.src}
+                      alt={meme.title}
+                      loading="lazy"
+                      onError={() => handleImageError(meme.id)}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </picture>
                 ) : (
                   // Ready-to-fill Upload Slot Placeholder
                   <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-gradient-to-br from-neutral-800 to-neutral-900 border-2 border-dashed border-neutral-600 rounded-xl select-none">
@@ -209,12 +213,15 @@ export default function FunnyCorner() {
               {/* Full Image or Upload Placeholder */}
               <div className="relative w-full rounded-2xl bg-neutral-900 flex items-center justify-center overflow-hidden my-3 shadow-inner min-h-[300px]">
                 {!imgErrors[selectedMeme.id] ? (
-                  <img
-                    src={selectedMeme.src}
-                    alt={selectedMeme.title}
-                    onError={() => handleImageError(selectedMeme.id)}
-                    className="max-h-[60vh] w-auto max-w-full object-contain rounded-xl"
-                  />
+                  <picture className="max-h-[60vh] w-auto max-w-full flex items-center justify-center">
+                    {selectedMeme.webp && <source srcSet={selectedMeme.webp} type="image/webp" />}
+                    <img
+                      src={selectedMeme.src}
+                      alt={selectedMeme.title}
+                      onError={() => handleImageError(selectedMeme.id)}
+                      className="max-h-[60vh] w-auto max-w-full object-contain rounded-xl"
+                    />
+                  </picture>
                 ) : (
                   <div className="p-8 text-center flex flex-col items-center">
                     <AlertTriangle className="w-12 h-12 text-amber-400 mb-3 animate-bounce" />

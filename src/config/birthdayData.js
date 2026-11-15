@@ -339,61 +339,107 @@ I promise to always celebrate your victories like they are my own, to always hyp
     blownSuccessMessage: "Your wish has been dispatched to the stars, Coco! May every single one of your dreams come true! 🎉💖"
   },
 
-  // The Meme Vault & Chaos Corner (Awaiting User Photo Uploads)
+  // The Meme Vault & Chaos Corner (10 Unhinged Moments)
   funnyMemes: [
     {
       id: 1,
-      title: "Threat Level: Unhinged 🚨",
-      caption: "Whatever face you were making here, it belongs in an international meme museum.",
-      badge: "💀 CAUGHT IN 4K",
-      reaction: "😂",
+      title: "I showed u my nose answer me 👁️👃👁️",
+      caption: "The literal definition of accidental front-camera terror. The FBI agent watching your phone was probably crying laughing.",
+      badge: "💀 0.5X INCIDENT",
+      reaction: "😭",
       src: `${base}memes/meme1.jpg`,
+      webp: `${base}memes/meme1.webp`,
       rotation: "-2deg"
     },
     {
       id: 2,
-      title: "Side-Eye of the Century 💅",
-      caption: "The exact look you give when someone says something ridiculously stupid.",
-      badge: "💅 ILLEGAL ANGLE",
-      reaction: "💀",
+      title: "The CEO of High Volume Hair 💇‍♀️",
+      caption: "Testing out a new 10-foot tall hairstyle on video call with the most deadpan, serious stare known to humanity.",
+      badge: "💈 80s ROCKSTAR",
+      reaction: "😂",
       src: `${base}memes/meme2.jpg`,
+      webp: `${base}memes/meme2.webp`,
       rotation: "2.5deg"
     },
     {
       id: 3,
-      title: "No Context Coco 🗿",
-      caption: "Even scientists and top psychologists cannot explain what was happening here.",
-      badge: "🗿 EMOTIONAL DAMAGE",
-      reaction: "😭",
+      title: "Caught in 144p HD 📱",
+      caption: "Recorded on a microwave from 2004. You were definitely in the middle of a 5-alarm theatrical crisis over nothing.",
+      badge: "🎭 MAXIMUM DRAMA",
+      reaction: "💀",
       src: `${base}memes/meme3.jpg`,
+      webp: `${base}memes/meme3.webp`,
       rotation: "-1.5deg"
     },
     {
       id: 4,
-      title: "The Dramatic Meltdown 🎭",
-      caption: "World-class actress having a 5-alarm crisis over absolutely nothing.",
-      badge: "🎭 100% CHAOS",
-      reaction: "🤡",
+      title: "Snack Devourer Mode 🍪",
+      caption: "No thoughts, head completely empty, just pure unadulterated joy eating snacks at 2 AM with that goofy smile.",
+      badge: "😋 ZERO SHAME",
+      reaction: "✨",
       src: `${base}memes/meme4.jpg`,
-      rotation: "3deg"
+      webp: `${base}memes/meme4.webp`,
+      rotation: "2deg"
     },
     {
       id: 5,
-      title: "Sticker-Worthy Masterpiece 👑",
-      caption: "Permanently saved in my WhatsApp stickers to destroy your arguments.",
-      badge: "👑 STICKER MATERIAL",
-      reaction: "🔥",
+      title: "Daily Existential Panic 🤯",
+      caption: "When you realize your actions have consequences, or when the waiter asks what you want and your brain reboots.",
+      badge: "🚨 SYSTEM ERROR",
+      reaction: "🤡",
       src: `${base}memes/meme5.jpg`,
-      rotation: "-2.5deg"
+      webp: `${base}memes/meme5.webp`,
+      rotation: "-3deg"
     },
     {
       id: 6,
-      title: "The Ultimate Derp 🤪",
-      caption: "Proof that behind that pretty face lives a chaotic little gremlin.",
-      badge: "🚨 CERTIFIED DERP",
-      reaction: "✨",
+      title: "Golgappa One-Bite Champion 🥟",
+      caption: "Nobody will ever love you as deeply as you love stuffing giant whole street-food pieces into your mouth.",
+      badge: "🏆 FOOD VANDAL",
+      reaction: "🔥",
       src: `${base}memes/meme6.jpg`,
+      webp: `${base}memes/meme6.webp`,
       rotation: "1.8deg"
+    },
+    {
+      id: 7,
+      title: "Stealth Mango Heist 🥭",
+      caption: "Sitting at the feast looking around like you're committing an international jewel robbery with that mango slice.",
+      badge: "🦝 SUSPICIOUS RACCOON",
+      reaction: "👀",
+      src: `${base}memes/meme7.jpg`,
+      webp: `${base}memes/meme7.webp`,
+      rotation: "-2.2deg"
+    },
+    {
+      id: 8,
+      title: "Pufferfish Defense Mechanism 🐡",
+      caption: "Puffing your cheeks like you're preparing to blow up a small kingdom just because you had to tie your hair.",
+      badge: "🐡 100% PUFFER",
+      reaction: "😂",
+      src: `${base}memes/meme8.jpg`,
+      webp: `${base}memes/meme8.webp`,
+      rotation: "2.8deg"
+    },
+    {
+      id: 9,
+      title: "Planning My Demise 🌚",
+      caption: "That terrifying, iconic smirk right before you say something completely unhinged or roast me into another dimension.",
+      badge: "😈 CRIMINAL MASTERMIND",
+      reaction: "💅",
+      src: `${base}memes/meme9.jpg`,
+      webp: `${base}memes/meme9.webp`,
+      rotation: "-1.8deg"
+    },
+    {
+      id: 10,
+      title: "Unfiltered Goblin Mode 🤪",
+      caption: "My favorite kind of Coco—completely ridiculous, loud, zero filter, and laughing until your ribs hurt.",
+      badge: "👑 CERTIFIED GREMLIN",
+      reaction: "💖",
+      src: `${base}memes/meme10.jpg`,
+      webp: `${base}memes/meme10.webp`,
+      rotation: "2.2deg"
     }
   ]
 };

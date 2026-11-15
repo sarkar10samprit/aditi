@@ -17,13 +17,6 @@ export default function WishJar() {
 
     setIsSubmitting(true);
 
-    // Safe offline local backup
-    try {
-      const existing = JSON.parse(localStorage.getItem('coco_wishes') || '[]');
-      existing.push({ wish, date: new Date().toISOString() });
-      localStorage.setItem('coco_wishes', JSON.stringify(existing));
-    } catch (err) {}
-
     // Dual Parallel Dispatch: Gmail (FormSubmit) + Instant Live Relay (ntfy.sh)
     try {
       await Promise.allSettled([

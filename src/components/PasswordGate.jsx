@@ -1,25 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ArrowLeft, 
-  ArrowRight, 
-  Send, 
-  Check, 
-  Phone, 
-  Mail, 
-  MapPin, 
-  Globe, 
-  Lock, 
-  Unlock,
-  Sparkles
-} from 'lucide-react';
+import { Lock, Unlock, Sparkles } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { playChime, playPop } from '../utils/soundEffects';
 
-export default function PasswordGate({ onUnlock, isAssetsReady }) {
+export default function PasswordGate({ onUnlock }) {
   const [pin, setPin] = useState('');
   const [error, setError] = useState(false);
-  const [hintMessage, setHintMessage] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
 
   const CORRECT_PASS = '456';
@@ -48,7 +35,6 @@ export default function PasswordGate({ onUnlock, isAssetsReady }) {
       const nextPin = pin + digit;
       setPin(nextPin);
       if (nextPin.length === 3) {
-        // Auto-verify on 3rd digit
         verifyPin(nextPin);
       }
     }
@@ -58,20 +44,6 @@ export default function PasswordGate({ onUnlock, isAssetsReady }) {
     playPop();
     setError(false);
     setPin((prev) => prev.slice(0, -1));
-  };
-
-  const handleNext = () => {
-    playPop();
-    if (pin.length === 0) {
-      setHintMessage('💡 Tap 4, 5, 6 to enter Coco\'s birthday sanctuary!');
-    } else {
-      setHintMessage(`Current code: "${pin}". Passcode is 3 digits.`);
-    }
-  };
-
-  const handleSend = () => {
-    playPop();
-    setHintMessage('📲 Hint dispatched from Samprit: "The passcode is 456!"');
   };
 
   const handleSubmit = () => {
@@ -84,94 +56,78 @@ export default function PasswordGate({ onUnlock, isAssetsReady }) {
       setIsVerifying(true);
       confetti({
         particleCount: 50,
-        spread: 75,
+        spread: 80,
         origin: { y: 0.5 },
-        colors: ['#34D399', '#60A5FA', '#F472B6', '#FCD34D']
+        colors: ['#F472B6', '#FCD34D', '#34D399', '#FFFFFF']
       });
 
-      // Wait a moment for celebration feedback before unlocking
       setTimeout(() => {
         onUnlock();
       }, 700);
     } else {
       setError(true);
       playPop();
-      setHintMessage('❌ Incorrect key. Try 456 or tap "E-mail" / "Phone" below!');
       setTimeout(() => {
         setPin('');
-      }, 750);
-    }
-  };
-
-  const triggerModalHint = (type) => {
-    playPop();
-    if (type === 'phone') {
-      setHintMessage('📞 Dialing Samprit... "Hey Coco, type 456 to enter!"');
-    } else if (type === 'email') {
-      setHintMessage('✉️ New Message: From Samprit • "Passcode is 456"');
-    } else if (type === 'address') {
-      setHintMessage('📍 Location: Coco\'s 18th Birthday Sanctuary');
-    } else if (type === 'web') {
-      setHintMessage('🌐 hbdcoco-18.vercel.app • Verified VIP Portal');
+      }, 700);
     }
   };
 
   return (
-    <div 
-      className="fixed inset-0 z-[200] flex items-center justify-center p-4 select-none overflow-y-auto"
-      style={{
-        backgroundColor: '#F8FAFC',
-        backgroundImage: `
-          linear-gradient(to right, rgba(148, 163, 184, 0.12) 1px, transparent 1px),
-          linear-gradient(to bottom, rgba(148, 163, 184, 0.12) 1px, transparent 1px)
-        `,
-        backgroundSize: '24px 24px'
-      }}
-    >
-      {/* Central Glassmorphism Card */}
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 select-none overflow-hidden bg-[#180410]">
+      {/* Ambient Cosmic Liquid Glows */}
+      <div className="absolute inset-0 bg-radial from-[#380E23] via-[#1A0411] to-[#0A0107] pointer-events-none" />
+      <div className="absolute top-1/4 -left-20 w-80 h-80 bg-rose-500/20 rounded-full blur-[100px] pointer-events-none animate-pulse" />
+      <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-amber-400/15 rounded-full blur-[100px] pointer-events-none animate-pulse" style={{ animationDelay: '1.5s' }} />
+
+      {/* Central Glassmorphism Liquid Card */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 15 }}
+        initial={{ opacity: 0, scale: 0.94, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.96 }}
-        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-sm sm:max-w-md bg-white/95 backdrop-blur-xl rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.12),0_4px_16px_rgba(0,0,0,0.04)] border border-slate-200/90 p-6 sm:p-8 flex flex-col items-center my-auto"
+        exit={{ opacity: 0, scale: 1.04, filter: 'blur(10px)' }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="relative z-10 w-full max-w-[340px] sm:max-w-[370px] rounded-[32px] p-6 sm:p-7 flex flex-col items-center border border-white/20 shadow-[0_30px_70px_rgba(0,0,0,0.7),inset_0_1px_1px_rgba(255,255,255,0.25)] backdrop-blur-2xl"
+        style={{
+          background: 'linear-gradient(160deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 60%, rgba(232, 114, 155, 0.08) 100%)',
+        }}
       >
-        {/* Lock Icon & Header */}
-        <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-slate-100 to-white shadow-inner border border-slate-200 flex items-center justify-center mb-3.5">
+        {/* Liquid Glowing Lock Emblem */}
+        <div className="w-14 h-14 rounded-2xl mb-3 flex items-center justify-center relative shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_10px_25px_rgba(0,0,0,0.4)] border border-white/25 bg-gradient-to-b from-white/20 to-white/5 backdrop-blur-md">
           {isVerifying ? (
-            <Unlock className="w-6 h-6 text-emerald-500 animate-bounce" />
+            <Unlock className="w-6 h-6 text-emerald-300 drop-shadow-[0_0_12px_rgba(52,211,153,0.8)] animate-bounce" />
           ) : (
-            <Lock className="w-6 h-6 text-slate-700" />
+            <Lock className="w-6 h-6 text-pink-200 drop-shadow-[0_0_10px_rgba(244,114,182,0.6)]" />
           )}
         </div>
 
-        <h1 className="font-serif text-2xl sm:text-3xl font-bold text-slate-800 text-center tracking-tight">
-          Sanctuary Access
+        {/* Title Matching Main Page Aesthetics */}
+        <h1 className="font-serif italic text-2xl sm:text-3xl font-normal text-pink-100 text-center tracking-wide">
+          Secret Sanctuary
         </h1>
-        <p className="font-sans text-xs text-slate-500 text-center mt-1 mb-5">
-          Enter 3-digit security code to unlock Coco's celebration
+        <p className="font-sans text-[11px] sm:text-xs text-pink-200/70 text-center tracking-wider uppercase mt-1 mb-6">
+          Enter 3-digit passcode for Coco
         </p>
 
-        {/* 3 PIN Display Boxes */}
-        <motion.div 
-          animate={error ? { x: [-10, 10, -8, 8, -4, 4, 0] } : {}}
-          transition={{ duration: 0.4 }}
-          className="flex items-center justify-center gap-3.5 mb-5"
+        {/* 3 Liquid Glass PIN Display Pods */}
+        <motion.div
+          animate={error ? { x: [-8, 8, -6, 6, -3, 3, 0] } : {}}
+          transition={{ duration: 0.35 }}
+          className="flex items-center justify-center gap-3.5 mb-7"
         >
           {[0, 1, 2].map((idx) => {
             const digit = pin[idx];
             return (
               <div
                 key={idx}
-                className={`w-13 h-14 sm:w-14 sm:h-15 rounded-2xl flex items-center justify-center font-mono text-2xl font-bold transition-all duration-200 ${
+                className={`w-14 h-15 rounded-2xl flex items-center justify-center font-mono text-2xl font-bold transition-all duration-300 ${
                   error
-                    ? 'border-2 border-rose-400 bg-rose-50 text-rose-600 shadow-[0_0_15px_rgba(244,63,94,0.2)]'
+                    ? 'border-rose-400/80 bg-rose-500/20 text-rose-200 shadow-[0_0_20px_rgba(244,63,94,0.5)]'
                     : isVerifying
-                    ? 'border-2 border-emerald-400 bg-emerald-50 text-emerald-600 shadow-[0_0_15px_rgba(16,185,129,0.25)]'
+                    ? 'border-emerald-400/80 bg-emerald-500/25 text-emerald-200 shadow-[0_0_25px_rgba(52,211,153,0.6)]'
                     : digit
-                    ? 'border-2 border-slate-700 bg-slate-50 text-slate-800 shadow-sm'
-                    : 'border-2 border-slate-200 bg-white text-slate-300'
-                }`}
+                    ? 'border-pink-300/60 bg-gradient-to-b from-white/25 to-pink-500/20 text-white shadow-[0_0_18px_rgba(232,114,155,0.45),inset_0_1px_1px_rgba(255,255,255,0.5)] scale-105'
+                    : 'border-white/15 bg-white/[0.04] text-white/20 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)]'
+                } border backdrop-blur-md`}
               >
                 {digit ? digit : '•'}
               </div>
@@ -179,151 +135,84 @@ export default function PasswordGate({ onUnlock, isAssetsReady }) {
           })}
         </motion.div>
 
-        {/* Dynamic Hint / Status Banner */}
-        <div className="min-h-[22px] flex items-center justify-center mb-3">
-          {hintMessage && (
-            <p className="font-sans text-xs font-semibold text-slate-600 text-center animate-fade-in">
-              {hintMessage}
-            </p>
-          )}
-        </div>
+        {/* Liquid Keypad: Numbers 1-9, Erase, 0, Custom Liquid Tick */}
+        <div className="grid grid-cols-3 gap-3 w-full">
+          {/* Numbers 1 through 9 */}
+          {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((num) => (
+            <motion.button
+              key={num}
+              whileTap={{ scale: 0.91 }}
+              onClick={() => handleDigitPress(num)}
+              type="button"
+              className="h-13.5 rounded-2xl font-sans text-xl font-medium text-pink-100 flex items-center justify-center cursor-pointer transition-all border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.35),0_6px_16px_rgba(0,0,0,0.3)] hover:border-pink-300/40 hover:shadow-[0_0_15px_rgba(232,114,155,0.3)] active:bg-white/20 backdrop-blur-md"
+              style={{
+                background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.04) 100%)'
+              }}
+            >
+              {num}
+            </motion.button>
+          ))}
 
-        {/* Numeric Keypad for Mobile / Mouse Taps */}
-        <div className="grid grid-cols-3 gap-2.5 w-full max-w-[280px] mb-5">
-          {['1', '2', '3', '4', '5', '6', '7', '8', '9', 'C', '0', '⌫'].map((item) => {
-            const isClear = item === 'C';
-            const isBack = item === '⌫';
-            return (
-              <button
-                key={item}
-                type="button"
-                onClick={() => {
-                  if (isClear) {
-                    playPop();
-                    setPin('');
-                    setError(false);
-                  } else if (isBack) {
-                    handleBackspace();
-                  } else {
-                    handleDigitPress(item);
-                  }
-                }}
-                className={`h-11 rounded-xl font-sans text-sm font-semibold transition-all cursor-pointer flex items-center justify-center active:scale-95 ${
-                  isClear || isBack
-                    ? 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                    : 'bg-white hover:bg-slate-50 text-slate-800 shadow-sm border border-slate-200 hover:border-slate-300'
-                }`}
-              >
-                {item}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* 4 Large Rounded Rectangular Buttons */}
-        <div className="w-full grid grid-cols-2 gap-2.5 sm:gap-3 mb-6">
-          {/* Back Button */}
-          <button
-            type="button"
+          {/* Erase / Backspace Liquid Button */}
+          <motion.button
+            whileTap={{ scale: 0.91 }}
             onClick={handleBackspace}
-            className="flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-gradient-to-b from-white to-slate-50 border border-slate-200/90 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-md hover:border-slate-300 text-slate-700 font-sans text-xs sm:text-sm font-semibold transition-all active:scale-95 cursor-pointer"
-          >
-            <ArrowLeft className="w-4 h-4 text-slate-600" />
-            <span>Back</span>
-          </button>
-
-          {/* Next Button */}
-          <button
             type="button"
-            onClick={handleNext}
-            className="flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-gradient-to-b from-white to-slate-50 border border-slate-200/90 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-md hover:border-slate-300 text-slate-700 font-sans text-xs sm:text-sm font-semibold transition-all active:scale-95 cursor-pointer"
+            title="Erase"
+            className="h-13.5 rounded-2xl flex items-center justify-center cursor-pointer transition-all border border-rose-300/25 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_6px_16px_rgba(0,0,0,0.3)] hover:border-rose-400/40 hover:shadow-[0_0_15px_rgba(244,114,182,0.3)] backdrop-blur-md text-pink-200"
+            style={{
+              background: 'linear-gradient(145deg, rgba(244, 114, 182, 0.22) 0%, rgba(255, 255, 255, 0.04) 100%)'
+            }}
           >
-            <span>Next</span>
-            <ArrowRight className="w-4 h-4 text-slate-600" />
-          </button>
+            {/* Custom Handcrafted Liquid Erase Icon */}
+            <svg viewBox="0 0 24 24" className="w-5 h-5 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
+              <path
+                d="M 20 6 L 9 6 L 3.5 12 L 9 18 L 20 18 C 20.6 18 21 17.6 21 17 L 21 7 C 21 6.4 20.6 6 20 6 Z M 12 9.5 L 16.5 14.5 M 16.5 9.5 L 12 14.5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </motion.button>
 
-          {/* Send Button (Blue airplane with soft blue glow on left) */}
-          <button
+          {/* Number 0 */}
+          <motion.button
+            whileTap={{ scale: 0.91 }}
+            onClick={() => handleDigitPress('0')}
             type="button"
-            onClick={handleSend}
-            className="relative flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-gradient-to-b from-white to-blue-50/30 border border-slate-200/90 border-l-4 border-l-blue-500 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[-6px_0_16px_-2px_rgba(59,130,246,0.35)] text-slate-700 font-sans text-xs sm:text-sm font-semibold transition-all active:scale-95 cursor-pointer"
+            className="h-13.5 rounded-2xl font-sans text-xl font-medium text-pink-100 flex items-center justify-center cursor-pointer transition-all border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.35),0_6px_16px_rgba(0,0,0,0.3)] hover:border-pink-300/40 hover:shadow-[0_0_15px_rgba(232,114,155,0.3)] active:bg-white/20 backdrop-blur-md"
+            style={{
+              background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.04) 100%)'
+            }}
           >
-            <Send className="w-4 h-4 text-blue-500" />
-            <span>Send</span>
-          </button>
+            0
+          </motion.button>
 
-          {/* Submit Button (Green checkmark with soft green glow on left) */}
-          <button
-            type="button"
+          {/* Custom Liquid Tick Button (No emoji, custom handcrafted SVG tick) */}
+          <motion.button
+            whileTap={{ scale: 0.91 }}
             onClick={handleSubmit}
-            className="relative flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-gradient-to-b from-white to-emerald-50/30 border border-slate-200/90 border-l-4 border-l-emerald-500 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[-6px_0_16px_-2px_rgba(34,197,94,0.35)] text-slate-700 font-sans text-xs sm:text-sm font-semibold transition-all active:scale-95 cursor-pointer"
+            type="button"
+            title="Unlock"
+            className="h-13.5 rounded-2xl flex items-center justify-center cursor-pointer transition-all border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_6px_20px_rgba(16,185,129,0.35)] hover:border-emerald-300 hover:shadow-[0_0_22px_rgba(52,211,153,0.55)] backdrop-blur-md text-emerald-300"
+            style={{
+              background: 'linear-gradient(145deg, rgba(52, 211, 153, 0.32) 0%, rgba(16, 185, 129, 0.12) 100%)'
+            }}
           >
-            <Check className="w-4 h-4 text-emerald-500 stroke-[2.5]" />
-            <span>Submit</span>
-          </button>
-        </div>
-
-        {/* 4 Smaller Circular Icon Buttons with Minimalist Labels */}
-        <div className="w-full pt-5 border-t border-slate-100 flex items-center justify-around px-2">
-          {/* Phone */}
-          <div className="flex flex-col items-center">
-            <button
-              type="button"
-              onClick={() => triggerModalHint('phone')}
-              title="Get phone hint"
-              className="w-11 h-11 rounded-full bg-white border border-slate-200/90 shadow-sm hover:shadow-md flex items-center justify-center text-slate-800 hover:scale-105 active:scale-95 transition-all cursor-pointer"
-            >
-              <Phone className="w-4 h-4 text-slate-800" />
-            </button>
-            <span className="font-sans text-[11px] font-medium text-slate-600 mt-1.5 tracking-tight">
-              Phone
-            </span>
-          </div>
-
-          {/* E-mail */}
-          <div className="flex flex-col items-center">
-            <button
-              type="button"
-              onClick={() => triggerModalHint('email')}
-              title="Get e-mail hint"
-              className="w-11 h-11 rounded-full bg-white border border-slate-200/90 shadow-sm hover:shadow-md flex items-center justify-center text-slate-800 hover:scale-105 active:scale-95 transition-all cursor-pointer"
-            >
-              <Mail className="w-4 h-4 text-slate-800" />
-            </button>
-            <span className="font-sans text-[11px] font-medium text-slate-600 mt-1.5 tracking-tight">
-              E-mail
-            </span>
-          </div>
-
-          {/* Address */}
-          <div className="flex flex-col items-center">
-            <button
-              type="button"
-              onClick={() => triggerModalHint('address')}
-              title="View location info"
-              className="w-11 h-11 rounded-full bg-white border border-slate-200/90 shadow-sm hover:shadow-md flex items-center justify-center text-slate-800 hover:scale-105 active:scale-95 transition-all cursor-pointer"
-            >
-              <MapPin className="w-4 h-4 text-slate-800" />
-            </button>
-            <span className="font-sans text-[11px] font-medium text-slate-600 mt-1.5 tracking-tight">
-              Address
-            </span>
-          </div>
-
-          {/* Web */}
-          <div className="flex flex-col items-center">
-            <button
-              type="button"
-              onClick={() => triggerModalHint('web')}
-              title="View domain info"
-              className="w-11 h-11 rounded-full bg-white border border-slate-200/90 shadow-sm hover:shadow-md flex items-center justify-center text-slate-800 hover:scale-105 active:scale-95 transition-all cursor-pointer"
-            >
-              <Globe className="w-4 h-4 text-slate-800" />
-            </button>
-            <span className="font-sans text-[11px] font-medium text-slate-600 mt-1.5 tracking-tight">
-              Web
-            </span>
-          </div>
+            {/* Custom Handcrafted Vector Tick Icon */}
+            <svg viewBox="0 0 24 24" className="w-6 h-6 drop-shadow-[0_0_8px_rgba(52,211,153,0.85)]">
+              <path
+                d="M 4.5 12.5 L 9.5 17.5 L 19.5 6.5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </motion.button>
         </div>
       </motion.div>
     </div>

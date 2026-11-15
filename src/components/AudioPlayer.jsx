@@ -22,21 +22,86 @@ export default function AudioPlayer() {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [floatingNotes, setFloatingNotes] = useState([]);
+  const [volume, setVolume] = useState(0.20); // 20%: Golden ratio for ambient "back of the mind" volume
+  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   
   const audioRef = useRef(null);
   const trackIndexRef = useRef(0);
   const isPlayingRef = useRef(false);
+  const volumeRef = useRef(0.20);
+  const fadeAnimRef = useRef(null);
 
   // Sync ref values for access in async events
   trackIndexRef.current = currentTrackIndex;
   isPlayingRef.current = isPlaying;
+  volumeRef.current = volume;
+
+  const cancelFade = () => {
+    if (fadeAnimRef.current) {
+      cancelAnimationFrame(fadeAnimRef.current);
+      fadeAnimRef.current = null;
+    }
+  };
+
+  /**
+   * Psychoacoustic smooth fade-in: ramps volume effortlessly so it feels
+   * like entering subconscious background thoughts rather than cutting in.
+   */
+  const smoothFadeIn = (audio, targetVol = volumeRef.current, durationMs = 1500) => {
+    if (!audio) return;
+    cancelFade();
+    audio.volume = 0;
+    const startTime = performance.now();
+
+    const step = (now) => {
+      const progress = Math.min((now - startTime) / durationMs, 1);
+      // Ease-out quadratic curve for natural sound entry
+      const current = targetVol * (1 - (1 - progress) * (1 - progress));
+      audio.volume = Math.min(Math.max(current, 0), 1);
+
+      if (progress < 1) {
+        fadeAnimRef.current = requestAnimationFrame(step);
+      } else {
+        audio.volume = targetVol;
+        fadeAnimRef.current = null;
+      }
+    };
+    fadeAnimRef.current = requestAnimationFrame(step);
+  };
+
+  /**
+   * Gentle fade-out before pausing to avoid harsh sudden clicks
+   */
+  const smoothFadeOut = (audio, durationMs = 350) => {
+    return new Promise((resolve) => {
+      if (!audio) return resolve();
+      cancelFade();
+      const startVol = audio.volume;
+      const startTime = performance.now();
+
+      const step = (now) => {
+        const progress = Math.min((now - startTime) / durationMs, 1);
+        audio.volume = Math.max(0, startVol * (1 - progress));
+
+        if (progress < 1) {
+          fadeAnimRef.current = requestAnimationFrame(step);
+        } else {
+          audio.pause();
+          audio.volume = volumeRef.current;
+          fadeAnimRef.current = null;
+          resolve();
+        }
+      };
+      fadeAnimRef.current = requestAnimationFrame(step);
+    });
+  };
 
   const currentTrack = playlist[currentTrackIndex] || playlist[0];
 
   useEffect(() => {
     const audio = new Audio(playlist[0].src);
     audio.loop = false; // Must be false so 'ended' fires to switch tracks!
-    audio.volume = 0.55;
+    audio.volume = 0.20; // Default gentle ambient background level
     audioRef.current = audio;
 
     const handleEnded = () => {
@@ -50,6 +115,7 @@ export default function AudioPlayer() {
       audio.load();
       audio.play().then(() => {
         setIsPlaying(true);
+        smoothFadeIn(audio, volumeRef.current, 1800);
       }).catch((err) => {
         console.warn('Playback transition error:', err);
       });
@@ -58,6 +124,7 @@ export default function AudioPlayer() {
     audio.addEventListener('ended', handleEnded);
 
     return () => {
+      cancelFade();
       audio.pause();
       audio.removeEventListener('ended', handleEnded);
       audioRef.current = null;
@@ -92,11 +159,13 @@ export default function AudioPlayer() {
     if (!audio) return;
 
     if (isPlaying) {
-      audio.pause();
-      setIsPlaying(false);
+      smoothFadeOut(audio, 300).then(() => {
+        setIsPlaying(false);
+      });
     } else {
       audio.play().then(() => {
         setIsPlaying(true);
+        smoothFadeIn(audio, volumeRef.current, 1600);
       }).catch((err) => {
         console.warn('Audio playback error:', err);
       });
@@ -117,7 +186,9 @@ export default function AudioPlayer() {
     audio.currentTime = 0;
     audio.load();
     if (isPlaying) {
-      audio.play().catch((err) => console.warn('Audio error:', err));
+      audio.play().then(() => {
+        smoothFadeIn(audio, volumeRef.current, 1500);
+      }).catch((err) => console.warn('Audio error:', err));
     }
   };
 
@@ -257,8 +328,12 @@ export default function AudioPlayer() {
           </div>
         </div>
 
-        {/* Action icons: Skip to next track & Sound toggle */}
-        <div className="flex items-center gap-1 pl-0.5">
+        {/* Action icons: Skip, Volume Icon & Mini Background Volume Slider */}
+        <div
+          className="flex items-center gap-1 pl-0.5"
+          onMouseEnter={() => setShowVolumeSlider(true)}
+          onMouseLeave={() => setShowVolumeSlider(false)}
+        >
           <button
             type="button"
             onClick={nextTrack}
@@ -267,12 +342,51 @@ export default function AudioPlayer() {
           >
             <SkipForward className="w-3.5 h-3.5" />
           </button>
-          <div className="text-white/70 group-hover:text-pink-300 transition-colors">
+
+          {/* Volume toggle & slider trigger */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowVolumeSlider((prev) => !prev);
+            }}
+            title={`Ambient background volume (Currently ${Math.round(volume * 100)}%)`}
+            className="p-1 rounded-full text-white/70 hover:text-pink-300 hover:bg-white/10 transition-colors cursor-pointer"
+          >
             {isPlaying ? (
               <Volume2 className="w-4 h-4 text-pink-300" />
             ) : (
               <VolumeX className="w-4 h-4 text-white/40" />
             )}
+          </button>
+
+          {/* Smooth Ambient Slider (Reveals on hover or tap) */}
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className={`transition-all duration-300 flex items-center gap-1.5 overflow-hidden ${
+              showVolumeSlider ? 'w-24 opacity-100 ml-0.5' : 'w-0 opacity-0 pointer-events-none'
+            }`}
+          >
+            <input
+              type="range"
+              min="0.04"
+              max="0.55"
+              step="0.01"
+              value={volume}
+              onChange={(e) => {
+                const newVol = parseFloat(e.target.value);
+                setVolume(newVol);
+                volumeRef.current = newVol;
+                if (audioRef.current && isPlaying) {
+                  audioRef.current.volume = newVol;
+                }
+              }}
+              className="w-14 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-pink-400"
+              title={`Background Volume: ${Math.round(volume * 100)}%`}
+            />
+            <span className="font-mono text-[9px] text-pink-200/80 font-bold shrink-0">
+              {Math.round(volume * 100)}%
+            </span>
           </div>
         </div>
       </div>

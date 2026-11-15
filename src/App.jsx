@@ -195,9 +195,9 @@ export default function App() {
         <FunnyCorner
           initialOpen={unlockMode === 'memes'}
           isMemeMode={unlockMode === 'memes'}
-          onSwitchToMain={() => {
+          onBack={() => {
+            setIsUnlocked(false);
             setUnlockMode('romantic');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
         />
         <ParchmentLetter />

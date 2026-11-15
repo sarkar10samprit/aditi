@@ -271,9 +271,13 @@ export default function AudioPlayer({ autoPlay = false, mode = 'romantic' }) {
     }
   }, [mode, autoPlay]);
 
-  // React to autoPlay prop update (when entering main page)
+  // React to autoPlay prop update (when entering main page or going back to password)
   useEffect(() => {
-    if (autoPlay && !isPlaying && audioRef.current) {
+    if (!autoPlay && audioRef.current) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+      isPlayingRef.current = false;
+    } else if (autoPlay && !isPlaying && audioRef.current) {
       if (!isPlayingRef.current) {
         audioRef.current.volume = volumeRef.current; // 20% default sound
         audioRef.current.play().then(() => {
@@ -334,6 +338,11 @@ export default function AudioPlayer({ autoPlay = false, mode = 'romantic' }) {
     const nextIndex = (trackIndexRef.current + 1) % currentList.length;
     playTrack(nextIndex);
   };
+
+  // If in meme mode, completely hide the top-right music UI while keeping background playback running
+  if (mode === 'memes') {
+    return null;
+  }
 
   return (
     <div className="fixed top-5 right-5 z-[110] flex items-center select-none">

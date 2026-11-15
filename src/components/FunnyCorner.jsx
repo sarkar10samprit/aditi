@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ZoomIn } from 'lucide-react';
+import { X, ZoomIn, ArrowLeft } from 'lucide-react';
 import { birthdayData } from '../config/birthdayData';
 import { playPop } from '../utils/soundEffects';
 
-export default function FunnyCorner({ initialOpen = false, isMemeMode = false, onSwitchToMain = null }) {
+export default function FunnyCorner({ initialOpen = false, isMemeMode = false, onBack = null }) {
   const [isChamberOpen, setIsChamberOpen] = useState(initialOpen);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
 
@@ -28,7 +28,7 @@ export default function FunnyCorner({ initialOpen = false, isMemeMode = false, o
     };
   }, [isChamberOpen]);
 
-  // Handle ESC key to close modals
+  // Handle ESC key to close modals or return to password page
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
@@ -36,12 +36,15 @@ export default function FunnyCorner({ initialOpen = false, isMemeMode = false, o
           setSelectedPhoto(null);
         } else if (isChamberOpen) {
           setIsChamberOpen(false);
+          if (isMemeMode && onBack) {
+            onBack();
+          }
         }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedPhoto, isChamberOpen]);
+  }, [selectedPhoto, isChamberOpen, isMemeMode, onBack]);
 
   return (
     <section id="funny-corner" className="py-10 sm:py-14 px-4 sm:px-6 max-w-4xl mx-auto select-none">
@@ -94,22 +97,20 @@ export default function FunnyCorner({ initialOpen = false, isMemeMode = false, o
                 </p>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex items-center gap-2">
-                {onSwitchToMain && (
-                  <button
-                    onClick={() => {
-                      playPop();
-                      setIsChamberOpen(false);
-                      onSwitchToMain();
-                    }}
-                    className="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500/80 to-rose-400/80 hover:from-pink-500 hover:to-rose-400 text-white font-sans text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-all cursor-pointer border border-pink-300/40 shadow-[0_0_15px_rgba(232,114,155,0.4)]"
-                  >
-                    <span>Romantic Sanctuary 🌸✨</span>
-                  </button>
-                )}
-
-                {/* Close Chamber Button */}
+              {/* Top Bar Action Button: Back to password page */}
+              {isMemeMode ? (
+                <button
+                  onClick={() => {
+                    playPop();
+                    setIsChamberOpen(false);
+                    if (onBack) onBack();
+                  }}
+                  className="px-4 py-2 rounded-full bg-white/15 hover:bg-white/25 text-white font-sans text-xs sm:text-sm font-semibold flex items-center gap-2 transition-all cursor-pointer border border-white/25 shadow-lg active:scale-95"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  <span>Back</span>
+                </button>
+              ) : (
                 <button
                   onClick={() => {
                     playPop();
@@ -120,7 +121,7 @@ export default function FunnyCorner({ initialOpen = false, isMemeMode = false, o
                   <X className="w-4 h-4" />
                   <span className="hidden sm:inline">Close</span>
                 </button>
-              </div>
+              )}
             </div>
 
             {/* Meme Photos Grid (Title-less and Caption-less) */}
@@ -171,28 +172,30 @@ export default function FunnyCorner({ initialOpen = false, isMemeMode = false, o
             </div>
 
             {/* Bottom Action Buttons */}
-            <div className="mt-4 mb-8 flex flex-col sm:flex-row items-center gap-3">
-              {onSwitchToMain && (
+            <div className="mt-4 mb-8 flex items-center justify-center">
+              {isMemeMode ? (
                 <button
                   onClick={() => {
                     playPop();
                     setIsChamberOpen(false);
-                    onSwitchToMain();
+                    if (onBack) onBack();
+                  }}
+                  className="luxury-button px-8 py-3 rounded-full text-white font-sans text-xs sm:text-sm font-semibold tracking-wider uppercase flex items-center gap-2 cursor-pointer shadow-xl hover:scale-105 active:scale-95 transition-all"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  <span>Back</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    playPop();
+                    setIsChamberOpen(false);
                   }}
                   className="luxury-button px-8 py-3 rounded-full text-white font-sans text-xs sm:text-sm font-semibold tracking-wider uppercase cursor-pointer"
                 >
-                  Switch to Romantic Sanctuary 🌸✨
+                  Back to Celebration ✨
                 </button>
               )}
-              <button
-                onClick={() => {
-                  playPop();
-                  setIsChamberOpen(false);
-                }}
-                className="px-6 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-sans text-xs sm:text-sm font-semibold tracking-wider cursor-pointer border border-white/20"
-              >
-                Close Chamber 🚪
-              </button>
             </div>
           </motion.div>
         )}

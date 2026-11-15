@@ -24,22 +24,35 @@ export default function WishJar() {
       localStorage.setItem('coco_wishes', JSON.stringify(existing));
     } catch (err) {}
 
-    // Send directly to Gmail inbox via FormSubmit AJAX API
+    // Dual Parallel Dispatch: Gmail (FormSubmit) + Instant Live Relay (ntfy.sh)
     try {
-      await fetch(`https://formsubmit.co/ajax/${recipientEmail}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          'From': 'Coco ❤️',
-          'Birthday Wish': wish,
-          '_subject': '🎂 New Birthday Wish from Coco! ✨',
-          '_template': 'table',
-          '_captcha': 'false'
+      await Promise.allSettled([
+        // Channel 1: FormSubmit to your verified Gmail
+        fetch(`https://formsubmit.co/ajax/${recipientEmail}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            'From': 'Coco ❤️',
+            'Birthday Wish': wish,
+            '_subject': '🎂 New Birthday Wish from Coco! ✨',
+            '_template': 'table',
+            '_captcha': 'false'
+          })
+        }),
+        // Channel 2: Instant 0ms Live Relay (Direct push notification & web feed)
+        fetch('https://ntfy.sh/coco-wish-samprit', {
+          method: 'POST',
+          headers: {
+            'Title': '🎂 Coco Sealed a Birthday Wish! ✨',
+            'Priority': 'urgent',
+            'Tags': 'tada,birthday,heart'
+          },
+          body: `Coco's Birthday Wish:\n\n"${wish}"\n\nTime: ${new Date().toLocaleTimeString()}`
         })
-      });
+      ]);
     } catch (err) {
       console.warn('Submission notice:', err);
     } finally {

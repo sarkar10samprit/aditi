@@ -339,35 +339,6 @@ I promise to always celebrate your victories like they are my own, to always hyp
     blownSuccessMessage: "Your wish has been dispatched to the stars, Coco! May every single one of your dreams come true! 🎉💖"
   },
 
-  // 18-Star Celestial Constellation Map (Spelling "C O C O" in the night sky)
-  constellationData: [
-    // Letter C (Stars 1 - 4)
-    { id: 1, letter: 'C', x: 200, y: 70, title: "Your Radiant Smile", text: "The way your eyes crinkle when you can't stop laughing." },
-    { id: 2, letter: 'C', x: 110, y: 110, title: "Everyday Magic", text: "How you make even the most boring Tuesday feel like an adventure." },
-    { id: 3, letter: 'C', x: 110, y: 230, title: "Unapologetic Sass", text: "Your ridiculous, playful attitude that always leaves me smiling." },
-    { id: 4, letter: 'C', x: 200, y: 270, title: "Always There", text: "The quiet comfort of knowing you're always just one text away." },
-
-    // Letter O (Stars 5 - 9)
-    { id: 5, letter: 'O', x: 350, y: 60, title: "Gentle Warmth", text: "That genuine warmth you carry without even trying to prove it." },
-    { id: 6, letter: 'O', x: 420, y: 140, title: "How You Listen", text: "How you listen so deeply, like every word actually matters." },
-    { id: 7, letter: 'O', x: 400, y: 260, title: "Midnight Chaos", text: "The chaotic 2 AM rants that keep me smiling for days afterwards." },
-    { id: 8, letter: 'O', x: 300, y: 260, title: "Quiet Strength", text: "Your quiet resilience, even on the days you think you're being weak." },
-    { id: 9, letter: 'O', x: 280, y: 140, title: "Irreplaceable", text: "How completely irreplaceable you are to everyone who truly knows you." },
-
-    // Letter C (Stars 10 - 13)
-    { id: 10, letter: 'C', x: 600, y: 70, title: "The Iconic Head-Tilt", text: "That iconic little head-tilt when you know you're 100% right." },
-    { id: 11, letter: 'C', x: 510, y: 110, title: "A Heart of Gold", text: "Your soft, caring heart that genuinely deserves the whole universe." },
-    { id: 12, letter: 'C', x: 510, y: 230, title: "Zero Pretense", text: "The way you never have to pretend to be anyone else around me." },
-    { id: 13, letter: 'C', x: 600, y: 270, title: "Unfiltered Laughter", text: "All the ridiculous, breathless giggles we've shared across the distance." },
-
-    // Letter O (Stars 14 - 18)
-    { id: 14, letter: 'O', x: 750, y: 60, title: "Core Memories", text: "How you turn the simplest little moments into memories saved forever." },
-    { id: 15, letter: 'O', x: 820, y: 140, title: "Fierce Loyalty", text: "Your loyalty—you stand by your people through thick and thin." },
-    { id: 16, letter: 'O', x: 800, y: 260, title: "That Beautiful Mind", text: "That wonderfully creative brain that thinks of things nobody else would." },
-    { id: 17, letter: 'O', x: 700, y: 260, title: "A Promise for Us", text: "The promise of our first real hug waiting for us in the future." },
-    { id: 18, letter: 'O', x: 680, y: 140, title: "Simply Coco ✨", text: "Simply because you are Coco—my absolute favorite person in this cosmos." }
-  ],
-
   // The Meme Vault & Chaos Corner (10 Unhinged Moments)
   funnyMemes: [
     {

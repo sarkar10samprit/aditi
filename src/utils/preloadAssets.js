@@ -100,6 +100,8 @@ export async function preloadAllAssets(onProgress) {
     fetch(`${base}birthday_song.mp3`).catch(() => {});
     fetch(`${base}this_love.mp3`).catch(() => {});
     fetch(`${base}cat_meow.mp3`).catch(() => {});
+    fetch(`${base}ale-le-le.mp3`).catch(() => {});
+    fetch(`${base}aji-mangal.mp3`).catch(() => {});
   } catch (e) {}
 
   const promises = ASSETS_TO_PRELOAD.map(async (assetPath) => {

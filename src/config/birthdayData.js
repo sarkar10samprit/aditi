@@ -71,6 +71,22 @@ export const birthdayData = {
     }
   ],
 
+  // Secret Meme Music Playlist for Passcode 654 (Plays "Ale Le Le", then "Aji Mangal", looping 1 -> 2 -> 1 -> 2)
+  memePlaylist: [
+    {
+      id: 'meme-1',
+      title: "Ale Le Le",
+      artist: "Desi Meme",
+      src: `${base}ale-le-le.mp3`
+    },
+    {
+      id: 'meme-2',
+      title: "Aji Mangal",
+      artist: "Classic Meme",
+      src: `${base}aji-mangal.mp3`
+    }
+  ],
+
   // Photo Gallery (Curated memories of Coco)
   photos: [
     {

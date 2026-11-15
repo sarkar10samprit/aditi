@@ -12,6 +12,7 @@ export default function PasswordGate({ onUnlock }) {
   const [isVerifying, setIsVerifying] = useState(false);
 
   const CORRECT_PASS = '456';
+  const MEME_PASS = '654';
 
   // Listen to physical keyboard events (0-9, Backspace, Enter) only while on PIN screen
   useEffect(() => {
@@ -51,6 +52,29 @@ export default function PasswordGate({ onUnlock }) {
   };
 
   const verifyPin = (codeToVerify) => {
+    // Secret Easter Egg Passcode: Direct Entry to Meme Chamber & Meme Music!
+    if (codeToVerify === MEME_PASS) {
+      playChime();
+      setIsVerifying(true);
+
+      confetti({
+        particleCount: 65,
+        spread: 95,
+        origin: { y: 0.5 },
+        colors: ['#F59E0B', '#EF4444', '#10B981', '#EC4899', '#8B5CF6']
+      });
+
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('unlock-success', { detail: { mode: 'memes' } }));
+      }
+
+      setTimeout(() => {
+        setIsVerifying(false);
+        onUnlock('memes');
+      }, 550);
+      return;
+    }
+
     if (codeToVerify === CORRECT_PASS) {
       playChime();
       setIsVerifying(true);
@@ -66,13 +90,14 @@ export default function PasswordGate({ onUnlock }) {
         setIsVerifying(false);
         setStage('captcha');
       }, 550);
-    } else {
-      setError(true);
-      playPop();
-      setTimeout(() => {
-        setPin('');
-      }, 700);
+      return;
     }
+
+    setError(true);
+    playPop();
+    setTimeout(() => {
+      setPin('');
+    }, 700);
   };
 
   return (
@@ -221,7 +246,7 @@ export default function PasswordGate({ onUnlock }) {
         </div>
           </motion.div>
         ) : (
-          <RobotCaptcha key="captcha-card" onSuccess={onUnlock} />
+          <RobotCaptcha key="captcha-card" onSuccess={() => onUnlock('main')} />
         )}
       </AnimatePresence>
     </div>

@@ -4,9 +4,15 @@ import { X, ZoomIn } from 'lucide-react';
 import { birthdayData } from '../config/birthdayData';
 import { playPop } from '../utils/soundEffects';
 
-export default function FunnyCorner() {
-  const [isChamberOpen, setIsChamberOpen] = useState(false);
+export default function FunnyCorner({ initialOpen = false, isMemeMode = false, onSwitchToMain = null }) {
+  const [isChamberOpen, setIsChamberOpen] = useState(initialOpen);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
+
+  useEffect(() => {
+    if (initialOpen) {
+      setIsChamberOpen(true);
+    }
+  }, [initialOpen]);
 
   const memes = birthdayData.funnyMemes || [];
 
@@ -82,21 +88,39 @@ export default function FunnyCorner() {
                   The meme corner 😂🌚
                 </h3>
                 <p className="font-sans text-xs sm:text-sm text-pink-200/80 font-normal mt-0.5">
-                  Birthday pe ye vi toh chalta haiii
+                  {isMemeMode
+                    ? '🎉 Secret Passcode 654 Unlocked! Birthday pe ye vi toh chalta haiii'
+                    : 'Birthday pe ye vi toh chalta haiii'}
                 </p>
               </div>
 
-              {/* Close Chamber Button */}
-              <button
-                onClick={() => {
-                  playPop();
-                  setIsChamberOpen(false);
-                }}
-                className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white font-sans text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border border-white/20"
-              >
-                <X className="w-4 h-4" />
-                <span className="hidden sm:inline">Back to Celebration</span>
-              </button>
+              {/* Action Buttons */}
+              <div className="flex items-center gap-2">
+                {onSwitchToMain && (
+                  <button
+                    onClick={() => {
+                      playPop();
+                      setIsChamberOpen(false);
+                      onSwitchToMain();
+                    }}
+                    className="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500/80 to-rose-400/80 hover:from-pink-500 hover:to-rose-400 text-white font-sans text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-all cursor-pointer border border-pink-300/40 shadow-[0_0_15px_rgba(232,114,155,0.4)]"
+                  >
+                    <span>Romantic Sanctuary 🌸✨</span>
+                  </button>
+                )}
+
+                {/* Close Chamber Button */}
+                <button
+                  onClick={() => {
+                    playPop();
+                    setIsChamberOpen(false);
+                  }}
+                  className="px-3.5 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white font-sans text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border border-white/20"
+                >
+                  <X className="w-4 h-4" />
+                  <span className="hidden sm:inline">Close</span>
+                </button>
+              </div>
             </div>
 
             {/* Meme Photos Grid (Title-less and Caption-less) */}
@@ -146,16 +170,28 @@ export default function FunnyCorner() {
               ))}
             </div>
 
-            {/* Bottom Close Button */}
-            <div className="mt-4 mb-8">
+            {/* Bottom Action Buttons */}
+            <div className="mt-4 mb-8 flex flex-col sm:flex-row items-center gap-3">
+              {onSwitchToMain && (
+                <button
+                  onClick={() => {
+                    playPop();
+                    setIsChamberOpen(false);
+                    onSwitchToMain();
+                  }}
+                  className="luxury-button px-8 py-3 rounded-full text-white font-sans text-xs sm:text-sm font-semibold tracking-wider uppercase cursor-pointer"
+                >
+                  Switch to Romantic Sanctuary 🌸✨
+                </button>
+              )}
               <button
                 onClick={() => {
                   playPop();
                   setIsChamberOpen(false);
                 }}
-                className="luxury-button px-8 py-3 rounded-full text-white font-sans text-xs sm:text-sm font-semibold tracking-wider uppercase cursor-pointer"
+                className="px-6 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-sans text-xs sm:text-sm font-semibold tracking-wider cursor-pointer border border-white/20"
               >
-                Back to Celebration ✨
+                Close Chamber 🚪
               </button>
             </div>
           </motion.div>

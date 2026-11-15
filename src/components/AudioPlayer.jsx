@@ -3,8 +3,8 @@ import { Volume2, VolumeX, Heart, Sparkles, SkipForward } from 'lucide-react';
 import { birthdayData } from '../config/birthdayData';
 import { playPop } from '../utils/soundEffects';
 
-export default function AudioPlayer({ autoPlay = false }) {
-  const playlist = birthdayData.playlist || [
+export default function AudioPlayer({ autoPlay = false, mode = 'romantic' }) {
+  const romanticPlaylist = birthdayData.playlist || [
     {
       id: 1,
       title: 'Her',
@@ -19,6 +19,23 @@ export default function AudioPlayer({ autoPlay = false }) {
     }
   ];
 
+  const memePlaylist = birthdayData.memePlaylist || [
+    {
+      id: 'meme-1',
+      title: 'Ale Le Le',
+      artist: 'Desi Meme',
+      src: `${import.meta.env.BASE_URL}ale-le-le.mp3`
+    },
+    {
+      id: 'meme-2',
+      title: 'Aji Mangal',
+      artist: 'Classic Meme',
+      src: `${import.meta.env.BASE_URL}aji-mangal.mp3`
+    }
+  ];
+
+  const playlist = mode === 'memes' ? memePlaylist : romanticPlaylist;
+
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [floatingNotes, setFloatingNotes] = useState([]);
@@ -26,15 +43,19 @@ export default function AudioPlayer({ autoPlay = false }) {
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   
   const audioRef = useRef(null);
+  const playlistRef = useRef(playlist);
   const trackIndexRef = useRef(0);
   const isPlayingRef = useRef(false);
   const volumeRef = useRef(0.20);
   const fadeAnimRef = useRef(null);
+  const modeRef = useRef(mode);
 
   // Sync ref values for access in async events
+  playlistRef.current = playlist;
   trackIndexRef.current = currentTrackIndex;
   isPlayingRef.current = isPlaying;
   volumeRef.current = volume;
+  modeRef.current = mode;
 
   const cancelFade = () => {
     if (fadeAnimRef.current) {
@@ -108,21 +129,22 @@ export default function AudioPlayer({ autoPlay = false }) {
 
   const playTrack = (index) => {
     const audio = audioRef.current;
-    if (!audio) return;
+    const currentList = playlistRef.current;
+    if (!audio || !currentList || !currentList[index]) return;
 
     cancelFade();
     trackIndexRef.current = index;
     setCurrentTrackIndex(index);
 
     // Direct source change without audio.load() to prevent AbortError
-    if (audio.src !== playlist[index].src) {
-      audio.src = playlist[index].src;
+    if (audio.src !== currentList[index].src) {
+      audio.src = currentList[index].src;
     }
     audio.volume = volumeRef.current; // Immediate 20% default sound
 
     // Pre-cache next song in the background
-    const upcomingIndex = (index + 1) % playlist.length;
-    preloadUpcomingTrack(playlist[upcomingIndex].src);
+    const upcomingIndex = (index + 1) % currentList.length;
+    preloadUpcomingTrack(currentList[upcomingIndex].src);
 
     const doPlay = () => {
       const p = audio.play();
@@ -150,19 +172,21 @@ export default function AudioPlayer({ autoPlay = false }) {
   };
 
   useEffect(() => {
-    const audio = new Audio(playlist[0].src);
+    const initialList = playlistRef.current;
+    const audio = new Audio(initialList[0].src);
     audio.loop = false; // Must be false so 'ended' fires to switch tracks!
     audio.volume = 0.20; // Default 20% ambient sound
     audioRef.current = audio;
 
     // Immediately pre-cache Track 2 into browser memory
-    if (playlist.length > 1) {
-      preloadUpcomingTrack(playlist[1].src);
+    if (initialList.length > 1) {
+      preloadUpcomingTrack(initialList[1].src);
     }
 
     const handleEnded = () => {
       // Loop sequentially: Track 1 -> Track 2 -> Track 1 -> Track 2...
-      const nextIndex = (trackIndexRef.current + 1) % playlist.length;
+      const currentList = playlistRef.current;
+      const nextIndex = (trackIndexRef.current + 1) % currentList.length;
       playTrack(nextIndex);
     };
 
@@ -194,7 +218,17 @@ export default function AudioPlayer({ autoPlay = false }) {
       }
     };
 
-    const handleUnlockAudio = () => {
+    const handleUnlockAudio = (e) => {
+      const targetMode = e?.detail?.mode;
+      if (targetMode && targetMode !== modeRef.current) {
+        const targetList = targetMode === 'memes' ? memePlaylist : romanticPlaylist;
+        playlistRef.current = targetList;
+        trackIndexRef.current = 0;
+        setCurrentTrackIndex(0);
+        if (audioRef.current) {
+          audioRef.current.src = targetList[0].src;
+        }
+      }
       startPlayback();
     };
 
@@ -208,6 +242,34 @@ export default function AudioPlayer({ autoPlay = false }) {
       audioRef.current = null;
     };
   }, []);
+
+  // Handle dynamic switching between Romantic playlist and Meme playlist
+  const prevModeRef = useRef(mode);
+  useEffect(() => {
+    if (prevModeRef.current !== mode) {
+      prevModeRef.current = mode;
+      const currentList = mode === 'memes' ? memePlaylist : romanticPlaylist;
+      playlistRef.current = currentList;
+      trackIndexRef.current = 0;
+      setCurrentTrackIndex(0);
+
+      const audio = audioRef.current;
+      if (audio) {
+        cancelFade();
+        audio.src = currentList[0].src;
+        audio.volume = volumeRef.current;
+        if (currentList.length > 1) {
+          preloadUpcomingTrack(currentList[1].src);
+        }
+        if (isPlayingRef.current || autoPlay) {
+          audio.play().then(() => {
+            setIsPlaying(true);
+            isPlayingRef.current = true;
+          }).catch(() => {});
+        }
+      }
+    }
+  }, [mode, autoPlay]);
 
   // React to autoPlay prop update (when entering main page)
   useEffect(() => {
@@ -268,7 +330,8 @@ export default function AudioPlayer({ autoPlay = false }) {
   const nextTrack = (e) => {
     if (e) e.stopPropagation();
     playPop();
-    const nextIndex = (trackIndexRef.current + 1) % playlist.length;
+    const currentList = playlistRef.current;
+    const nextIndex = (trackIndexRef.current + 1) % currentList.length;
     playTrack(nextIndex);
   };
 
@@ -316,7 +379,11 @@ export default function AudioPlayer({ autoPlay = false }) {
 
             {/* Center Record Label */}
             <div className="w-4 h-4 rounded-full bg-gradient-to-tr from-pink-500 via-rose-400 to-amber-300 flex items-center justify-center shadow-inner relative z-10 border border-white/25">
-              <Heart className="w-2.5 h-2.5 text-white fill-white drop-shadow-xs" />
+              {mode === 'memes' ? (
+                <span className="text-[9px] leading-none select-none">😂</span>
+              ) : (
+                <Heart className="w-2.5 h-2.5 text-white fill-white drop-shadow-xs" />
+              )}
             </div>
 
             {/* Spindle center hole */}

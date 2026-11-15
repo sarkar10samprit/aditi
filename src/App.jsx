@@ -20,6 +20,7 @@ export default function App() {
   const isPreviewLoading = typeof window !== 'undefined' && window.location.search.includes('preview=loading');
   const showMemeCorner = typeof window !== 'undefined' && window.location.search.includes('view=memes');
   const [isUnlocked, setIsUnlocked] = useState(false);
+  const [unlockMode, setUnlockMode] = useState('romantic'); // 'romantic' | 'memes'
   const [isAssetsReady, setIsAssetsReady] = useState(false);
   const [loadProgress, setLoadProgress] = useState(isPreviewLoading ? 76 : 0);
   const [unwrapped, setUnwrapped] = useState(false);
@@ -101,7 +102,8 @@ export default function App() {
     };
   }, []);
 
-  const handleUnlock = () => {
+  const handleUnlock = (mode = 'romantic') => {
+    setUnlockMode(mode);
     setIsUnlocked(true);
   };
 
@@ -168,7 +170,7 @@ export default function App() {
       <PawTrail />
 
       {/* Floating Audio Controller */}
-      <AudioPlayer autoPlay={isUnlocked} />
+      <AudioPlayer autoPlay={isUnlocked} mode={unlockMode} />
 
       {/* Hidden Hardware DOM Pre-mount for 0ms Instant Cat & Media Decoding */}
       <div
@@ -190,7 +192,14 @@ export default function App() {
       <main>
         <Hero onGiftOpen={handleGiftOpen} />
         <MemoryWall />
-        {showMemeCorner && <FunnyCorner />}
+        <FunnyCorner
+          initialOpen={unlockMode === 'memes'}
+          isMemeMode={unlockMode === 'memes'}
+          onSwitchToMain={() => {
+            setUnlockMode('romantic');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        />
         <ParchmentLetter />
         <CakeSection />
         <ReasonsGrid />

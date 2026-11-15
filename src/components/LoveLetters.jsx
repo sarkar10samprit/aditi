@@ -120,7 +120,7 @@ export default function LoveLetters() {
         <div className="mt-12 pt-8 border-t border-white/15 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div>
             <p className="font-serif italic text-2xl sm:text-3xl text-cosmic-champagne">
-              Forever your biggest fan, confidant & partner in chaos,
+              Forever your biggest fan, confidant <span className="vintage-ampersand">&amp;</span> partner in chaos,
             </p>
             <p className="font-sans text-xs text-white/60 font-medium tracking-widest uppercase mt-1">
               With unconditional devotion ✨

@@ -101,10 +101,22 @@ export default function ParchmentLetter() {
     setRevealedPages((prev) => ({ ...prev, [currentPage]: true }));
   };
 
+  // Helper to format text with adjusted classic ampersand font
+  const formatTextWithAmpersand = (text) => {
+    if (typeof text !== 'string' || !text.includes('&')) return text;
+    const parts = text.split('&');
+    return parts.map((part, idx) => (
+      <React.Fragment key={idx}>
+        {idx > 0 && <span className="vintage-ampersand">&amp;</span>}
+        {part}
+      </React.Fragment>
+    ));
+  };
+
   // Helper to render animated or static text block
   const renderTextBlock = (text, globalOffset, currentChars, isFullyRevealed) => {
     if (isFullyRevealed) {
-      return <span>{text}</span>;
+      return <span>{formatTextWithAmpersand(text)}</span>;
     }
 
     const chars = text.split('');
@@ -121,10 +133,11 @@ export default function ParchmentLetter() {
       <span>
         {chars.slice(0, visibleInBlock).map((char, index) => {
           const isLatest = globalOffset + index === currentChars - 1;
+          const isAmp = char === '&';
           return (
             <span
               key={index}
-              className={`char-blur-in ${isLatest ? 'text-cosmic-rose' : ''}`}
+              className={`char-blur-in ${isLatest ? 'text-cosmic-rose' : ''} ${isAmp ? 'vintage-ampersand' : ''}`}
             >
               {char}
             </span>

@@ -77,6 +77,18 @@
   text-shadow: 0 0.5px 1px rgba(46, 22, 12, 0.15);
 }
 
+/* Adjusted Classic Ampersand matching letter font & color */
+.vintage-ampersand {
+  font-family: 'EB Garamond', 'Georgia', 'Baskerville', 'Times New Roman', serif !important;
+  font-style: inherit;
+  font-weight: inherit;
+  color: inherit;
+  display: inline-block;
+  padding: 0 0.06em;
+  line-height: inherit;
+  vertical-align: baseline;
+}
+
 /* Full-Screen Rising Emojis Animation */
 @keyframes floatUpHeart {
   0% {

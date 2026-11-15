@@ -8,7 +8,7 @@ export default function WishJar() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const recipientEmail = birthdayData.recipientEmail || 'sarkarsamrprit08@gmail.com';
+  const recipientEmail = birthdayData.recipientEmail || 'sarkarsamprit08@gmail.com';
 
   const handleAddWish = async (e) => {
     e.preventDefault();

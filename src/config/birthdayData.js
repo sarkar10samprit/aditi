@@ -53,7 +53,7 @@ export const birthdayData = {
   ],
 
   // Wish jar destination email
-  recipientEmail: "sarkarsamrprit08@gmail.com",
+  recipientEmail: "sarkarsamprit08@gmail.com",
 
   // Ambient Music Playlist (Plays "Her" first, then "This Love", continuously looping 1 -> 2 -> 1 -> 2)
   playlist: [

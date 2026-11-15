@@ -163,7 +163,7 @@ export default function ParchmentLetter() {
       <div 
         onClick={revealActivePage}
         title="Tap to reveal full page"
-        className="vintage-ink flex flex-col justify-between h-full select-text cursor-pointer"
+        className="vintage-ink flex flex-col justify-between h-full select-none cursor-pointer"
       >
         <div className="space-y-3 sm:space-y-3.5">
           {/* Recipient on Page 1 */}

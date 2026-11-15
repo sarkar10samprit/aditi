@@ -42,6 +42,65 @@ export default function App() {
     };
   }, []);
 
+  // Sealed Website Guard: Block long-press context menus, copying, and drag-selection
+  useEffect(() => {
+    const isFormElement = (target) => {
+      return target && ['INPUT', 'TEXTAREA'].includes(target.tagName);
+    };
+
+    const handleContextMenu = (e) => {
+      if (!isFormElement(e.target)) {
+        e.preventDefault();
+      }
+    };
+
+    const handleCopy = (e) => {
+      if (!isFormElement(e.target)) {
+        e.preventDefault();
+        if (e.clipboardData) {
+          e.clipboardData.clearData();
+        }
+      }
+    };
+
+    const handleCut = (e) => {
+      if (!isFormElement(e.target)) {
+        e.preventDefault();
+      }
+    };
+
+    const handleDragStart = (e) => {
+      if (!isFormElement(e.target)) {
+        e.preventDefault();
+      }
+    };
+
+    const handleKeyDown = (e) => {
+      const isModifier = e.ctrlKey || e.metaKey;
+      if (isModifier && !isFormElement(e.target)) {
+        const key = e.key.toLowerCase();
+        // Block Select All (a), Copy (c), Cut (x), Save Page (s), View Source (u)
+        if (['a', 'c', 'x', 's', 'u'].includes(key)) {
+          e.preventDefault();
+        }
+      }
+    };
+
+    document.addEventListener('contextmenu', handleContextMenu);
+    document.addEventListener('copy', handleCopy);
+    document.addEventListener('cut', handleCut);
+    document.addEventListener('dragstart', handleDragStart);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('contextmenu', handleContextMenu);
+      document.removeEventListener('copy', handleCopy);
+      document.removeEventListener('cut', handleCut);
+      document.removeEventListener('dragstart', handleDragStart);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   const handleUnlock = () => {
     setIsUnlocked(true);
   };

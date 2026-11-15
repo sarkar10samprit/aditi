@@ -193,7 +193,7 @@ export default function AudioPlayer() {
   };
 
   return (
-    <div className="fixed top-5 right-5 z-50 flex items-center select-none">
+    <div className="fixed top-5 right-5 z-[110] flex items-center select-none">
       {/* Floating Notes Container */}
       <div className="absolute -top-3 left-3 pointer-events-none">
         {floatingNotes.map((note) => (

@@ -42,18 +42,6 @@ export const ASSETS_TO_PRELOAD = [
   'photos/photo11.webp',
   'photos/photo12.webp',
 
-  // The Meme Vault & Chaos Corner (WebP 0ms cache)
-  'memes/meme1.webp',
-  'memes/meme2.webp',
-  'memes/meme3.webp',
-  'memes/meme4.webp',
-  'memes/meme5.webp',
-  'memes/meme6.webp',
-  'memes/meme7.webp',
-  'memes/meme8.webp',
-  'memes/meme9.webp',
-  'memes/meme10.webp',
-
   // Interactive Cat Stickers
   'stickers/cat_sticker_1.png',
   'stickers/cat_sticker_2.png',

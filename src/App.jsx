@@ -16,6 +16,7 @@ import { preloadAllAssets } from './utils/preloadAssets';
 
 export default function App() {
   const isPreviewLoading = typeof window !== 'undefined' && window.location.search.includes('preview=loading');
+  const showMemeCorner = typeof window !== 'undefined' && window.location.search.includes('view=memes');
   const [isLoading, setIsLoading] = useState(true);
   const [loadProgress, setLoadProgress] = useState(isPreviewLoading ? 76 : 0);
   const [unwrapped, setUnwrapped] = useState(false);
@@ -124,7 +125,7 @@ export default function App() {
       <main>
         <Hero onGiftOpen={handleGiftOpen} />
         <MemoryWall />
-        <FunnyCorner />
+        {showMemeCorner && <FunnyCorner />}
         <ParchmentLetter />
         <CakeSection />
         <ReasonsGrid />

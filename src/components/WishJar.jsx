@@ -1,28 +1,65 @@
 import React, { useState } from 'react';
 import { Send, Sparkles, CheckCircle2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { birthdayData } from '../config/birthdayData';
 
 export default function WishJar() {
   const [inputWish, setInputWish] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleAddWish = (e) => {
+  const recipientEmail = birthdayData.recipientEmail || 'sarkarsamrprit08@gmail.com';
+
+  const handleAddWish = async (e) => {
     e.preventDefault();
-    if (!inputWish.trim()) return;
+    const wish = inputWish.trim();
+    if (!wish || isSubmitting) return;
 
-    setIsSubmitted(true);
-    setInputWish('');
+    setIsSubmitting(true);
 
-    confetti({
-      particleCount: 40,
-      spread: 60,
-      origin: { y: 0.8 },
-      colors: ['#E8729B', '#FCD34D', '#FFFFFF', '#D64E7E']
-    });
+    // Safe offline local backup
+    try {
+      const existing = JSON.parse(localStorage.getItem('coco_wishes') || '[]');
+      existing.push({ wish, date: new Date().toISOString() });
+      localStorage.setItem('coco_wishes', JSON.stringify(existing));
+    } catch (err) {}
 
-    setTimeout(() => {
-      setIsSubmitted(false);
-    }, 5000);
+    // Send directly to Gmail inbox via FormSubmit AJAX API
+    try {
+      await fetch(`https://formsubmit.co/ajax/${recipientEmail}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          'From': 'Coco ❤️',
+          'Birthday Wish': wish,
+          '_subject': '🎂 New Birthday Wish from Coco! ✨',
+          '_template': 'table',
+          '_captcha': 'false'
+        })
+      });
+    } catch (err) {
+      console.warn('Submission notice:', err);
+    } finally {
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+      setInputWish('');
+
+      try {
+        confetti({
+          particleCount: 50,
+          spread: 70,
+          origin: { y: 0.8 },
+          colors: ['#E8729B', '#FCD34D', '#FFFFFF', '#D64E7E']
+        });
+      } catch (e) {}
+
+      setTimeout(() => {
+        setIsSubmitted(false);
+      }, 6000);
+    }
   };
 
   return (
@@ -47,20 +84,31 @@ export default function WishJar() {
               value={inputWish}
               onChange={(e) => setInputWish(e.target.value)}
               placeholder="type your wish"
-              className="w-full px-5 py-4 rounded-2xl bg-white/10 border border-white/25 focus:outline-none focus:ring-2 focus:ring-cosmic-rose font-sans text-sm text-white placeholder-white/40 backdrop-blur-md"
+              disabled={isSubmitting}
+              className="w-full px-5 py-4 rounded-2xl bg-white/10 border border-white/25 focus:outline-none focus:ring-2 focus:ring-cosmic-rose font-sans text-sm text-white placeholder-white/40 backdrop-blur-md transition-all disabled:opacity-60"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full luxury-button py-3.5 rounded-2xl text-white font-sans font-semibold text-xs tracking-widest uppercase flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-glow-rose active:scale-[0.99] transition-transform"
+            disabled={isSubmitting}
+            className="w-full luxury-button py-3.5 rounded-2xl text-white font-sans font-semibold text-xs tracking-widest uppercase flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-glow-rose active:scale-[0.99] transition-transform disabled:opacity-75 disabled:cursor-wait"
           >
-            <Send className="w-4 h-4" />
-            <span>Seal Inside Capsule</span>
+            {isSubmitting ? (
+              <>
+                <Sparkles className="w-4 h-4 text-cosmic-gold animate-spin" />
+                <span>Sealing Inside Capsule...</span>
+              </>
+            ) : (
+              <>
+                <Send className="w-4 h-4" />
+                <span>Seal Inside Capsule</span>
+              </>
+            )}
           </button>
         </form>
 
-        {/* Temporary Submission Feedback */}
+        {/* Submission Feedback */}
         {isSubmitted && (
           <div className="mt-6 flex items-center justify-center gap-2 text-cosmic-champagne font-sans text-sm animate-pulse-subtle">
             <CheckCircle2 className="w-4 h-4 text-cosmic-gold" />

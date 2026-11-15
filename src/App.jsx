@@ -14,6 +14,7 @@ import WishJar from './components/WishJar';
 import Footer from './components/Footer';
 import PasswordGate from './components/PasswordGate';
 import { preloadAllAssets } from './utils/preloadAssets';
+import { KNIFE_CAT_DATA } from './assets/knifeCatBase64';
 
 export default function App() {
   const isPreviewLoading = typeof window !== 'undefined' && window.location.search.includes('preview=loading');
@@ -115,7 +116,7 @@ export default function App() {
         className="opacity-0 pointer-events-none absolute -top-[9999px] -left-[9999px] w-1 h-1 overflow-hidden"
         aria-hidden="true"
       >
-        <img src={`${import.meta.env.BASE_URL}knife_cat.webp`} decoding="sync" loading="eager" alt="" />
+        <img src={KNIFE_CAT_DATA} decoding="sync" loading="eager" alt="" />
         <img src={`${import.meta.env.BASE_URL}gift_box.png`} decoding="sync" loading="eager" alt="" />
         <img src={`${import.meta.env.BASE_URL}cats/cat1.webp`} decoding="sync" loading="eager" alt="" />
         <img src={`${import.meta.env.BASE_URL}cats/cat2.webp`} decoding="sync" loading="eager" alt="" />

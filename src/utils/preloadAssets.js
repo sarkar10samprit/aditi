@@ -2,13 +2,21 @@
 // Pre-caches all images, cutout cats, stickers, and sounds into memory on initial site entry
 
 export const ASSETS_TO_PRELOAD = [
-  // Interactive 3D & Core Cutouts
-  'gift_box.png',
+  // Interactive 3D & Core Cutouts (Ultra-fast WebP + PNG)
+  'knife_cat.webp',
   'knife_cat.png',
+  'gift_box.png',
   'torn_paper.png',
   'background.jpg',
 
-  // All 7 Interactive Orbiting Cats
+  // All 7 Interactive Orbiting Cats (Ultra-fast WebP + PNG)
+  'cats/cat1.webp',
+  'cats/cat2.webp',
+  'cats/cat3.webp',
+  'cats/cat4.webp',
+  'cats/cat5.webp',
+  'cats/cat6.webp',
+  'cats/cat7.webp',
   'cats/cat1.png',
   'cats/cat2.png',
   'cats/cat3.png',
@@ -44,13 +52,15 @@ export const ASSETS_TO_PRELOAD = [
 ];
 
 /**
- * Preload a single image into browser memory cache
+ * Preload and hardware-decode a single image into browser GPU cache
  */
 function preloadImage(url) {
   return new Promise((resolve) => {
     const img = new Image();
     img.src = url;
-    if (img.complete) {
+    if (typeof img.decode === 'function') {
+      img.decode().then(() => resolve(url)).catch(() => resolve(url));
+    } else if (img.complete) {
       resolve(url);
     } else {
       img.onload = () => resolve(url);

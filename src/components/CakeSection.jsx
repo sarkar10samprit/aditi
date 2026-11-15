@@ -331,7 +331,7 @@ export default function CakeSection() {
           </svg>
         </div>
 
-        {/* --- SASSY KNIFE CAT (Appears after blowing out candles) --- */}
+        {/* --- SASSY KNIFE CAT (Pre-cached in VRAM for 0ms Instant Spring-in) --- */}
         <AnimatePresence>
           {isBlown && (
             <motion.div
@@ -366,11 +366,17 @@ export default function CakeSection() {
                 className="w-40 sm:w-52 h-auto cursor-pointer group"
                 title="Click to cut a slice of cake for Coco!"
               >
-                <img
-                  src={`${import.meta.env.BASE_URL}knife_cat.png`}
-                  alt="Sassy Kitten with Pink Knife"
-                  className="w-full h-auto object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.65)] group-hover:scale-105 transition-transform"
-                />
+                <picture>
+                  <source srcSet={`${import.meta.env.BASE_URL}knife_cat.webp`} type="image/webp" />
+                  <img
+                    src={`${import.meta.env.BASE_URL}knife_cat.png`}
+                    alt="Sassy Kitten with Pink Knife"
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="sync"
+                    className="w-full h-auto object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.65)] group-hover:scale-105 transition-transform"
+                  />
+                </picture>
               </motion.div>
             </motion.div>
           )}

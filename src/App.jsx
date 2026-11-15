@@ -103,6 +103,22 @@ export default function App() {
       {/* Floating Audio Controller */}
       <AudioPlayer />
 
+      {/* Hidden Hardware DOM Pre-mount for 0ms Instant Cat & Media Decoding */}
+      <div
+        className="opacity-0 pointer-events-none absolute -top-[9999px] -left-[9999px] w-1 h-1 overflow-hidden"
+        aria-hidden="true"
+      >
+        <img src={`${import.meta.env.BASE_URL}knife_cat.webp`} decoding="sync" loading="eager" alt="" />
+        <img src={`${import.meta.env.BASE_URL}gift_box.png`} decoding="sync" loading="eager" alt="" />
+        <img src={`${import.meta.env.BASE_URL}cats/cat1.webp`} decoding="sync" loading="eager" alt="" />
+        <img src={`${import.meta.env.BASE_URL}cats/cat2.webp`} decoding="sync" loading="eager" alt="" />
+        <img src={`${import.meta.env.BASE_URL}cats/cat3.webp`} decoding="sync" loading="eager" alt="" />
+        <img src={`${import.meta.env.BASE_URL}cats/cat4.webp`} decoding="sync" loading="eager" alt="" />
+        <img src={`${import.meta.env.BASE_URL}cats/cat5.webp`} decoding="sync" loading="eager" alt="" />
+        <img src={`${import.meta.env.BASE_URL}cats/cat6.webp`} decoding="sync" loading="eager" alt="" />
+        <img src={`${import.meta.env.BASE_URL}cats/cat7.webp`} decoding="sync" loading="eager" alt="" />
+      </div>
+
       {/* Main Content Sections */}
       <main>
         <Hero onGiftOpen={handleGiftOpen} />

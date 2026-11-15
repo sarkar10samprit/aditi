@@ -33,6 +33,7 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
     {
       id: 7,
       src: `${base}cats/cat7.png`,
+      webp: `${base}cats/cat7.webp`,
       alt: 'Cat with plate of momos',
       caption: 'Steaming hot momos for Coco! 🥟',
       angle: -90, // Top center
@@ -41,6 +42,7 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
     {
       id: 3,
       src: `${base}cats/cat3.png`,
+      webp: `${base}cats/cat3.webp`,
       alt: 'Cat with pink bow and KitKat',
       caption: 'Break time with KitKat! 🎀',
       angle: -90 + (360 / 7) * 1, // ~ -38.6° (upper right)
@@ -49,6 +51,7 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
     {
       id: 6,
       src: `${base}cats/cat6.png`,
+      webp: `${base}cats/cat6.webp`,
       alt: 'Cat with Biryani and Diet Coke',
       caption: 'Biryani & Diet Coke for Coco! 🍗',
       angle: -90 + (360 / 7) * 2, // ~ +12.9° (mid right)
@@ -57,6 +60,7 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
     {
       id: 5,
       src: `${base}cats/cat5.png`,
+      webp: `${base}cats/cat5.webp`,
       alt: 'Cat with pink Monster Energy',
       caption: 'Pink Monster energy! ⚡',
       angle: -90 + (360 / 7) * 3, // ~ +64.3° (lower right)
@@ -65,6 +69,7 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
     {
       id: 2,
       src: `${base}cats/cat2.png`,
+      webp: `${base}cats/cat2.webp`,
       alt: 'Cat with chocolate frappe',
       caption: 'Iced chocolate drink! 🥤',
       angle: -90 + (360 / 7) * 4, // ~ +115.7° (lower left)
@@ -73,6 +78,7 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
     {
       id: 4,
       src: `${base}cats/cat4.png`,
+      webp: `${base}cats/cat4.webp`,
       alt: 'Cat with Kinder Joy',
       caption: 'Kinder Joy surprise! 🥚',
       angle: -90 + (360 / 7) * 5, // ~ +167.1° (mid left)
@@ -81,6 +87,7 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
     {
       id: 1,
       src: `${base}cats/cat1.png`,
+      webp: `${base}cats/cat1.webp`,
       alt: 'Cat with NY cap and Dairy Milk Silk',
       caption: 'Silk just for Coco! 🍫',
       angle: -90 + (360 / 7) * 6, // ~ +218.6° (upper left)
@@ -196,12 +203,17 @@ export default function InteractiveGiftBox({ onOpen, isOpened: externalIsOpened 
                       }}
                       className="w-full h-full relative flex items-center justify-center"
                     >
-                      <img
-                        src={cat.src}
-                        alt={cat.alt}
-                        style={{ transform: `rotate(${cat.rot}deg)` }}
-                        className="w-full h-full object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.65)] select-none pointer-events-none"
-                      />
+                      <picture>
+                        <source srcSet={cat.webp} type="image/webp" />
+                        <img
+                          src={cat.src}
+                          alt={cat.alt}
+                          loading="eager"
+                          decoding="sync"
+                          style={{ transform: `rotate(${cat.rot}deg)` }}
+                          className="w-full h-full object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.65)] select-none pointer-events-none"
+                        />
+                      </picture>
 
                       {/* Cute Floating Tooltip above the Cat's Head */}
                       <div

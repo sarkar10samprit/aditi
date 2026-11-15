@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { birthdayData } from '../config/birthdayData';
 import { playChime, playPop } from '../utils/soundEffects';
+import { KNIFE_CAT_DATA } from '../assets/knifeCatBase64';
 
 export default function CakeSection() {
   const [isBlown, setIsBlown] = useState(false);
@@ -127,9 +128,9 @@ export default function CakeSection() {
       <div className="relative flex flex-col md:flex-row items-center justify-center gap-6 sm:gap-12 my-6 z-10">
         {/* Ultra-Chunky 32x32 Retro Pixel Art Cake */}
         <div 
-          onClick={!isBlown ? handleBlowCandles : undefined}
+          onClick={!isBlown ? handleBlowCandles : (!isCut ? handleCutCake : undefined)}
           className="relative cursor-pointer group transition-transform duration-300 hover:scale-105 active:scale-95"
-          title={!isBlown ? "Click to blow out the chunky pixel candles!" : (isCut ? "A slice has been cut for Coco!" : "Candles extinguished!")}
+          title={!isBlown ? "Click to blow out the chunky pixel candles!" : (!isCut ? "Click to cut a slice of cake for Coco!" : "A slice has been cut for Coco!")}
         >
           {/* Scalable 32x32 Chunky Pixel Grid SVG */}
           <svg
@@ -331,56 +332,51 @@ export default function CakeSection() {
           </svg>
         </div>
 
-        {/* --- SASSY KNIFE CAT (Pre-cached in VRAM for 0ms Instant Spring-in) --- */}
-        <AnimatePresence>
-          {isBlown && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.6, x: 40 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              exit={{ opacity: 0, scale: 0.6 }}
-              transition={{ type: 'spring', stiffness: 180, damping: 18 }}
-              className="relative flex flex-col items-center select-none"
-            >
-              {/* Sassy Floating Speech Bubble */}
-              <motion.div
-                animate={{ y: [0, -4, 0] }}
-                transition={{ repeat: Infinity, duration: 2.4, ease: 'easeInOut' }}
-                className="mb-2 px-4 py-1.5 rounded-full bg-white text-neutral-900 font-sans text-xs font-bold shadow-xl border border-cosmic-rose/40 flex items-center gap-1.5 whitespace-nowrap"
-              >
-                <span>{isCut ? "A slice just for Coco! 🍰💖" : "Ready to slice the cake! 🎀🔪"}</span>
-              </motion.div>
+        {/* --- SASSY KNIFE CAT (Base64 Inlined & Permanently Rendered with 0ms Load Time) --- */}
+        <div className="relative flex flex-col items-center select-none">
+          {/* Sassy Floating Speech Bubble */}
+          <motion.div
+            animate={{ y: [0, -4, 0] }}
+            transition={{ repeat: Infinity, duration: 2.4, ease: 'easeInOut' }}
+            className="mb-2 px-4 py-1.5 rounded-full bg-white text-neutral-900 font-sans text-xs font-bold shadow-xl border border-cosmic-rose/40 flex items-center gap-1.5 whitespace-nowrap"
+          >
+            <span>
+              {isCut
+                ? "A slice just for Coco! 🍰💖"
+                : isBlown
+                ? "Ready to slice the cake! 🎀🔪"
+                : "Blow out the candles first! 🎂🕯️"}
+            </span>
+          </motion.div>
 
-              {/* Cat Image with Knife Slice Animation */}
-              <motion.div
-                animate={
-                  isCutting
-                    ? { rotate: [-16, 22, -10, 14, 0], scale: [1, 1.12, 1] }
-                    : { rotate: [-2, 2, -2] }
-                }
-                transition={
-                  isCutting
-                    ? { duration: 0.45, ease: 'easeInOut' }
-                    : { repeat: Infinity, duration: 3.2, ease: 'easeInOut' }
-                }
-                onClick={handleCutCake}
-                className="w-40 sm:w-52 h-auto cursor-pointer group"
-                title="Click to cut a slice of cake for Coco!"
-              >
-                <picture>
-                  <source srcSet={`${import.meta.env.BASE_URL}knife_cat.webp`} type="image/webp" />
-                  <img
-                    src={`${import.meta.env.BASE_URL}knife_cat.png`}
-                    alt="Sassy Kitten with Pink Knife"
-                    loading="eager"
-                    fetchPriority="high"
-                    decoding="sync"
-                    className="w-full h-auto object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.65)] group-hover:scale-105 transition-transform"
-                  />
-                </picture>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+          {/* Cat Image with Knife Slice Animation */}
+          <motion.div
+            animate={
+              isCutting
+                ? { rotate: [-16, 22, -10, 14, 0], scale: [1, 1.12, 1] }
+                : isBlown && !isCut
+                ? { scale: [1, 1.05, 1], rotate: [-2, 2, -2] }
+                : { rotate: [-2, 2, -2] }
+            }
+            transition={
+              isCutting
+                ? { duration: 0.45, ease: 'easeInOut' }
+                : { repeat: Infinity, duration: 3.2, ease: 'easeInOut' }
+            }
+            onClick={!isBlown ? handleBlowCandles : handleCutCake}
+            className="w-40 sm:w-52 h-auto cursor-pointer group"
+            title={!isBlown ? "Click to blow the candles!" : (!isCut ? "Click to cut a slice of cake for Coco!" : "A slice has been cut for Coco!")}
+          >
+            <img
+              src={KNIFE_CAT_DATA}
+              alt="Sassy Kitten with Pink Knife"
+              loading="eager"
+              fetchPriority="high"
+              decoding="sync"
+              className="w-full h-auto object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.65)] group-hover:scale-105 transition-transform"
+            />
+          </motion.div>
+        </div>
       </div>
 
       {/* Action Button Section */}

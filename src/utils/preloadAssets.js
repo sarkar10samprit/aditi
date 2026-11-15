@@ -25,7 +25,7 @@ export const ASSETS_TO_PRELOAD = [
   'cats/cat6.png',
   'cats/cat7.png',
 
-  // Curated Exhibition Photos (1 to 9)
+  // Curated Exhibition Photos (1 to 12)
   'photos/photo1.jpg',
   'photos/photo2.jpg',
   'photos/photo3.jpg',
@@ -35,6 +35,12 @@ export const ASSETS_TO_PRELOAD = [
   'photos/photo7.jpg',
   'photos/photo8.jpg',
   'photos/photo9.jpg',
+  'photos/photo10.jpg',
+  'photos/photo11.jpg',
+  'photos/photo12.jpg',
+  'photos/photo10.webp',
+  'photos/photo11.webp',
+  'photos/photo12.webp',
 
   // Interactive Cat Stickers
   'stickers/cat_sticker_1.png',

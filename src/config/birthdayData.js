@@ -153,6 +153,33 @@ export const birthdayData = {
       date: "Archive #09",
       rotation: "0deg",
       objectPosition: "center center"
+    },
+    {
+      id: 10,
+      title: "Falling for you all over again",
+      caption: "Look at that smile, the glasses, that little tilt of your head... honestly, how was I ever supposed to stand a chance? Every time I look at this picture, my heart quietly falls for you all over again.",
+      src: `${base}photos/photo10.jpg`,
+      date: "Archive #10",
+      rotation: "0deg",
+      objectPosition: "center center"
+    },
+    {
+      id: 11,
+      title: "Outshining the city lights",
+      caption: "Under an entire canopy of glowing fairy lights, you were still the brightest thing on the street. Pure grace, effortless elegance, and completely unforgettable.",
+      src: `${base}photos/photo11.jpg`,
+      date: "Archive #11",
+      rotation: "0deg",
+      objectPosition: "center center"
+    },
+    {
+      id: 12,
+      title: "My Lotus Blossom 🪷",
+      caption: "Holding a pink lotus and looking so peaceful, like the whole chaotic world went quiet just for you. You really are the gentlest, most beautiful soul.",
+      src: `${base}photos/photo12.jpg`,
+      date: "Archive #12",
+      rotation: "0deg",
+      objectPosition: "center center"
     }
   ],
 
